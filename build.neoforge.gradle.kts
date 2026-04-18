@@ -51,11 +51,18 @@ neoForge {
 repositories {
 	mavenCentral()
 	strictMaven("https://api.modrinth.com/maven", "maven.modrinth") { name = "Modrinth" }
+	strictMaven("https://maven.bawnorton.com/releases", "com.github.bawnorton.mixinsquared") { name = "MixinSquared" }
 }
 
 dependencies {
 	implementation(libs.moulberry.mixinconstraints)
 	jarJar(libs.moulberry.mixinconstraints)
+	annotationProcessor(libs.mixinsquared.common)?.let { compileOnly(it) }
+	jarJar(libs.mixinsquared.neoforge)?.let { implementation(it) }
+
+	implementation("maven.modrinth:punchy-fpa:${prop("deps.punchy")}")
+	implementation("maven.modrinth:vics-point-blank:${prop("deps.pointblank")}")
+	implementation("maven.modrinth:geckolib:${prop("deps.geckolib")}")
 }
 
 tasks.named("createMinecraftArtifacts") {

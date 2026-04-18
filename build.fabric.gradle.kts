@@ -50,6 +50,7 @@ repositories {
 	mavenCentral()
 	strictMaven("https://maven.terraformersmc.com/", "com.terraformersmc") { name = "TerraformersMC" }
 	strictMaven("https://api.modrinth.com/maven", "maven.modrinth") { name = "Modrinth" }
+	strictMaven("https://maven.bawnorton.com/releases", "com.github.bawnorton.mixinsquared") { name = "MixinSquared" }
 }
 
 dependencies {
@@ -62,8 +63,16 @@ dependencies {
 	modImplementation(libs.fabric.loader)
 	implementation(libs.moulberry.mixinconstraints)
 	include(libs.moulberry.mixinconstraints)
+	annotationProcessor(libs.mixinsquared.fabric)
+	implementation(libs.mixinsquared.fabric)
+	include(libs.mixinsquared.fabric)
+
 	modImplementation("net.fabricmc.fabric-api:fabric-api:${prop("deps.fabric-api")}")
 	modLocalRuntime("com.terraformersmc:modmenu:${prop("deps.modmenu")}")
+
+	modImplementation("maven.modrinth:punchy-fpa:${prop("deps.punchy")}")
+	modImplementation("maven.modrinth:vics-point-blank:${prop("deps.pointblank")}")
+	modImplementation("maven.modrinth:geckolib:${prop("deps.geckolib")}")
 }
 
 stonecutter {

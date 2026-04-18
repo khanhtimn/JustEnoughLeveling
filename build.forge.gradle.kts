@@ -53,7 +53,9 @@ mixin {
 
 repositories {
 	mavenCentral()
+	maven("https://maven.minecraftforge.net/") { name = "Forge" }
 	strictMaven("https://api.modrinth.com/maven", "maven.modrinth") { name = "Modrinth" }
+	strictMaven("https://maven.bawnorton.com/releases", "com.github.bawnorton.mixinsquared") { name = "MixinSquared" }
 }
 
 dependencies {
@@ -61,6 +63,8 @@ dependencies {
 
 	implementation(libs.moulberry.mixinconstraints)
 	jarJar(libs.moulberry.mixinconstraints)
+	compileOnly(annotationProcessor("com.github.bawnorton.mixinsquared:mixinsquared-common:0.3.7-beta.1")!!)
+	implementation(jarJar("com.github.bawnorton.mixinsquared:mixinsquared-forge:0.3.7-beta.1")!!)
 }
 
 sourceSets {

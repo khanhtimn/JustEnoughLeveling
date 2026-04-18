@@ -1,16 +1,17 @@
 [versions]
-stonecutter = "0.8"
+stonecutter = "0.9.1"
 stonecutter-postprocess = "2.1-beta.8"
 mod-publish = "1.1.0"
 dotenv-gradle = "4.0.0"
 fabric-loom = "1.14-SNAPSHOT"
-neoforge-moddev = "2.0.120"
+neoforge-moddev = "2.0.141"
 foojay = "1.0.0"
-fabric-loader = "0.17.3"
+fabric-loader = "0.19.2"
 devtools-ksp = "2.2.10-2.0.2"
 kotlin-jvm = "2.2.10"
 fletching-table = "0.1.0-alpha.22"
 moulberry-mixinconstraints = "1.1.0"
+mixinsquared = "0.3.7-beta.1"
 vanniktech-maven-publish = "0.35.0"
 mixin = "0.8.5"
 
@@ -22,6 +23,9 @@ fabric-loader = { module = "net.fabricmc:fabric-loader", version.ref = "fabric-l
 foojay-resolver = { module = "org.gradle.toolchains:foojay-resolver", version.ref = "foojay" }
 fletching-table = { module = "dev.kikugie:fletching-table", version.ref = "fletching-table" }
 moulberry-mixinconstraints = { module = "com.moulberry:mixinconstraints", version.ref = "moulberry-mixinconstraints" }
+mixinsquared-fabric = { module = "com.github.bawnorton.mixinsquared:mixinsquared-fabric", version.ref = "mixinsquared" }
+mixinsquared-neoforge = { module = "com.github.bawnorton.mixinsquared:mixinsquared-neoforge", version.ref = "mixinsquared" }
+mixinsquared-common = { module = "com.github.bawnorton.mixinsquared:mixinsquared-common", version.ref = "mixinsquared" }
 
 [plugins]
 stonecutter = { id = "dev.kikugie.stonecutter", version.ref = "stonecutter" }
