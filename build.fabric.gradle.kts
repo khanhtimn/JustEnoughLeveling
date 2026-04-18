@@ -51,6 +51,13 @@ repositories {
 	strictMaven("https://maven.terraformersmc.com/", "com.terraformersmc") { name = "TerraformersMC" }
 	strictMaven("https://api.modrinth.com/maven", "maven.modrinth") { name = "Modrinth" }
 	strictMaven("https://maven.bawnorton.com/releases", "com.github.bawnorton.mixinsquared") { name = "MixinSquared" }
+	strictMaven("https://maven.pkg.github.com/MrCrayfish/Maven") {
+		name = "MrCrayfish (GitHub)"
+		credentials {
+			username = project.findProperty("gpr.user") as String?
+			password = project.findProperty("gpr.key") as String?
+		}
+	}
 }
 
 dependencies {
@@ -70,9 +77,7 @@ dependencies {
 	modImplementation("net.fabricmc.fabric-api:fabric-api:${prop("deps.fabric-api")}")
 	modLocalRuntime("com.terraformersmc:modmenu:${prop("deps.modmenu")}")
 
-	modImplementation("maven.modrinth:punchy-fpa:${prop("deps.punchy")}")
-	modImplementation("maven.modrinth:vics-point-blank:${prop("deps.pointblank")}")
-	modImplementation("maven.modrinth:geckolib:${prop("deps.geckolib")}")
+	modImplementation("com.mrcrayfish:framework-fabric:${prop("deps.minecraft")}-${prop("deps.framework")}")
 }
 
 stonecutter {
