@@ -8,10 +8,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 //? fabric {
-/*import dev.khanhtimn.jel.platform.fabric.FabricPlatform;
- *///?} neoforge {
-import dev.khanhtimn.jel.platform.neoforge.NeoforgePlatform;
- //?} forge {
+import dev.khanhtimn.jel.platform.fabric.FabricPlatform;
+ //?} neoforge {
+/*import dev.khanhtimn.jel.platform.neoforge.NeoforgePlatform;
+ *///?} forge {
 /*import dev.khanhtimn.jel.platform.forge.ForgePlatform;
  *///?}
 
@@ -47,10 +47,10 @@ public class JustEnoughLeveling {
 
 	private static Platform createPlatformInstance() {
 		//? fabric {
-		/*return new FabricPlatform();
-		 *///?} neoforge {
-		return new NeoforgePlatform();
-		//?} forge {
+		return new FabricPlatform();
+		 //?} neoforge {
+		/*return new NeoforgePlatform();
+		*///?} forge {
 		/*return new ForgePlatform();
 		 *///?}
 	}

@@ -2,7 +2,7 @@ package dev.khanhtimn.jel.platform.fabric;
 
 //? fabric {
 
-/*import dev.khanhtimn.jel.platform.Platform;
+import dev.khanhtimn.jel.platform.Platform;
 import net.fabricmc.loader.api.FabricLoader;
 
 public class FabricPlatform implements Platform {
@@ -27,4 +27,4 @@ public class FabricPlatform implements Platform {
 		return FabricLoader.getInstance().isDevelopmentEnvironment();
 	}
 }
-*///?}
+//?}

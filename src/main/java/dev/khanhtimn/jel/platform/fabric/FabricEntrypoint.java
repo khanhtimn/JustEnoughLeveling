@@ -2,7 +2,7 @@ package dev.khanhtimn.jel.platform.fabric;
 
 //? fabric {
 
-/*import dev.khanhtimn.jel.JustEnoughLeveling;
+import dev.khanhtimn.jel.JustEnoughLeveling;
 import dev.kikugie.fletching_table.annotation.fabric.Entrypoint;
 import net.fabricmc.api.ModInitializer;
 
@@ -15,4 +15,4 @@ public class FabricEntrypoint implements ModInitializer {
 		FabricEventSubscriber.registerEvents();
 	}
 }
-*///?}
+//?}
