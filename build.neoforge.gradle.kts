@@ -12,6 +12,10 @@ platform {
 		required("neoforge") {
 			forgeVersionRange = "[1,)"
 		}
+		required("framework") {
+			slug("framework")
+			forgeVersionRange = "[${prop("deps.framework")},)"
+		}
 	}
 }
 

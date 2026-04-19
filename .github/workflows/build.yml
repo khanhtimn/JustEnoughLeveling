@@ -4,3 +4,6 @@ on: [ push, pull_request ]
 jobs:
   build:
     uses: ./.github/workflows/build_reusable.yml
+    secrets:
+      GPR_USER: ${{ secrets.GPR_USER }}
+      GPR_KEY: ${{ secrets.GPR_KEY }}

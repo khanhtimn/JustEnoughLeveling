@@ -17,6 +17,9 @@ env:
 jobs:
   build:
     uses: ./.github/workflows/build_reusable.yml
+    secrets:
+      GPR_USER: ${{ secrets.GPR_USER }}
+      GPR_KEY: ${{ secrets.GPR_KEY }}
 
   prepare:
     name: Prepare Release
@@ -190,4 +193,4 @@ jobs:
 
       - name: Publish to Platforms
         run: |
-          ./gradlew publishMods --stacktrace
+          ./gradlew publishMods --stacktrace -Pgpr.user=${{ secrets.GPR_USER }} -Pgpr.key=${{ secrets.GPR_KEY }}

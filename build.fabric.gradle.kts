@@ -16,6 +16,10 @@ platform {
 		required("fabricloader") {
 			versionRange = ">=${libs.fabric.loader.get().version}"
 		}
+		required("framework") {
+			slug("framework")
+			versionRange = ">=${prop("deps.framework")}"
+		}
 		optional("modmenu") {}
 	}
 }

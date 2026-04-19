@@ -12,6 +12,10 @@ platform {
 		required("forge") {
 			forgeVersionRange = "[1,)"
 		}
+		required("framework") {
+			slug("framework")
+			forgeVersionRange = "[${prop("deps.framework")},)"
+		}
 	}
 }
 
