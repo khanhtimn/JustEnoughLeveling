@@ -1,4 +1,4 @@
-package dev.khanhtimn.jel.registry.skill;
+package dev.khanhtimn.jel.common.skill;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;

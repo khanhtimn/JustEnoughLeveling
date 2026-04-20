@@ -1,0 +1,32 @@
+package dev.khanhtimn.jel.platform.fabric.datagen;
+
+//? fabric {
+
+/*import dev.khanhtimn.jel.Constants;
+import dev.khanhtimn.jel.core.ModRegistries;
+import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
+import net.fabricmc.fabric.api.datagen.v1.provider.FabricDynamicRegistryProvider;
+import net.minecraft.core.HolderLookup;
+
+import java.util.concurrent.CompletableFuture;
+
+// Generates JSON files for custom datapack registries (skill definitions).
+// Reads entries populated by SkillDefinitions.bootstrap via the RegistrySetBuilder.
+public class ModDynamicRegistryProvider extends FabricDynamicRegistryProvider {
+
+	public ModDynamicRegistryProvider(FabricDataOutput output,
+			CompletableFuture<HolderLookup.Provider> registriesFuture) {
+		super(output, registriesFuture);
+	}
+
+	@Override
+	protected void configure(HolderLookup.Provider registries, Entries entries) {
+		entries.addAll(registries.lookupOrThrow(ModRegistries.SKILL_REGISTRY_KEY));
+	}
+
+	@Override
+	public String getName() {
+		return Constants.MOD_ID + ":dynamic_registries";
+	}
+}
+*///?}
