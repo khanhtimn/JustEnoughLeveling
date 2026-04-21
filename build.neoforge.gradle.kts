@@ -54,7 +54,14 @@ neoForge {
 
 repositories {
 	mavenCentral()
-	strictMaven("https://api.modrinth.com/maven", "maven.modrinth") { name = "Modrinth" }
+	exclusiveContent {
+		forRepository { maven("https://api.modrinth.com/maven") { name = "Modrinth" } }
+		filter { includeGroup("maven.modrinth") }
+	}
+	exclusiveContent {
+		forRepository { maven("https://cursemaven.com") { name = "CurseForge"} }
+		filter { includeGroup("curse.maven") }
+	}
 	strictMaven("https://maven.bawnorton.com/releases", "com.github.bawnorton.mixinsquared") { name = "MixinSquared" }
 	strictMaven("https://maven.pkg.github.com/MrCrayfish/Maven") {
 		name = "MrCrayfish (GitHub)"

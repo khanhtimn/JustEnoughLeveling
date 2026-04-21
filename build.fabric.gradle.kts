@@ -52,8 +52,15 @@ fabricApi {
 
 repositories {
 	mavenCentral()
+	exclusiveContent {
+		forRepository { maven("https://api.modrinth.com/maven") { name = "Modrinth" } }
+		filter { includeGroup("maven.modrinth") }
+	}
+	exclusiveContent {
+		forRepository { maven("https://cursemaven.com") { name = "CurseForge"} }
+		filter { includeGroup("curse.maven") }
+	}
 	strictMaven("https://maven.terraformersmc.com/", "com.terraformersmc") { name = "TerraformersMC" }
-	strictMaven("https://api.modrinth.com/maven", "maven.modrinth") { name = "Modrinth" }
 	strictMaven("https://maven.bawnorton.com/releases", "com.github.bawnorton.mixinsquared") { name = "MixinSquared" }
 	strictMaven("https://maven.pkg.github.com/MrCrayfish/Maven") {
 		name = "MrCrayfish (GitHub)"

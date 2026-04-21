@@ -14,6 +14,10 @@ pluginManagement {
 			forRepository { maven("https://api.modrinth.com/maven") { name = "Modrinth" } }
 			filter { includeGroup("maven.modrinth") }
 		}
+		exclusiveContent {
+			forRepository { maven("https://cursemaven.com") { name = "CurseForge"} }
+			filter { includeGroup("curse.maven") }
+		}
 	}
 	includeBuild("build-logic")
 }

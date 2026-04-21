@@ -11,8 +11,7 @@ import net.neoforged.neoforge.registries.DataPackRegistryEvent;
 /**
  * Handles NeoForge-specific event subscriptions on the MOD event bus.
  */
-@SuppressWarnings("removal")
-@EventBusSubscriber(bus = EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber()
 public class NeoforgeEventSubscriber {
 
 	@SubscribeEvent
