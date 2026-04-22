@@ -1,8 +1,7 @@
-package dev.khanhtimn.jel.common.skill;
+package dev.khanhtimn.jel.common.skill.impl;
 
 import dev.khanhtimn.jel.core.ModRegistries;
 import dev.khanhtimn.jel.core.ModSyncedDataKeys;
-import dev.khanhtimn.jel.data.skill.SkillsTracker;
 import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.ResourceKey;
@@ -12,22 +11,23 @@ import net.minecraft.world.entity.player.Player;
 /**
  * Orchestrator for skill operations: leveling, XP gain, refunds.
  * <p>
- * This class enforces all game rules (max level, XP formulas, passive recomputation)
+ * Enforces all game rules (max level, XP formulas, passive recomputation)
  * and is the <b>only</b> external-facing API for mutating skill state.
- * Do not modify {@link SkillsTracker} directly from outside this package.
+ * Do not modify {@link PlayerSkillData} directly from outside this package.
  */
 public final class SkillLogic {
 
-	private SkillLogic() {}
+	private SkillLogic() {
+	}
 
 	// ---- Accessor ----
 
 	/**
-	 * Get the live {@link SkillsTracker} for a player.
+	 * Get the live {@link PlayerSkillData} for a player.
 	 * On server: authoritative copy, mutations trigger Framework sync.
 	 * On client: synced read-only copy.
 	 */
-	public static SkillsTracker getSkills(Player player) {
+	public static PlayerSkillData getSkills(Player player) {
 		return ModSyncedDataKeys.PLAYER_SKILLS.getValue(player);
 	}
 
@@ -63,7 +63,7 @@ public final class SkillLogic {
 	 */
 	public static int tryLevelUp(
 			ServerPlayer player,
-			SkillsTracker tracker,
+			PlayerSkillData tracker,
 			ResourceKey<SkillDefinition> skillKey,
 			int levelsToGain
 	) {
@@ -87,7 +87,7 @@ public final class SkillLogic {
 	 */
 	public static int addSkillXp(
 			ServerPlayer player,
-			SkillsTracker tracker,
+			PlayerSkillData tracker,
 			ResourceKey<SkillDefinition> skillKey,
 			int skillXpDelta
 	) {
@@ -115,7 +115,7 @@ public final class SkillLogic {
 	 */
 	public static int addSkillXpFromVanilla(
 			ServerPlayer player,
-			SkillsTracker tracker,
+			PlayerSkillData tracker,
 			ResourceKey<SkillDefinition> skillKey,
 			int maxVanillaXpToSpend
 	) {
@@ -156,7 +156,7 @@ public final class SkillLogic {
 	 */
 	public static int refundSkill(
 			ServerPlayer player,
-			SkillsTracker tracker,
+			PlayerSkillData tracker,
 			ResourceKey<SkillDefinition> skillKey
 	) {
 		RegistryAccess access = player.level().registryAccess();
@@ -195,12 +195,22 @@ public final class SkillLogic {
 	}
 
 	/**
+	 * Reset all skill progress and recompute passives.
+	 * Used by admin commands.
+	 */
+	public static void resetAll(ServerPlayer player) {
+		PlayerSkillData data = getSkills(player);
+		data.clearSkills();
+		recomputeAll(player, data, player.level().registryAccess());
+	}
+
+	/**
 	 * Recompute all passive effects. Delegates to {@link PassiveApplier}.
 	 * Called from event handlers on login/respawn.
 	 */
 	public static void recomputeAll(
 			ServerPlayer player,
-			SkillsTracker tracker,
+			PlayerSkillData tracker,
 			RegistryAccess access
 	) {
 		PassiveApplier.recomputeAll(player, tracker, access);
@@ -210,7 +220,7 @@ public final class SkillLogic {
 
 	private static boolean tryLevelUpOnceInternal(
 			ServerPlayer player,
-			SkillsTracker tracker,
+			PlayerSkillData tracker,
 			ResourceKey<SkillDefinition> skillKey,
 			SkillDefinition def
 	) {

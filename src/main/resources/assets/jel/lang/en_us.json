@@ -1,0 +1,7 @@
+{
+  "gui.jel.skills": "Skills",
+  "gui.jel.skills_tab": "Skills",
+  "gui.jel.inventory_tab": "Inventory",
+  "gui.jel.back_to_inventory": "← Back to Inventory",
+  "gui.jel.vanilla_xp": "Level %s  (%s XP)"
+}

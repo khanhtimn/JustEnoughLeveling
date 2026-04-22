@@ -2,7 +2,7 @@ package dev.khanhtimn.jel.platform.neoforge;
 
 //? neoforge {
 
-import dev.khanhtimn.jel.common.skill.SkillDefinition;
+import dev.khanhtimn.jel.common.skill.impl.SkillDefinition;
 import dev.khanhtimn.jel.core.ModRegistries;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -18,7 +18,8 @@ public class NeoforgeEventSubscriber {
 	public static void registerDatapackRegistries(DataPackRegistryEvent.NewRegistry event) {
 		event.dataPackRegistry(
 				ModRegistries.SKILL_REGISTRY_KEY,
-				SkillDefinition.CODEC
+				SkillDefinition.CODEC,
+				SkillDefinition.NETWORK_CODEC
 		);
 	}
 }

@@ -1,7 +1,7 @@
 package dev.khanhtimn.jel.core;
 
 import dev.khanhtimn.jel.Constants;
-import dev.khanhtimn.jel.common.skill.SkillDefinition;
+import dev.khanhtimn.jel.common.skill.impl.SkillDefinition;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -22,5 +22,6 @@ public final class ModRegistries {
 					ResourceLocation.fromNamespaceAndPath(Constants.MOD_ID, "skill")
 			);
 
-	private ModRegistries() {}
+	private ModRegistries() {
+	}
 }

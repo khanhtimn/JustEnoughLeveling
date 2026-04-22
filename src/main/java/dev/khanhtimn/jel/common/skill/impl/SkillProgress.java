@@ -1,10 +1,9 @@
-package dev.khanhtimn.jel.common.skill;
+package dev.khanhtimn.jel.common.skill.impl;
 
-import dev.khanhtimn.jel.data.skill.SkillsTracker;
 
 /**
  * Immutable value object representing a player's progress in a single skill.
- * Serialization is handled by {@link SkillsTracker}.
+ * Serialization is handled by {@link PlayerSkillData}.
  */
 public record SkillProgress(int level, int xp) {
 	public static final SkillProgress ZERO = new SkillProgress(0, 0);

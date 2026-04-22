@@ -3,9 +3,6 @@ package dev.khanhtimn.jel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
- * Mod-wide constants shared by all loaders and packages.
- */
 public final class Constants {
 
 	public static final String MOD_ID = /*$ mod_id*/ "jel";
@@ -13,5 +10,6 @@ public final class Constants {
 	public static final String MOD_NAME = /*$ mod_name*/ "JustEnoughLeveling";
 	public static final Logger LOG = LoggerFactory.getLogger(MOD_ID);
 
-	private Constants() {}
+	private Constants() {
+	}
 }

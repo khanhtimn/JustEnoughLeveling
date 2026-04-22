@@ -2,7 +2,7 @@ package dev.khanhtimn.jel.core;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mrcrayfish.framework.api.event.ServerEvents;
-import dev.khanhtimn.jel.common.command.SkillCommand;
+import dev.khanhtimn.jel.command.SkillCommand;
 import net.minecraft.commands.CommandSourceStack;
 
 /**
@@ -18,5 +18,6 @@ public final class ModCommands {
 		});
 	}
 
-	private ModCommands() {}
+	private ModCommands() {
+	}
 }

@@ -1,4 +1,4 @@
-package dev.khanhtimn.jel.common.command;
+package dev.khanhtimn.jel.command;
 
 import java.util.Map;
 
@@ -8,11 +8,11 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 
-import dev.khanhtimn.jel.common.skill.SkillDefinition;
-import dev.khanhtimn.jel.common.skill.SkillLogic;
-import dev.khanhtimn.jel.common.skill.SkillProgress;
+import dev.khanhtimn.jel.common.skill.impl.SkillDefinition;
+import dev.khanhtimn.jel.common.skill.impl.SkillLogic;
+import dev.khanhtimn.jel.common.skill.impl.SkillProgress;
 import dev.khanhtimn.jel.core.ModRegistries;
-import dev.khanhtimn.jel.data.skill.SkillsTracker;
+import dev.khanhtimn.jel.common.skill.impl.PlayerSkillData;
 import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -25,14 +25,6 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 
-/**
- * {@code /jel skills} — list all skills and progress.
- * {@code /jel addxp <skill> <amount>} — grant pure skill XP (no vanilla XP
- * spent).
- * {@code /jel levelup <skill> [levels]} — try to level up (spends
- * vanilla XP). {@code /jel refund <skill>} — refund a skill.
- * {@code /jel reset} — reset all skills.
- */
 public final class SkillCommand {
 
 	private static final SuggestionProvider<CommandSourceStack> SUGGEST_SKILLS = (ctx, builder) -> {
@@ -68,7 +60,7 @@ public final class SkillCommand {
 
 	private static int listSkills(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
 		ServerPlayer player = ctx.getSource().getPlayerOrException();
-		SkillsTracker tracker = SkillLogic.getSkills(player);
+		PlayerSkillData tracker = SkillLogic.getSkills(player);
 		RegistryAccess access = player.level().registryAccess();
 		Registry<SkillDefinition> registry = access.registryOrThrow(ModRegistries.SKILL_REGISTRY_KEY);
 
@@ -90,7 +82,7 @@ public final class SkillCommand {
 			SkillDefinition def = entry.getValue();
 			SkillProgress prog = tracker.getProgress(entry.getKey());
 
-			String displayName = def.display().name().getString();
+			String displayName = def.name();
 			int maxLevel = def.maxLevel();
 			int xpNext = def.xpCostForNextLevel(prog.level());
 
@@ -164,10 +156,8 @@ public final class SkillCommand {
 
 	private static int resetAll(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
 		ServerPlayer player = ctx.getSource().getPlayerOrException();
-		SkillsTracker tracker = SkillLogic.getSkills(player);
 
-		tracker.clearSkills();
-		SkillLogic.recomputeAll(player, tracker, player.level().registryAccess());
+		SkillLogic.resetAll(player);
 
 		ctx.getSource().sendSuccess(()
 				-> Component.literal("Reset all skills.").withStyle(ChatFormatting.GREEN), true);

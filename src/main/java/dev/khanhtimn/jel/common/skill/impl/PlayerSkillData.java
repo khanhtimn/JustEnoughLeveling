@@ -1,9 +1,7 @@
-package dev.khanhtimn.jel.data.skill;
+package dev.khanhtimn.jel.common.skill.impl;
 
 import com.mrcrayfish.framework.api.sync.DataSerializer;
 import com.mrcrayfish.framework.api.sync.SyncedObject;
-import dev.khanhtimn.jel.common.skill.SkillDefinition;
-import dev.khanhtimn.jel.common.skill.SkillProgress;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.minecraft.core.HolderLookup;
@@ -15,6 +13,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -29,18 +28,18 @@ import java.util.Set;
  * or synced. This ensures a single source of truth.
  * <p>
  * <b>Mutation methods are package-private</b> — external callers should use
- * {@link dev.khanhtimn.jel.common.skill.SkillLogic} which enforces invariants
+ * {@link SkillLogic} which enforces invariants
  * (max level, passive recomputation, etc.).
  */
-public final class SkillsTracker extends SyncedObject {
+public final class PlayerSkillData extends SyncedObject {
 
 	// ---- Framework serialization ----
 
-	public static final StreamCodec<RegistryFriendlyByteBuf, SkillsTracker> STREAM_CODEC =
-			StreamCodec.of(SkillsTracker::writeNetwork, SkillsTracker::readNetwork);
+	public static final StreamCodec<RegistryFriendlyByteBuf, PlayerSkillData> STREAM_CODEC =
+			StreamCodec.of(PlayerSkillData::writeNetwork, PlayerSkillData::readNetwork);
 
-	public static final DataSerializer<SkillsTracker> SERIALIZER =
-			new DataSerializer<>(STREAM_CODEC, SkillsTracker::writeTag, SkillsTracker::readTag);
+	public static final DataSerializer<PlayerSkillData> SERIALIZER =
+			new DataSerializer<>(STREAM_CODEC, PlayerSkillData::writeTag, PlayerSkillData::readTag);
 
 	// ---- State ----
 
@@ -49,6 +48,10 @@ public final class SkillsTracker extends SyncedObject {
 
 	// Transient: derived from skill levels × definitions, NOT persisted or synced.
 	private final ObjectOpenHashSet<ResourceLocation> abilityFlags = new ObjectOpenHashSet<>();
+
+	// Transient: original attribute base values before JEL overwrote them.
+	// Rebuilt on each recomputeAll() cycle. NOT persisted or synced.
+	private final HashMap<ResourceLocation, Double> originalBases = new HashMap<>();
 
 	// ---- Public query helpers (read-only) ----
 
@@ -104,10 +107,7 @@ public final class SkillsTracker extends SyncedObject {
 	 * Set progress for a skill. Removes entry if progress is zero.
 	 * Marks dirty for Framework sync.
 	 */
-	public void setProgress(
-			ResourceKey<SkillDefinition> skillKey,
-			SkillProgress progress
-	) {
+	void setProgress(ResourceKey<SkillDefinition> skillKey, SkillProgress progress) {
 		setProgress(skillKey.location(), progress);
 	}
 
@@ -115,10 +115,7 @@ public final class SkillsTracker extends SyncedObject {
 	 * Set progress for a skill. Removes entry if progress is zero.
 	 * Marks dirty for Framework sync.
 	 */
-	public void setProgress(
-			ResourceLocation skillId,
-			SkillProgress progress
-	) {
+	void setProgress(ResourceLocation skillId, SkillProgress progress) {
 		if (progress == null || (progress.level() == 0 && progress.xp() == 0)) {
 			if (skills.remove(skillId) == null) return; // was already absent
 		} else {
@@ -128,8 +125,10 @@ public final class SkillsTracker extends SyncedObject {
 		this.markDirty();
 	}
 
-	/** Clear all skill progress. */
-	public void clearSkills() {
+	/**
+	 * Clear all skill progress.
+	 */
+	void clearSkills() {
 		if (!skills.isEmpty()) {
 			skills.clear();
 			this.markDirty();
@@ -138,14 +137,38 @@ public final class SkillsTracker extends SyncedObject {
 
 	// ---- Ability flag mutation (package-private — called by PassiveApplier) ----
 
-	/** Grant an ability flag. No persistence, transient only. */
-	public void grantAbilityFlag(ResourceLocation flagId) {
+	/**
+	 * Grant an ability flag. No persistence, transient only.
+	 */
+	void grantAbilityFlag(ResourceLocation flagId) {
 		abilityFlags.add(flagId);
 	}
 
-	/** Clear all ability flags (called before passive recomputation). */
-	public void clearAbilityFlags() {
+	/**
+	 * Clear all ability flags (called before passive recomputation).
+	 */
+	void clearAbilityFlags() {
 		abilityFlags.clear();
+	}
+
+	// ---- Original base tracking (transient, package-private) ----
+
+	/**
+	 * Save the original base value for an attribute before JEL modifies it.
+	 * Uses putIfAbsent so only the first (vanilla) value is retained per cycle.
+	 */
+	void saveOriginalBase(ResourceLocation attr, double originalValue) {
+		originalBases.putIfAbsent(attr, originalValue);
+	}
+
+	/** Get all saved original base values. */
+	Map<ResourceLocation, Double> getOriginalBases() {
+		return Collections.unmodifiableMap(originalBases);
+	}
+
+	/** Clear saved original bases (called at start of revoke cycle). */
+	void clearOriginalBases() {
+		originalBases.clear();
 	}
 
 	// ---- NBT serialization (skills only — ability flags are transient) ----
@@ -167,9 +190,9 @@ public final class SkillsTracker extends SyncedObject {
 		return tag;
 	}
 
-	private static SkillsTracker readTag(Tag tag, HolderLookup.Provider provider) {
+	private static PlayerSkillData readTag(Tag tag, HolderLookup.Provider provider) {
 		CompoundTag data = (CompoundTag) tag;
-		SkillsTracker tracker = new SkillsTracker();
+		PlayerSkillData skillData = new PlayerSkillData();
 
 		if (data.contains("skills", Tag.TAG_COMPOUND)) {
 			CompoundTag skillsTag = data.getCompound("skills");
@@ -179,19 +202,19 @@ public final class SkillsTracker extends SyncedObject {
 					CompoundTag progressTag = skillsTag.getCompound(key);
 					int level = progressTag.getInt("level");
 					int xp = progressTag.getInt("xp");
-					tracker.skills.put(id, new SkillProgress(level, xp));
+					skillData.skills.put(id, new SkillProgress(level, xp));
 				}
 			}
 		}
 
-		return tracker;
+		return skillData;
 	}
 
 	// ---- Network serialization (skills only — ability flags are transient) ----
 
-	private static void writeNetwork(RegistryFriendlyByteBuf buf, SkillsTracker tracker) {
-		buf.writeVarInt(tracker.skills.size());
-		tracker.skills.forEach((id, progress) -> {
+	private static void writeNetwork(RegistryFriendlyByteBuf buf, PlayerSkillData skillData) {
+		buf.writeVarInt(skillData.skills.size());
+		skillData.skills.forEach((id, progress) -> {
 			buf.writeResourceLocation(id);
 			buf.writeVarInt(progress.level());
 			buf.writeVarInt(progress.xp());
@@ -200,17 +223,17 @@ public final class SkillsTracker extends SyncedObject {
 		// Ability flags are NOT synced — they are derived state.
 	}
 
-	private static SkillsTracker readNetwork(RegistryFriendlyByteBuf buf) {
-		SkillsTracker tracker = new SkillsTracker();
+	private static PlayerSkillData readNetwork(RegistryFriendlyByteBuf buf) {
+		PlayerSkillData skillData = new PlayerSkillData();
 
 		int skillCount = buf.readVarInt();
 		for (int i = 0; i < skillCount; i++) {
 			ResourceLocation id = buf.readResourceLocation();
 			int level = buf.readVarInt();
 			int xp = buf.readVarInt();
-			tracker.skills.put(id, new SkillProgress(level, xp));
+			skillData.skills.put(id, new SkillProgress(level, xp));
 		}
 
-		return tracker;
+		return skillData;
 	}
 }

@@ -1,12 +1,13 @@
 package dev.khanhtimn.jel;
 
+import dev.khanhtimn.jel.client.ClientBootstrap;
 import dev.khanhtimn.jel.platform.Platform;
 
 //? fabric {
 /*import dev.khanhtimn.jel.platform.fabric.FabricPlatform;
  *///?} neoforge {
 import dev.khanhtimn.jel.platform.neoforge.NeoforgePlatform;
- //?} forge {
+		//?} forge {
 /*import dev.khanhtimn.jel.platform.forge.ForgePlatform;
  *///?}
 
@@ -21,6 +22,7 @@ public class JustEnoughLeveling {
 
 	public static void onInitializeClient() {
 		Constants.LOG.info("Initializing {} Client on {}", Constants.MOD_ID, xplat().loader());
+		ClientBootstrap.init();
 	}
 
 	static Platform xplat() {

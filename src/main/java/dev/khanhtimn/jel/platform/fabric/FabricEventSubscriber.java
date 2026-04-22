@@ -2,7 +2,7 @@ package dev.khanhtimn.jel.platform.fabric;
 
 //? fabric {
 
-/*import dev.khanhtimn.jel.common.skill.SkillDefinition;
+/*import dev.khanhtimn.jel.common.skill.impl.SkillDefinition;
 import dev.khanhtimn.jel.core.ModRegistries;
 import net.fabricmc.fabric.api.event.registry.DynamicRegistries;
 
@@ -10,10 +10,11 @@ import net.fabricmc.fabric.api.event.registry.DynamicRegistries;
 public class FabricEventSubscriber {
 
 	public static void registerEvents() {
-		// Register the SkillDefinition datapack registry via Fabric API
-		DynamicRegistries.register(
+		// Register the SkillDefinition datapack registry via Fabric API (synced to clients)
+		DynamicRegistries.registerSynced(
 				ModRegistries.SKILL_REGISTRY_KEY,
-				SkillDefinition.CODEC
+				SkillDefinition.CODEC,
+				SkillDefinition.NETWORK_CODEC
 		);
 	}
 }

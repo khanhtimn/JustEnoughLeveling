@@ -1,29 +1,25 @@
 {
-  "display": {
-    "color": 5636095,
-    "description": "Improves mining efficiency",
-    "icon_item": "minecraft:diamond_pickaxe",
-    "name": {
-      "color": "#55FFFF",
-      "text": "Mining"
-    }
-  },
+  "color": "#55FFFF",
+  "description": "Improves mining efficiency",
+  "icon": "minecraft:diamond_pickaxe",
   "max_level": 15,
+  "name": "Mining",
   "passives": [
     {
-      "type": "attribute",
-      "amount_per_level": 0.1,
+      "type": "attribute_modifier",
+      "amount": {
+        "type": "minecraft:linear",
+        "base": 0.1,
+        "per_level_above_first": 0.1
+      },
       "attribute": "minecraft:player.block_break_speed",
       "operation": "add_multiplied_base",
       "unlock_level": 1
     }
   ],
-  "xp": {
-    "type": "constant",
-    "xp_per_level": 200
-  },
+  "xp": 200.0,
   "xp_conversion": {
-    "type": "ratio",
-    "vanilla_per_skill_xp": 1.5
+    "skill_to_vanilla_rate": 1.5,
+    "vanilla_to_skill_rate": 0.6666667
   }
 }

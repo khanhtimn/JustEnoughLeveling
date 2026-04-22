@@ -2,8 +2,8 @@ package dev.khanhtimn.jel.platform.fabric.datagen;
 
 //? fabric {
 
-/*import dev.khanhtimn.jel.common.skill.skills.SkillDefinitions;
-import dev.khanhtimn.jel.core.ModRegistries;
+/*import dev.khanhtimn.jel.core.ModRegistries;
+import dev.khanhtimn.jel.common.skill.ModSkills;
 import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 //? != 1.19.2 {
@@ -22,7 +22,7 @@ public class FabricDataGeneratorEntrypoint implements DataGeneratorEntrypoint {
 
 	@Override
 	public void buildRegistry(RegistrySetBuilder builder) {
-		builder.add(ModRegistries.SKILL_REGISTRY_KEY, SkillDefinitions::bootstrap);
+		builder.add(ModRegistries.SKILL_REGISTRY_KEY, ModSkills::bootstrap);
 	}
 
 }
