@@ -82,7 +82,7 @@ public final class SkillCommand {
 			SkillDefinition def = entry.getValue();
 			SkillProgress prog = tracker.getProgress(entry.getKey());
 
-			String displayName = def.name();
+			String displayName = def.name().getString();
 			int maxLevel = def.maxLevel();
 			int xpNext = def.xpCostForNextLevel(prog.level());
 

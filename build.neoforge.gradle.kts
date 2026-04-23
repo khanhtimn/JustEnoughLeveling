@@ -84,6 +84,7 @@ dependencies {
 	runtimeOnly("maven.modrinth:sodium:mc${prop("deps.minecraft")}-${prop("deps.sodium")}-neoforge")
 	runtimeOnly("maven.modrinth:sodium-extra:mc${prop("deps.minecraft")}-${prop("deps.sodium-extra")}+neoforge")
 	runtimeOnly("dev.emi:emi-neoforge:${prop("deps.emi")}+${prop("deps.minecraft")}")
+	runtimeOnly("maven.modrinth:jade:${prop("deps.jade")}+neoforge")
 }
 
 tasks.named("createMinecraftArtifacts") {

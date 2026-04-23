@@ -14,7 +14,7 @@ public final class SkillEvents {
 	}
 
 	/**
-	 * Recompute all passive effects for a player that just
+	 * Recompute all skill effects for a player that just
 	 * entered the game (login) or returned from death/end-portal (respawn).
 	 */
 	private static void onPlayerReady(Player player) {

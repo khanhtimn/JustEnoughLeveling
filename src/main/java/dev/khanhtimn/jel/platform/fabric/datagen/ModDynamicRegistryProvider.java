@@ -11,8 +11,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.CompletableFuture;
 
-// Generates JSON files for custom datapack registries (skill definitions).
-// Reads entries populated by SkillDefinitions.bootstrap via the RegistrySetBuilder.
 public class ModDynamicRegistryProvider extends FabricDynamicRegistryProvider {
 
 	public ModDynamicRegistryProvider(FabricDataOutput output,

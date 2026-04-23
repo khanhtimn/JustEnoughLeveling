@@ -1,93 +1,98 @@
 package dev.khanhtimn.jel.common.skill.impl;
 
 import com.mojang.serialization.Codec;
-import com.mojang.serialization.DataResult;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.ChatFormatting;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.ComponentSerialization;
+import net.minecraft.network.chat.TextColor;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
-import net.minecraft.world.item.enchantment.LevelBasedValue;
+import net.minecraft.world.item.Item;
+
+import dev.khanhtimn.jel.common.skill.impl.perk.Perk;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Data-driven definition of a skill, loaded from a datapack JSON.
- * <p>
- * All fields are top-level for maximum readability:
+ * Definition of a skill.
  * <pre>{@code
  * {
  *   "name": "Constitution",
+ *   "name": {"translate": "skill.jel.constitution"},
  *   "description": "Increases max health",
  *   "icon": "minecraft:golden_apple",
  *   "color": "#CC3333",
  *   "max_level": 10,
  *   "xp": { "type": "minecraft:linear", "base": 100, "per_level_above_first": 50 },
- *   "xp_conversion": { ... },
- *   "passives": [ ... ]
+ *   "attributes": [ ... ],
+ *   "perks": [ ... ]
  * }
  * }</pre>
  */
 public record SkillDefinition(
-		String name,
-		String description,
+		Component name,
+		Component description,
 		ResourceLocation icon,
 		int color,
 		int maxLevel,
 		XpFormula xp,
 		XpConversion xpConversion,
-		List<SkillPassive> passives
+		List<AttributeEffect> attributes,
+		List<Perk> perks
 ) {
 
-	// ---- Hex color codec: "#RRGGBB" ↔ int ----
-
-	public static final Codec<Integer> HEX_COLOR_CODEC = Codec.STRING.comapFlatMap(
-			s -> {
-				try {
-					String hex = s.startsWith("#") ? s.substring(1) : s;
-					return DataResult.success(Integer.parseUnsignedInt(hex, 16));
-				} catch (NumberFormatException e) {
-					return DataResult.error(() -> "Invalid hex color: " + s);
-				}
-			},
-			i -> "#" + String.format("%06X", i & 0xFFFFFF)
+	/**
+	 * Color codec using vanilla's {@link TextColor}. Accepts:
+	 * <ul>
+	 *   <li>Hex strings: {@code "#CC3333"}</li>
+	 *   <li>Named colors: {@code "red"}, {@code "gold"}, {@code "dark_blue"}, etc.</li>
+	 * </ul>
+	 */
+	public static final Codec<Integer> COLOR_CODEC = TextColor.CODEC.xmap(
+			TextColor::getValue,
+			TextColor::fromRgb
 	);
 
-	// ---- Main codec ----
-
-	public static final Codec<SkillDefinition> CODEC =
-			RecordCodecBuilder.create(instance -> instance.group(
-					Codec.STRING.fieldOf("name")
-							.forGetter(SkillDefinition::name),
-					Codec.STRING.optionalFieldOf("description", "")
-							.forGetter(SkillDefinition::description),
-					ResourceLocation.CODEC.fieldOf("icon")
-							.forGetter(SkillDefinition::icon),
-					HEX_COLOR_CODEC.optionalFieldOf("color", 0xFFFFFF)
-							.forGetter(SkillDefinition::color),
-					Codec.INT.fieldOf("max_level")
-							.forGetter(SkillDefinition::maxLevel),
-					XpFormula.CODEC.optionalFieldOf("xp", XpFormula.vanilla())
-							.forGetter(SkillDefinition::xp),
-					XpConversion.CODEC.optionalFieldOf(
-									"xp_conversion",
-									XpConversion.IDENTITY
-							)
-							.forGetter(SkillDefinition::xpConversion),
-					SkillPassive.CODEC.listOf()
-							.optionalFieldOf("passives", List.of())
-							.forGetter(SkillDefinition::passives)
-			).apply(instance, SkillDefinition::new));
+	public static final Codec<SkillDefinition> CODEC
+			= RecordCodecBuilder.create(instance -> instance.group(
+			ComponentSerialization.CODEC.fieldOf("name")
+					.forGetter(SkillDefinition::name),
+			ComponentSerialization.CODEC.optionalFieldOf("description", Component.empty())
+					.forGetter(SkillDefinition::description),
+			ResourceLocation.CODEC.fieldOf("icon")
+					.forGetter(SkillDefinition::icon),
+			COLOR_CODEC.optionalFieldOf("color", 0xFFFFFF)
+					.forGetter(SkillDefinition::color),
+			Codec.INT.fieldOf("max_level")
+					.forGetter(SkillDefinition::maxLevel),
+			XpFormula.CODEC.optionalFieldOf("xp", XpFormula.vanilla())
+					.forGetter(SkillDefinition::xp),
+			XpConversion.CODEC.optionalFieldOf(
+							"xp_conversion",
+							XpConversion.IDENTITY
+					)
+					.forGetter(SkillDefinition::xpConversion),
+			AttributeEffect.CODEC.listOf()
+					.optionalFieldOf("attributes", List.of())
+					.forGetter(SkillDefinition::attributes),
+			Perk.CODEC.listOf()
+					.optionalFieldOf("perks", List.of())
+					.forGetter(SkillDefinition::perks)
+	).apply(instance, SkillDefinition::new));
 
 	public static final Codec<SkillDefinition> NETWORK_CODEC = CODEC;
 
 	public SkillDefinition {
-		if (maxLevel < 1) maxLevel = 1;
-		passives = List.copyOf(passives);
+		if (maxLevel < 1) {
+			maxLevel = 1;
+		}
+		attributes = List.copyOf(attributes);
+		perks = List.copyOf(perks);
 	}
 
-	/**
-	 * Creates a new fluent builder for constructing a {@link SkillDefinition}.
-	 */
 	public static Builder builder() {
 		return new Builder();
 	}
@@ -100,45 +105,33 @@ public record SkillDefinition(
 		return level >= maxLevel;
 	}
 
-	/**
-	 * Skill XP needed to reach targetLevel from targetLevel-1.
-	 */
 	public int xpCostForLevel(int targetLevel) {
-		if (targetLevel <= 0 || targetLevel > maxLevel) return 0;
+		if (targetLevel <= 0 || targetLevel > maxLevel) {
+			return 0;
+		}
 		return xp.costForLevel(targetLevel);
 	}
 
-	/**
-	 * Skill XP needed to go from currentLevel to currentLevel+1.
-	 */
 	public int xpCostForNextLevel(int currentLevel) {
-		if (isMaxLevel(currentLevel)) return 0;
+		if (isMaxLevel(currentLevel)) {
+			return 0;
+		}
 		return xp.costForLevel(currentLevel + 1);
 	}
 
-	/**
-	 * Total skill XP to reach targetLevel from 0.
-	 */
 	public int totalXpCostToReachLevel(int targetLevel) {
 		targetLevel = clampLevel(targetLevel);
 		return xp.totalCostToLevel(targetLevel);
 	}
 
-	/**
-	 * Convert vanilla XP to skill XP using this skill's conversion rate.
-	 */
 	public int vanillaToSkillXp(int vanillaXp, int skillLevel) {
 		return xpConversion.vanillaToSkillXp(vanillaXp, skillLevel);
 	}
 
-	/**
-	 * Convert skill XP to vanilla XP (for refunds) using this skill's conversion rate.
-	 */
 	public int skillToVanillaXp(int skillXp, int skillLevel) {
 		return xpConversion.skillToVanillaXp(skillXp, skillLevel);
 	}
 
-	// ---- Builder ----
 
 	/**
 	 * Fluent builder for constructing {@link SkillDefinition} instances.
@@ -151,33 +144,44 @@ public record SkillDefinition(
 	 *     .icon("minecraft:diamond_sword")
 	 *     .color(0xFF4444)
 	 *     .maxLevel(10)
-	 *     .xpFormula(XpFormula.of(LevelBasedValue.perLevel(100, 50)))
-	 *     .passive(SkillPassive.attributeBonus(1, "minecraft:generic.attack_damage",
-	 *         LevelBasedValue.perLevel(0.5f, 0.5f), AttributeModifier.Operation.ADD_VALUE))
+	 *     .attribute(AttributeEffect.modifier("minecraft:generic.attack_damage",
+	 *         AttributeModifier.Operation.ADD_VALUE, LevelBasedValue.perLevel(0.5f, 0.5f), 1))
+	 *     .tag("jel.combat_mastery", 5)
 	 *     .build();
 	 * }</pre>
 	 */
 	public static final class Builder {
 
-		private String name = "Unnamed";
-		private String description = "";
+		private Component name = Component.literal("Unnamed");
+		private Component description = Component.empty();
 		private ResourceLocation iconItem = ResourceLocation.withDefaultNamespace("barrier");
 		private int color = 0xFFFFFF;
 		private int maxLevel = 10;
 		private XpFormula xpFormula = XpFormula.vanilla();
 		private XpConversion xpConversion = XpConversion.identity();
-		private final List<SkillPassive> passives = new ArrayList<>();
+		private final List<AttributeEffect> attributes = new ArrayList<>();
+		private final List<Perk> perks = new ArrayList<>();
 
 		private Builder() {
 		}
 
 		public Builder name(String text) {
-			this.name = text;
+			this.name = Component.literal(text);
+			return this;
+		}
+
+		public Builder name(Component component) {
+			this.name = component;
 			return this;
 		}
 
 		public Builder description(String text) {
-			this.description = text;
+			this.description = Component.literal(text);
+			return this;
+		}
+
+		public Builder description(Component component) {
+			this.description = component;
 			return this;
 		}
 
@@ -186,12 +190,53 @@ public record SkillDefinition(
 			return this;
 		}
 
+		public Builder icon(Item item) {
+			this.iconItem = BuiltInRegistries.ITEM.getKey(item);
+			return this;
+		}
+
+		public Builder icon(ResourceLocation itemId) {
+			this.iconItem = itemId;
+			return this;
+		}
+
 		/**
-		 * Set the skill's theme color. Used for name text, progress bar,
-		 * card border, and other UI accents.
+		 * Set the skill's theme color from an RGB int (e.g. {@code 0xFF4444}).
+		 * Used for name text, progress bar, card border, and other UI accents.
 		 */
-		public Builder color(int displayColor) {
-			this.color = displayColor;
+		public Builder color(int rgb) {
+			this.color = rgb;
+			return this;
+		}
+
+		/**
+		 * Set the skill's theme color from a hex string ({@code "#CC3333"})
+		 * or named color ({@code "red"}, {@code "gold"}, etc.).
+		 */
+		public Builder color(String colorStr) {
+			this.color = TextColor.parseColor(colorStr)
+					.getOrThrow().getValue();
+			return this;
+		}
+
+		public Builder color(TextColor textColor) {
+			this.color = textColor.getValue();
+			return this;
+		}
+
+		/**
+		 * Set the skill's theme color from a vanilla {@link ChatFormatting}
+		 * (e.g. {@code ChatFormatting.RED}, {@code ChatFormatting.GOLD}).
+		 *
+		 * @throws IllegalArgumentException if the formatting has no color
+		 */
+		public Builder color(ChatFormatting formatting) {
+			TextColor tc = TextColor.fromLegacyFormat(formatting);
+			if (tc == null) {
+				throw new IllegalArgumentException(
+						"ChatFormatting." + formatting.name() + " has no color");
+			}
+			this.color = tc.getValue();
 			return this;
 		}
 
@@ -210,20 +255,23 @@ public record SkillDefinition(
 			return this;
 		}
 
-		public Builder passive(SkillPassive passive) {
-			this.passives.add(passive);
+		public Builder attribute(AttributeEffect effect) {
+			this.attributes.add(effect);
 			return this;
 		}
 
-		/**
-		 * Add an attribute base override passive. Always active from level 0.
-		 * Sets the attribute's base value directly.
-		 *
-		 * @param attribute the attribute (e.g. "minecraft:generic.max_health")
-		 * @param value     level-based value computing the new base
-		 */
-		public Builder attributeBase(String attribute, LevelBasedValue value) {
-			this.passives.add(SkillPassive.attributeBase(attribute, value));
+		public Builder attribute(List<AttributeEffect> effects) {
+			this.attributes.addAll(effects);
+			return this;
+		}
+
+		public Builder perk(Perk perk) {
+			this.perks.add(perk);
+			return this;
+		}
+
+		public Builder perk(List<Perk> perkEntries) {
+			this.perks.addAll(perkEntries);
 			return this;
 		}
 
@@ -236,7 +284,8 @@ public record SkillDefinition(
 					maxLevel,
 					xpFormula,
 					xpConversion,
-					List.copyOf(passives)
+					List.copyOf(attributes),
+					List.copyOf(perks)
 			);
 		}
 	}

@@ -1,34 +1,30 @@
 {
-  "color": "#CC3333",
-  "description": "Increases max health",
-  "icon": "minecraft:golden_apple",
-  "max_level": 10,
-  "name": "Constitution",
-  "passives": [
+  "attributes": [
     {
-      "type": "attribute_base",
       "attribute": "minecraft:generic.max_health",
+      "operation": "base",
       "value": {
-        "type": "minecraft:lookup",
-        "fallback": 20.0,
-        "values": [
-          6.0,
-          8.0,
-          10.0,
-          12.0,
-          14.0,
-          16.0,
-          17.0,
-          18.0,
-          19.0,
-          20.0
-        ]
+        "type": "minecraft:linear",
+        "base": 6.0,
+        "per_level_above_first": 1.0
       }
-    },
+    }
+  ],
+  "color": "#FFAA00",
+  "description": {
+    "translate": "jel.skill.constitution.description"
+  },
+  "icon": "minecraft:golden_apple",
+  "max_level": 34,
+  "name": {
+    "translate": "jel.skill.constitution.name"
+  },
+  "perks": [
     {
-      "type": "flag",
-      "flag": "jel:self_heal",
-      "unlock_level": 10
+      "type": "jel:effect",
+      "amplifier": 1,
+      "effect": "minecraft:regeneration",
+      "unlock_level": 24
     }
   ],
   "xp": {

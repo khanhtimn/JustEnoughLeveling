@@ -48,7 +48,6 @@ public record XpConversion(
 		LevelBasedValue skillToVanillaRate
 ) {
 
-	/** Identity conversion: 1:1 in both directions. */
 	public static final XpConversion IDENTITY = new XpConversion(
 			LevelBasedValue.constant(1f),
 			LevelBasedValue.constant(1f)
@@ -65,9 +64,7 @@ public record XpConversion(
 			).apply(instance, XpConversion::new)
 	);
 
-	// ---- Factory methods ----
 
-	/** 1:1 conversion (default). */
 	public static XpConversion identity() {
 		return IDENTITY;
 	}
@@ -85,34 +82,16 @@ public record XpConversion(
 		);
 	}
 
-	/**
-	 * Full control: specify both rates as {@link LevelBasedValue}s.
-	 */
 	public static XpConversion of(LevelBasedValue vanillaToSkill, LevelBasedValue skillToVanilla) {
 		return new XpConversion(vanillaToSkill, skillToVanilla);
 	}
 
-	// ---- Conversion methods ----
 
-	/**
-	 * Convert vanilla XP points to skill XP.
-	 *
-	 * @param vanillaXp  amount of vanilla XP being spent
-	 * @param skillLevel the player's current level in this skill
-	 * @return skill XP gained
-	 */
 	public int vanillaToSkillXp(int vanillaXp, int skillLevel) {
 		float rate = vanillaToSkillRate.calculate(skillLevel + 1);
 		return Math.max(0, Math.round(vanillaXp * rate));
 	}
 
-	/**
-	 * Convert skill XP back to vanilla XP (for refunds).
-	 *
-	 * @param skillXp    amount of skill XP to convert back
-	 * @param skillLevel the player's current level in this skill
-	 * @return vanilla XP refunded
-	 */
 	public int skillToVanillaXp(int skillXp, int skillLevel) {
 		float rate = skillToVanillaRate.calculate(skillLevel + 1);
 		return Math.max(0, Math.round(skillXp * rate));

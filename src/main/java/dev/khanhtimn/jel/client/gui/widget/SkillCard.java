@@ -11,7 +11,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -37,7 +36,7 @@ public class SkillCard extends AbstractWidget {
 	public SkillCard(int x, int y, int width, int height,
 	                 ResourceKey<SkillDefinition> skillKey,
 	                 SkillDefinition definition) {
-		super(x, y, width, height, Component.literal(definition.name()));
+		super(x, y, width, height, definition.name());
 		this.skillKey = skillKey;
 		this.definition = definition;
 		this.iconStack = new ItemStack(

@@ -41,39 +41,19 @@ import net.minecraft.world.item.enchantment.LevelBasedValue;
 public sealed interface XpFormula
 		permits XpFormula.Vanilla, XpFormula.Exponential, XpFormula.LevelBased {
 
-	// ---- Factory methods ----
 
-	/**
-	 * Minecraft's piecewise XP curve.
-	 */
 	static XpFormula vanilla() {
 		return Vanilla.INSTANCE;
 	}
 
-	/**
-	 * Exponential: {@code base × multiplier^(level-1)}.
-	 * <p>
-	 * No {@link LevelBasedValue} equivalent exists for this formula.
-	 */
 	static XpFormula exponential(int base, double multiplier) {
 		return new Exponential(base, multiplier);
 	}
 
-	/**
-	 * Delegate to any {@link LevelBasedValue} for full flexibility.
-	 * <p>
-	 * This is the primary entry point for custom XP curves:
-	 * <pre>{@code
-	 * XpFormula.of(LevelBasedValue.constant(200))
-	 * XpFormula.of(LevelBasedValue.perLevel(100, 50))
-	 * XpFormula.of(LevelBasedValue.lookup(List.of(50f, 100f, 200f), fallback))
-	 * }</pre>
-	 */
 	static XpFormula of(LevelBasedValue cost) {
 		return new LevelBased(cost);
 	}
 
-	// ---- Codec ----
 
 	/**
 	 * Codec handling all JSON forms:
@@ -136,17 +116,9 @@ public sealed interface XpFormula
 		}
 	};
 
-	// ---- Interface ----
 
-	/**
-	 * Skill XP required to go from skill level (level - 1) → level.
-	 */
 	int costForLevel(int level);
 
-	/**
-	 * Total skill XP required to reach {@code targetLevel} from 0.
-	 * Default implementation iterates and sums.
-	 */
 	default int totalCostToLevel(int targetLevel) {
 		if (targetLevel <= 0) {
 			return 0;
@@ -161,12 +133,7 @@ public sealed interface XpFormula
 		return (int) total;
 	}
 
-	// ---- Variants ----
 
-	/**
-	 * Minecraft's piecewise XP curve. Uses the same cost-per-level
-	 * as vanilla's experience bar.
-	 */
 	record Vanilla() implements XpFormula {
 
 		public static final Vanilla INSTANCE = new Vanilla();
@@ -176,17 +143,10 @@ public sealed interface XpFormula
 			if (level <= 0) {
 				return 0;
 			}
-			// Vanilla XP cost for (level - 1) → level
 			return VanillaXpHelper.xpNeededForLevel(level - 1);
 		}
 	}
 
-	/**
-	 * Exponential: {@code base × multiplier^(level - 1)}.
-	 * <p>
-	 * No vanilla {@link LevelBasedValue} equivalent exists for this formula,
-	 * so it's kept as a dedicated variant.
-	 */
 	record Exponential(int base, double multiplier) implements XpFormula {
 
 		public static final MapCodec<Exponential> MAP_CODEC
@@ -217,11 +177,6 @@ public sealed interface XpFormula
 		}
 	}
 
-	/**
-	 * Delegates to any {@link LevelBasedValue} for the cost computation.
-	 * Supports all vanilla LBV types: constant, linear, lookup, clamped,
-	 * fraction, levels_squared.
-	 */
 	record LevelBased(LevelBasedValue cost) implements XpFormula {
 
 		@Override

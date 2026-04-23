@@ -93,6 +93,7 @@ dependencies {
 	modLocalRuntime("maven.modrinth:sodium:mc${prop("deps.minecraft")}-${prop("deps.sodium")}-fabric")
 	modLocalRuntime("maven.modrinth:sodium-extra:mc${prop("deps.minecraft")}-${prop("deps.sodium-extra")}+fabric")
 	modLocalRuntime("dev.emi:emi-fabric:${prop("deps.emi")}+${prop("deps.minecraft")}")
+	modLocalRuntime("maven.modrinth:jade:${prop("deps.jade")}+fabric")
 }
 
 stonecutter {
