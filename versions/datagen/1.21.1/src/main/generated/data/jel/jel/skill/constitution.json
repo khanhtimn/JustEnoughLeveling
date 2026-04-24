@@ -21,10 +21,19 @@
   },
   "perks": [
     {
+      "type": "jel:trait",
+      "trait": "jel:bonus_natural_regen",
+      "unlock_level": 10,
+      "value": {
+        "type": "minecraft:linear",
+        "base": 0.0,
+        "per_level_above_first": 0.025
+      }
+    },
+    {
       "type": "jel:effect",
-      "amplifier": 1,
       "effect": "minecraft:regeneration",
-      "unlock_level": 24
+      "unlock_level": 34
     }
   ],
   "xp": {

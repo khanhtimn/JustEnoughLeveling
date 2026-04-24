@@ -2,15 +2,16 @@ package dev.khanhtimn.jel.client.gui.widget;
 
 import dev.khanhtimn.jel.core.ModNetwork;
 import dev.khanhtimn.jel.network.message.MessageLevelUpSkill;
-import dev.khanhtimn.jel.common.skill.impl.SkillDefinition;
-import dev.khanhtimn.jel.common.skill.impl.SkillLogic;
-import dev.khanhtimn.jel.common.skill.impl.SkillProgress;
-import dev.khanhtimn.jel.common.skill.impl.VanillaXpHelper;
-import dev.khanhtimn.jel.common.skill.impl.PlayerSkillData;
+import dev.khanhtimn.jel.api.skill.SkillDefinition;
+import dev.khanhtimn.jel.api.JelSkills;
+import dev.khanhtimn.jel.api.skill.SkillProgress;
+import dev.khanhtimn.jel.common.VanillaXpHelper;
+import dev.khanhtimn.jel.common.PlayerSkillData;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -20,7 +21,7 @@ import org.jetbrains.annotations.NotNull;
  * Shows icon, name, level, XP bar, and a level-up button.
  * <p>
  * Reads the live {@link PlayerSkillData} fresh each frame via
- * {@link SkillLogic#getSkills} so that synced updates from the
+ * {@link JelSkills#getSkillData} so that synced updates from the
  * server are reflected immediately.
  */
 public class SkillCard extends AbstractWidget {
@@ -40,7 +41,7 @@ public class SkillCard extends AbstractWidget {
 		this.skillKey = skillKey;
 		this.definition = definition;
 		this.iconStack = new ItemStack(
-				net.minecraft.core.registries.BuiltInRegistries.ITEM.get(definition.icon())
+				BuiltInRegistries.ITEM.get(definition.icon())
 		);
 	}
 
@@ -50,7 +51,7 @@ public class SkillCard extends AbstractWidget {
 	private PlayerSkillData liveTracker() {
 		Minecraft mc = Minecraft.getInstance();
 		if (mc.player == null) return new PlayerSkillData();
-		return SkillLogic.getSkills(mc.player);
+		return JelSkills.getSkillData(mc.player);
 	}
 
 	@Override

@@ -3,7 +3,7 @@ package dev.khanhtimn.jel.platform.fabric.datagen;
 //? fabric {
 
 /*import dev.khanhtimn.jel.Constants;
-import dev.khanhtimn.jel.core.ModRegistries;
+import dev.khanhtimn.jel.api.JelRegistries;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricDynamicRegistryProvider;
 import net.minecraft.core.HolderLookup;
@@ -20,7 +20,7 @@ public class ModDynamicRegistryProvider extends FabricDynamicRegistryProvider {
 
 	@Override
 	protected void configure(HolderLookup.Provider registries, Entries entries) {
-		entries.addAll(registries.lookupOrThrow(ModRegistries.SKILL_REGISTRY_KEY));
+		entries.addAll(registries.lookupOrThrow(JelRegistries.SKILL_REGISTRY_KEY));
 	}
 
 	@NotNull

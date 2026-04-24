@@ -2,9 +2,9 @@ package dev.khanhtimn.jel.network.message;
 
 import com.mrcrayfish.framework.api.network.MessageContext;
 import dev.khanhtimn.jel.Constants;
-import dev.khanhtimn.jel.common.skill.impl.SkillDefinition;
-import dev.khanhtimn.jel.common.skill.impl.SkillLogic;
-import dev.khanhtimn.jel.core.ModRegistries;
+import dev.khanhtimn.jel.api.skill.SkillDefinition;
+import dev.khanhtimn.jel.api.JelSkills;
+import dev.khanhtimn.jel.api.JelRegistries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceKey;
@@ -24,10 +24,10 @@ public record MessageLevelUpSkill(ResourceLocation skillId) {
 		context.execute(() -> context.getPlayer().ifPresent(player -> {
 			if (player instanceof ServerPlayer serverPlayer) {
 				ResourceKey<SkillDefinition> key = ResourceKey.create(
-						ModRegistries.SKILL_REGISTRY_KEY,
+						JelRegistries.SKILL_REGISTRY_KEY,
 						message.skillId()
 				);
-				boolean success = SkillLogic.tryLevelUpOnce(serverPlayer, key);
+				boolean success = JelSkills.tryLevelUpOnce(serverPlayer, key);
 				if (!success) {
 					Constants.LOG.debug("Level-up denied for {} on skill {} (insufficient XP or max level)",
 							serverPlayer.getName().getString(), message.skillId());

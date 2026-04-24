@@ -2,7 +2,7 @@ package dev.khanhtimn.jel.core;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mrcrayfish.framework.api.event.ServerEvents;
-import dev.khanhtimn.jel.command.SkillCommand;
+import dev.khanhtimn.jel.command.JelCommand;
 import net.minecraft.commands.CommandSourceStack;
 
 public final class ModCommands {
@@ -11,7 +11,7 @@ public final class ModCommands {
 		ServerEvents.STARTING.register(server -> {
 			CommandDispatcher<CommandSourceStack> dispatcher =
 					server.getCommands().getDispatcher();
-			SkillCommand.register(dispatcher);
+			JelCommand.register(dispatcher);
 		});
 	}
 

@@ -1,9 +1,9 @@
 package dev.khanhtimn.jel.client.gui;
 
 import dev.khanhtimn.jel.client.gui.widget.SkillCard;
-import dev.khanhtimn.jel.common.skill.impl.SkillDefinition;
-import dev.khanhtimn.jel.common.skill.impl.VanillaXpHelper;
-import dev.khanhtimn.jel.core.ModRegistries;
+import dev.khanhtimn.jel.api.skill.SkillDefinition;
+import dev.khanhtimn.jel.common.VanillaXpHelper;
+import dev.khanhtimn.jel.api.JelRegistries;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
@@ -47,7 +47,7 @@ public class SkillScreen extends Screen {
 		if (player == null) return;
 
 		Registry<SkillDefinition> registry = player.level().registryAccess()
-				.registryOrThrow(ModRegistries.SKILL_REGISTRY_KEY);
+				.registryOrThrow(JelRegistries.SKILL_REGISTRY_KEY);
 
 		// Collect skill entries
 		List<Map.Entry<ResourceKey<SkillDefinition>, SkillDefinition>> entries = new ArrayList<>();

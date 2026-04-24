@@ -3,7 +3,7 @@ package dev.khanhtimn.jel;
 import dev.khanhtimn.jel.core.ModEvents;
 import dev.khanhtimn.jel.core.ModNetwork;
 import dev.khanhtimn.jel.core.ModCommands;
-import dev.khanhtimn.jel.core.ModSyncedDataKeys;
+import dev.khanhtimn.jel.common.ModSyncedDataKeys;
 
 public final class Bootstrap {
 
