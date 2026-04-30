@@ -1,0 +1,56 @@
+{
+  "color": "#FFAA00",
+  "description": {
+    "translate": "jel.skill.magic.description"
+  },
+  "icon": "minecraft:potion",
+  "max_level": 30,
+  "name": {
+    "translate": "jel.skill.magic.name"
+  },
+  "perks": [
+    {
+      "type": "jel:trait",
+      "parameters": {
+        "chance": {
+          "formula": {
+            "type": "minecraft:linear",
+            "base": 0.0,
+            "per_level_above_first": 0.008
+          },
+          "unlock_level": 15
+        },
+        "multiplier": {
+          "formula": {
+            "type": "minecraft:linear",
+            "base": 0.0,
+            "per_level_above_first": 0.025
+          },
+          "unlock_level": 15
+        }
+      },
+      "trait": "jel:damage_reflection",
+      "unlock_level": 15
+    },
+    {
+      "type": "jel:trait",
+      "parameters": {
+        "chance": {
+          "formula": {
+            "type": "minecraft:linear",
+            "base": 0.0,
+            "per_level_above_first": 0.012
+          },
+          "unlock_level": 20
+        }
+      },
+      "trait": "jel:upgraded_effect",
+      "unlock_level": 20
+    }
+  ],
+  "xp": {
+    "type": "minecraft:linear",
+    "base": 100.0,
+    "per_level_above_first": 50.0
+  }
+}

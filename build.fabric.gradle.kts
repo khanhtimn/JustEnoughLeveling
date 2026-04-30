@@ -1,6 +1,7 @@
 plugins {
 	id("mod-platform")
 	id("fabric-loom")
+	id("dev.mixinmcp.decompile") version "0.9.0"
 }
 
 platform {

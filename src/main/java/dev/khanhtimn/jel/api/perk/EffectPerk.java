@@ -11,8 +11,12 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.item.enchantment.LevelBasedValue;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 
+import dev.khanhtimn.jel.api.skill.Requirement;
 import dev.khanhtimn.jel.common.EffectTracker;
+
+import java.util.Optional;
 
 /**
  * Grants a mob effect with infinite duration while the skill meets the unlock
@@ -39,7 +43,9 @@ public record EffectPerk(
 		LevelBasedValue amplifier,
 		boolean ambient,
 		boolean showParticles,
-		boolean showIcon
+		boolean showIcon,
+		Optional<LootItemCondition> condition,
+		Optional<Requirement> requirement
 ) implements Perk {
 
 	public static final MapCodec<EffectPerk> CODEC
@@ -55,7 +61,11 @@ public record EffectPerk(
 			Codec.BOOL.optionalFieldOf("show_particles", false)
 					.forGetter(EffectPerk::showParticles),
 			Codec.BOOL.optionalFieldOf("show_icon", false)
-					.forGetter(EffectPerk::showIcon)
+					.forGetter(EffectPerk::showIcon),
+			LootItemCondition.DIRECT_CODEC.optionalFieldOf("condition")
+					.forGetter(EffectPerk::condition),
+			Requirement.CODEC.optionalFieldOf("requirement")
+					.forGetter(EffectPerk::requirement)
 	).apply(instance, EffectPerk::new));
 
 	static ResourceLocation unwrap(Holder<MobEffect> effect) {
@@ -64,45 +74,45 @@ public record EffectPerk(
 
 
 	public static EffectPerk of(Holder<MobEffect> effect, int amplifier, int unlockLevel) {
-		return new EffectPerk(unlockLevel, unwrap(effect), LevelBasedValue.constant(amplifier), false, false, false);
+		return new EffectPerk(unlockLevel, unwrap(effect), LevelBasedValue.constant(amplifier), false, false, false, Optional.empty(), Optional.empty());
 	}
 
 	public static EffectPerk of(Holder<MobEffect> effect, LevelBasedValue amplifier, int unlockLevel) {
-		return new EffectPerk(unlockLevel, unwrap(effect), amplifier, false, false, false);
+		return new EffectPerk(unlockLevel, unwrap(effect), amplifier, false, false, false, Optional.empty(), Optional.empty());
 	}
 
 	public static EffectPerk of(Holder<MobEffect> effect, int amplifier, boolean ambient, boolean showParticles, int unlockLevel) {
-		return new EffectPerk(unlockLevel, unwrap(effect), LevelBasedValue.constant(amplifier), ambient, showParticles, false);
+		return new EffectPerk(unlockLevel, unwrap(effect), LevelBasedValue.constant(amplifier), ambient, showParticles, false, Optional.empty(), Optional.empty());
 	}
 
 	public static EffectPerk of(Holder<MobEffect> effect, LevelBasedValue amplifier, boolean ambient, boolean showParticles, int unlockLevel) {
-		return new EffectPerk(unlockLevel, unwrap(effect), amplifier, ambient, showParticles, false);
+		return new EffectPerk(unlockLevel, unwrap(effect), amplifier, ambient, showParticles, false, Optional.empty(), Optional.empty());
 	}
 
 	public static EffectPerk of(Holder<MobEffect> effect, int amplifier, boolean ambient, boolean showParticles, boolean showIcon, int unlockLevel) {
-		return new EffectPerk(unlockLevel, unwrap(effect), LevelBasedValue.constant(amplifier), ambient, showParticles, showIcon);
+		return new EffectPerk(unlockLevel, unwrap(effect), LevelBasedValue.constant(amplifier), ambient, showParticles, showIcon, Optional.empty(), Optional.empty());
 	}
 
 	public static EffectPerk of(Holder<MobEffect> effect, LevelBasedValue amplifier, boolean ambient, boolean showParticles, boolean showIcon, int unlockLevel) {
-		return new EffectPerk(unlockLevel, unwrap(effect), amplifier, ambient, showParticles, showIcon);
+		return new EffectPerk(unlockLevel, unwrap(effect), amplifier, ambient, showParticles, showIcon, Optional.empty(), Optional.empty());
 	}
 
 
 	public static EffectPerk of(ResourceLocation effect, int amplifier, int unlockLevel) {
-		return new EffectPerk(unlockLevel, effect, LevelBasedValue.constant(amplifier), false, false, false);
+		return new EffectPerk(unlockLevel, effect, LevelBasedValue.constant(amplifier), false, false, false, Optional.empty(), Optional.empty());
 	}
 
 	public static EffectPerk of(ResourceLocation effect, LevelBasedValue amplifier, int unlockLevel) {
-		return new EffectPerk(unlockLevel, effect, amplifier, false, false, false);
+		return new EffectPerk(unlockLevel, effect, amplifier, false, false, false, Optional.empty(), Optional.empty());
 	}
 
 
 	public static EffectPerk of(String effect, int amplifier, int unlockLevel) {
-		return new EffectPerk(unlockLevel, ResourceLocation.parse(effect), LevelBasedValue.constant(amplifier), false, false, false);
+		return new EffectPerk(unlockLevel, ResourceLocation.parse(effect), LevelBasedValue.constant(amplifier), false, false, false, Optional.empty(), Optional.empty());
 	}
 
 	public static EffectPerk of(String effect, LevelBasedValue amplifier, int unlockLevel) {
-		return new EffectPerk(unlockLevel, ResourceLocation.parse(effect), amplifier, false, false, false);
+		return new EffectPerk(unlockLevel, ResourceLocation.parse(effect), amplifier, false, false, false, Optional.empty(), Optional.empty());
 	}
 
 	@Override
@@ -112,6 +122,11 @@ public record EffectPerk(
 
 	@Override
 	public void apply(PerkContext ctx, int currentLevel) {
+		if (condition.isPresent() && !condition.get().test(ctx.lootContext())) {
+			revoke(ctx);
+			return;
+		}
+
 		var holder = resolveEffect();
 		if (holder == null) {
 			return;

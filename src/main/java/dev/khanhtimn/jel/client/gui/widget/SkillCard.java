@@ -3,6 +3,7 @@ package dev.khanhtimn.jel.client.gui.widget;
 import dev.khanhtimn.jel.core.ModNetwork;
 import dev.khanhtimn.jel.network.message.MessageLevelUpSkill;
 import dev.khanhtimn.jel.api.skill.SkillDefinition;
+import dev.khanhtimn.jel.api.skill.Requirement;
 import dev.khanhtimn.jel.api.JelSkills;
 import dev.khanhtimn.jel.api.skill.SkillProgress;
 import dev.khanhtimn.jel.common.VanillaXpHelper;
@@ -15,6 +16,8 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Optional;
 
 /**
  * A single skill card widget displayed in the skill screen grid.
@@ -162,6 +165,23 @@ public class SkillCard extends AbstractWidget {
 					btnY + (LEVEL_UP_BTN_SIZE - 8) / 2,
 					plusColor
 			);
+
+			// Requirement tooltip
+			if (btnHovered && !canAfford) {
+				int targetLevel = level + 1;
+				Optional<Requirement> req = definition.requirementForLevel(targetLevel);
+				if (req.isPresent() && !tracker.isRequirementMet(skillKey.location(), targetLevel)) {
+					req.get().description().ifPresent(desc ->
+							graphics.drawString(
+									Minecraft.getInstance().font,
+									desc,
+									getX() + 4,
+									getY() + height + 2,
+									0xFFFF6666,
+									true
+							));
+				}
+			}
 		}
 	}
 
@@ -185,6 +205,14 @@ public class SkillCard extends AbstractWidget {
 	private boolean canAffordLevelUp(PlayerSkillData tracker, int currentLevel) {
 		Minecraft mc = Minecraft.getInstance();
 		if (mc.player == null) return false;
+
+		// Requirement gate
+		int targetLevel = currentLevel + 1;
+		Optional<Requirement> req = definition.requirementForLevel(targetLevel);
+		if (req.isPresent() && !tracker.isRequirementMet(skillKey.location(), targetLevel)) {
+			return false;
+		}
+
 		int neededSkillXp = definition.xpCostForNextLevel(currentLevel)
 				- tracker.getProgress(skillKey).xp();
 		if (neededSkillXp <= 0) return true;

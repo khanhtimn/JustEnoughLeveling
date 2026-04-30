@@ -29,6 +29,23 @@
   "name": {
     "translate": "jel.skill.mining.name"
   },
+  "perks": [
+    {
+      "type": "jel:trait",
+      "parameters": {
+        "chance": {
+          "formula": {
+            "type": "minecraft:linear",
+            "base": 0.0,
+            "per_level_above_first": 0.025
+          },
+          "unlock_level": 24
+        }
+      },
+      "trait": "jel:bonus_mining_drop",
+      "unlock_level": 24
+    }
+  ],
   "xp": 200.0,
   "xp_conversion": {
     "skill_to_vanilla_rate": 1.5,

@@ -1,0 +1,16 @@
+{
+  "color": "#FFAA00",
+  "description": {
+    "translate": "jel.skill.cooking.description"
+  },
+  "icon": "minecraft:cooked_beef",
+  "max_level": 30,
+  "name": {
+    "translate": "jel.skill.cooking.name"
+  },
+  "xp": {
+    "type": "minecraft:linear",
+    "base": 100.0,
+    "per_level_above_first": 50.0
+  }
+}

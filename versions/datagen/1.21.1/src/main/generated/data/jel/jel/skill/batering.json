@@ -1,0 +1,53 @@
+{
+  "color": "#FFAA00",
+  "description": {
+    "translate": "jel.skill.batering.description"
+  },
+  "icon": "minecraft:emerald",
+  "max_level": 30,
+  "name": {
+    "translate": "jel.skill.batering.name"
+  },
+  "perks": [
+    {
+      "type": "jel:trait",
+      "parameters": {
+        "multiplier": {
+          "formula": {
+            "type": "minecraft:linear",
+            "base": 0.005,
+            "per_level_above_first": 0.005
+          },
+          "unlock_level": 10
+        }
+      },
+      "trait": "jel:trade_xp",
+      "unlock_level": 10
+    },
+    {
+      "type": "jel:trait",
+      "parameters": {
+        "discount": {
+          "formula": {
+            "type": "minecraft:linear",
+            "base": 0.01,
+            "per_level_above_first": 0.01
+          },
+          "unlock_level": 15
+        }
+      },
+      "trait": "jel:trade_price",
+      "unlock_level": 15
+    },
+    {
+      "type": "jel:trait",
+      "trait": "jel:trade_immunity",
+      "unlock_level": 30
+    }
+  ],
+  "xp": {
+    "type": "minecraft:linear",
+    "base": 100.0,
+    "per_level_above_first": 50.0
+  }
+}

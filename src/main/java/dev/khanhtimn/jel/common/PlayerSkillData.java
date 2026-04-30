@@ -4,8 +4,11 @@ import com.mrcrayfish.framework.api.sync.DataSerializer;
 import com.mrcrayfish.framework.api.sync.SyncedObject;
 import dev.khanhtimn.jel.api.skill.SkillDefinition;
 import dev.khanhtimn.jel.api.skill.SkillProgress;
+import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
+import it.unimi.dsi.fastutil.ints.IntSet;
 import it.unimi.dsi.fastutil.objects.Object2FloatOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
@@ -47,6 +50,10 @@ public final class PlayerSkillData extends SyncedObject {
 	private final Object2FloatOpenHashMap<ResourceLocation> traitValues = new Object2FloatOpenHashMap<>();
 
 	private final HashMap<ResourceLocation, Double> originalBases = new HashMap<>();
+
+	private final ObjectOpenHashSet<ResourceLocation> unlockedPerks = new ObjectOpenHashSet<>();
+
+	private final HashMap<ResourceLocation, IntSet> requirementsMet = new HashMap<>();
 
 
 	public int getLevel(ResourceKey<SkillDefinition> skillKey) {
@@ -152,6 +159,41 @@ public final class PlayerSkillData extends SyncedObject {
 	}
 
 
+	public boolean isPerkUnlocked(ResourceLocation perkId) {
+		return unlockedPerks.contains(perkId);
+	}
+
+	public void unlockPerk(ResourceLocation perkId) {
+		if (unlockedPerks.add(perkId)) {
+			markDirty();
+		}
+	}
+
+
+	public boolean isRequirementMet(ResourceLocation skillId, int targetLevel) {
+		IntSet met = requirementsMet.get(skillId);
+		return met != null && met.contains(targetLevel);
+	}
+
+	public void setRequirementMet(ResourceLocation skillId, int targetLevel, boolean met) {
+		if (met) {
+			requirementsMet.computeIfAbsent(skillId, k -> new IntOpenHashSet()).add(targetLevel);
+		} else {
+			IntSet set = requirementsMet.get(skillId);
+			if (set != null) {
+				set.remove(targetLevel);
+				if (set.isEmpty()) {
+					requirementsMet.remove(skillId);
+				}
+			}
+		}
+	}
+
+	public void clearRequirementsMet() {
+		requirementsMet.clear();
+	}
+
+
 	private CompoundTag writeTag(HolderLookup.Provider provider) {
 		CompoundTag tag = new CompoundTag();
 
@@ -164,6 +206,13 @@ public final class PlayerSkillData extends SyncedObject {
 		});
 		tag.put("skills", skillsTag);
 
+		if (!unlockedPerks.isEmpty()) {
+			CompoundTag perksTag = new CompoundTag();
+			for (ResourceLocation perkId : unlockedPerks) {
+				perksTag.putBoolean(perkId.toString(), true);
+			}
+			tag.put("unlocked_perks", perksTag);
+		}
 
 		return tag;
 	}
@@ -185,6 +234,16 @@ public final class PlayerSkillData extends SyncedObject {
 			}
 		}
 
+		if (data.contains("unlocked_perks", Tag.TAG_COMPOUND)) {
+			CompoundTag perksTag = data.getCompound("unlocked_perks");
+			for (String key : perksTag.getAllKeys()) {
+				ResourceLocation id = ResourceLocation.tryParse(key);
+				if (id != null) {
+					skillData.unlockedPerks.add(id);
+				}
+			}
+		}
+
 		return skillData;
 	}
 
@@ -201,6 +260,20 @@ public final class PlayerSkillData extends SyncedObject {
 		for (var entry : skillData.traitValues.object2FloatEntrySet()) {
 			buf.writeResourceLocation(entry.getKey());
 			buf.writeFloat(entry.getFloatValue());
+		}
+
+		buf.writeVarInt(skillData.unlockedPerks.size());
+		for (ResourceLocation perkId : skillData.unlockedPerks) {
+			buf.writeResourceLocation(perkId);
+		}
+
+		int reqEntries = skillData.requirementsMet.values().stream().mapToInt(IntSet::size).sum();
+		buf.writeVarInt(reqEntries);
+		for (var entry : skillData.requirementsMet.entrySet()) {
+			for (int level : entry.getValue()) {
+				buf.writeResourceLocation(entry.getKey());
+				buf.writeVarInt(level);
+			}
 		}
 	}
 
@@ -220,6 +293,18 @@ public final class PlayerSkillData extends SyncedObject {
 			ResourceLocation id = buf.readResourceLocation();
 			float value = buf.readFloat();
 			skillData.traitValues.put(id, value);
+		}
+
+		int perkCount = buf.readVarInt();
+		for (int i = 0; i < perkCount; i++) {
+			skillData.unlockedPerks.add(buf.readResourceLocation());
+		}
+
+		int reqCount = buf.readVarInt();
+		for (int i = 0; i < reqCount; i++) {
+			ResourceLocation skillId = buf.readResourceLocation();
+			int level = buf.readVarInt();
+			skillData.requirementsMet.computeIfAbsent(skillId, k -> new IntOpenHashSet()).add(level);
 		}
 
 		return skillData;

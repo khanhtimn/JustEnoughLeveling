@@ -6,9 +6,21 @@
   "injectors": {
     "defaultRequire": 1
   },
+  "mixinextras": {
+    "minVersion": "0.5.3"
+  },
   "mixins": [
+    "entity.AnimalMixin",
     "entity.LivingEntityMixin",
-    "player.FoodDataMixin"
+    "entity.TntEntityMixin",
+    "entity.VillagerMixin",
+    "item.BowItemMixin",
+    "item.CrossbowItemMixin",
+    "item.ItemStackServerMixin",
+    "item.PotionItemMixin",
+    "misc.AnvilMenuMixin",
+    "player.FoodDataMixin",
+    "player.PlayerMixin"
   ],
   "client": []
 }

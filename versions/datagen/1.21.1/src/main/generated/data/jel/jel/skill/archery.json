@@ -1,0 +1,98 @@
+{
+  "attributes": [
+    {
+      "attribute": "minecraft:player.block_interaction_range",
+      "operation": "base",
+      "value": {
+        "type": "minecraft:linear",
+        "base": 2.5,
+        "per_level_above_first": 0.1
+      }
+    },
+    {
+      "attribute": "minecraft:generic.follow_range",
+      "operation": "base",
+      "value": {
+        "type": "minecraft:linear",
+        "base": 32.0,
+        "per_level_above_first": 1.0
+      }
+    }
+  ],
+  "color": "#FF4444",
+  "description": {
+    "translate": "jel.skill.archery.description"
+  },
+  "icon": "minecraft:bow",
+  "max_level": 30,
+  "name": {
+    "translate": "jel.skill.archery.name"
+  },
+  "perks": [
+    {
+      "type": "jel:trait",
+      "parameters": {
+        "bonus": {
+          "formula": {
+            "type": "minecraft:linear",
+            "base": 0.0,
+            "per_level_above_first": 0.025
+          },
+          "unlock_level": 12
+        }
+      },
+      "trait": "jel:bow_damage",
+      "unlock_level": 12
+    },
+    {
+      "type": "jel:trait",
+      "parameters": {
+        "bonus": {
+          "formula": {
+            "type": "minecraft:linear",
+            "base": 0.0,
+            "per_level_above_first": 0.025
+          },
+          "unlock_level": 16
+        }
+      },
+      "trait": "jel:crossbow_damage",
+      "unlock_level": 16
+    },
+    {
+      "type": "jel:trait",
+      "parameters": {
+        "chance": {
+          "formula": {
+            "type": "minecraft:linear",
+            "base": 0.0,
+            "per_level_above_first": 0.025
+          },
+          "unlock_level": 20
+        }
+      },
+      "trait": "jel:bow_double_damage",
+      "unlock_level": 20
+    },
+    {
+      "type": "jel:trait",
+      "parameters": {
+        "chance": {
+          "formula": {
+            "type": "minecraft:linear",
+            "base": 0.0,
+            "per_level_above_first": 0.025
+          },
+          "unlock_level": 24
+        }
+      },
+      "trait": "jel:crossbow_double_damage",
+      "unlock_level": 24
+    }
+  ],
+  "xp": {
+    "type": "minecraft:linear",
+    "base": 100.0,
+    "per_level_above_first": 50.0
+  }
+}

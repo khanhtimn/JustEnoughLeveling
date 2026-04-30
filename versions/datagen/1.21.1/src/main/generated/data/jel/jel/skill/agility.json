@@ -1,0 +1,117 @@
+{
+  "attributes": [
+    {
+      "attribute": "minecraft:generic.movement_speed",
+      "operation": "base",
+      "value": {
+        "type": "minecraft:linear",
+        "base": 0.07,
+        "per_level_above_first": 0.001
+      }
+    },
+    {
+      "attribute": "minecraft:player.sneaking_speed",
+      "operation": "base",
+      "value": {
+        "type": "minecraft:linear",
+        "base": 0.2,
+        "per_level_above_first": 0.01
+      }
+    },
+    {
+      "attribute": "minecraft:player.submerged_mining_speed",
+      "operation": "base",
+      "value": {
+        "type": "minecraft:linear",
+        "base": 0.1,
+        "per_level_above_first": 0.01
+      }
+    },
+    {
+      "attribute": "minecraft:generic.water_movement_efficiency",
+      "operation": "add_value",
+      "unlock_level": 15,
+      "value": {
+        "type": "minecraft:linear",
+        "base": 0.1,
+        "per_level_above_first": 0.01
+      }
+    },
+    {
+      "attribute": "minecraft:generic.oxygen_bonus",
+      "operation": "add_value",
+      "unlock_level": 10,
+      "value": {
+        "type": "minecraft:linear",
+        "base": 0.2,
+        "per_level_above_first": 0.2
+      }
+    }
+  ],
+  "color": "#FFAA00",
+  "description": {
+    "translate": "jel.skill.agility.description"
+  },
+  "icon": "minecraft:leather_boots",
+  "max_level": 30,
+  "name": {
+    "translate": "jel.skill.agility.name"
+  },
+  "perks": [
+    {
+      "type": "jel:trait",
+      "parameters": {
+        "avoid_chance": {
+          "formula": {
+            "type": "minecraft:linear",
+            "base": 0.0,
+            "per_level_above_first": 0.025
+          },
+          "unlock_level": 10
+        }
+      },
+      "trait": "jel:mob_collide",
+      "unlock_level": 10
+    },
+    {
+      "type": "jel:trait",
+      "parameters": {
+        "reduction": {
+          "formula": {
+            "type": "minecraft:linear",
+            "base": 0.0,
+            "per_level_above_first": 0.025
+          },
+          "unlock_level": 15
+        }
+      },
+      "trait": "jel:exhaustion",
+      "unlock_level": 15
+    },
+    {
+      "type": "jel:trait",
+      "parameters": {
+        "reduction": {
+          "formula": {
+            "type": "minecraft:linear",
+            "base": 0.0,
+            "per_level_above_first": 0.025
+          },
+          "unlock_level": 20
+        }
+      },
+      "trait": "jel:fall_damage",
+      "unlock_level": 20
+    },
+    {
+      "type": "jel:effect",
+      "effect": "minecraft:saturation",
+      "unlock_level": 30
+    }
+  ],
+  "xp": {
+    "type": "minecraft:linear",
+    "base": 100.0,
+    "per_level_above_first": 50.0
+  }
+}

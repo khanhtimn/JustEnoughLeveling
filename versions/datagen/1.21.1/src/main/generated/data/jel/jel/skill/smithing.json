@@ -1,0 +1,88 @@
+{
+  "attributes": [
+    {
+      "attribute": "minecraft:generic.burning_time",
+      "operation": "base",
+      "value": {
+        "type": "minecraft:linear",
+        "base": 1.8,
+        "per_level_above_first": -0.05
+      }
+    },
+    {
+      "attribute": "minecraft:generic.explosion_knockback_resistance",
+      "operation": "add_value",
+      "unlock_level": 15,
+      "value": {
+        "type": "minecraft:linear",
+        "base": 0.05,
+        "per_level_above_first": 0.05
+      }
+    }
+  ],
+  "color": "#FFAA00",
+  "description": {
+    "translate": "jel.skill.smithing.description"
+  },
+  "icon": "minecraft:furnace",
+  "max_level": 30,
+  "name": {
+    "translate": "jel.skill.smithing.name"
+  },
+  "perks": [
+    {
+      "type": "jel:trait",
+      "parameters": {
+        "chance": {
+          "formula": {
+            "type": "minecraft:linear",
+            "base": 0.005,
+            "per_level_above_first": 0.005
+          },
+          "unlock_level": 10
+        }
+      },
+      "trait": "jel:avoid_item_break",
+      "unlock_level": 10
+    },
+    {
+      "type": "jel:trait",
+      "parameters": {
+        "xp_cap": {
+          "formula": 30.0,
+          "unlock_level": 30
+        },
+        "xp_discount": {
+          "formula": {
+            "type": "minecraft:linear",
+            "base": 0.0,
+            "per_level_above_first": -1.0
+          },
+          "unlock_level": 12
+        }
+      },
+      "trait": "jel:anvil_xp_cost",
+      "unlock_level": 12
+    },
+    {
+      "type": "jel:trait",
+      "parameters": {
+        "multiplier": {
+          "formula": {
+            "type": "minecraft:linear",
+            "base": 0.2,
+            "per_level_above_first": 0.2
+          },
+          "unlock_level": 15
+        }
+      },
+      "trait": "jel:upgraded_tnt",
+      "unlock_level": 15
+    }
+  ],
+  "xp": {
+    "type": "minecraft:linear",
+    "base": 100.0,
+    "per_level_above_first": 50.0
+  }
+}

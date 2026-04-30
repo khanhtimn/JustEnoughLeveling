@@ -9,7 +9,10 @@ import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.enchantment.LevelBasedValue;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Optional;
 
 /**
  * A single attribute effect within a skill definition.
@@ -23,6 +26,9 @@ import org.jetbrains.annotations.NotNull;
  *   <li>{@code add_multiplied_base} — adds {@code base × amount}</li>
  *   <li>{@code add_multiplied_total} — multiplies the final computed value</li>
  * </ul>
+ * <p>
+ * An optional {@code condition} gates whether this effect is applied during
+ * recompute. The condition is evaluated against the skill's {@code LootContext}.
  *
  * <h2>JSON examples</h2>
  * <pre>{@code
@@ -35,16 +41,19 @@ import org.jetbrains.annotations.NotNull;
  *   "value": { "type": "minecraft:linear", "base": 0.5, "per_level_above_first": 0.5 },
  *   "unlock_level": 1 }
  *
- * // Multiply break speed, unlocks at skill level 1
- * { "attribute": "minecraft:player.block_break_speed", "operation": "add_multiplied_base",
- *   "value": 0.1, "unlock_level": 1 }
+ * // Conditional: only when holding a netherite sword
+ * { "attribute": "minecraft:generic.attack_damage", "operation": "add_value",
+ *   "value": 2.0, "unlock_level": 5,
+ *   "condition": { "condition": "minecraft:match_tool",
+ *     "predicate": { "items": "minecraft:netherite_sword" } } }
  * }</pre>
  */
 public record AttributeEffect(
 		ResourceLocation attribute,
 		Operation operation,
 		LevelBasedValue value,
-		int unlockLevel
+		int unlockLevel,
+		Optional<LootItemCondition> condition
 ) {
 
 	public static final Codec<AttributeEffect> CODEC =
@@ -56,7 +65,9 @@ public record AttributeEffect(
 					LevelBasedValue.CODEC.fieldOf("value")
 							.forGetter(AttributeEffect::value),
 					Codec.INT.optionalFieldOf("unlock_level", 0)
-							.forGetter(AttributeEffect::unlockLevel)
+							.forGetter(AttributeEffect::unlockLevel),
+					LootItemCondition.DIRECT_CODEC.optionalFieldOf("condition")
+							.forGetter(AttributeEffect::condition)
 			).apply(instance, AttributeEffect::new));
 
 	public boolean isBaseOverride() {
@@ -74,19 +85,19 @@ public record AttributeEffect(
 
 
 	public static AttributeEffect base(String attribute, LevelBasedValue value) {
-		return new AttributeEffect(ResourceLocation.parse(attribute), Operation.BASE, value, 0);
+		return new AttributeEffect(ResourceLocation.parse(attribute), Operation.BASE, value, 0, Optional.empty());
 	}
 
 	public static AttributeEffect base(ResourceLocation attribute, LevelBasedValue value) {
-		return new AttributeEffect(attribute, Operation.BASE, value, 0);
+		return new AttributeEffect(attribute, Operation.BASE, value, 0, Optional.empty());
 	}
 
 	public static AttributeEffect base(ResourceKey<Attribute> attribute, LevelBasedValue value) {
-		return new AttributeEffect(attribute.location(), Operation.BASE, value, 0);
+		return new AttributeEffect(attribute.location(), Operation.BASE, value, 0, Optional.empty());
 	}
 
 	public static AttributeEffect base(Holder<Attribute> attribute, LevelBasedValue value) {
-		return new AttributeEffect(attribute.unwrapKey().orElseThrow().location(), Operation.BASE, value, 0);
+		return new AttributeEffect(attribute.unwrapKey().orElseThrow().location(), Operation.BASE, value, 0, Optional.empty());
 	}
 
 
@@ -97,7 +108,7 @@ public record AttributeEffect(
 			int unlockLevel
 	) {
 		return new AttributeEffect(
-				ResourceLocation.parse(attribute), fromVanilla(operation), value, unlockLevel);
+				ResourceLocation.parse(attribute), fromVanilla(operation), value, unlockLevel, Optional.empty());
 	}
 
 	public static AttributeEffect modifier(
@@ -106,7 +117,7 @@ public record AttributeEffect(
 			LevelBasedValue value,
 			int unlockLevel
 	) {
-		return new AttributeEffect(attribute, fromVanilla(operation), value, unlockLevel);
+		return new AttributeEffect(attribute, fromVanilla(operation), value, unlockLevel, Optional.empty());
 	}
 
 	public static AttributeEffect modifier(
@@ -116,7 +127,7 @@ public record AttributeEffect(
 			int unlockLevel
 	) {
 		return new AttributeEffect(
-				attribute.location(), fromVanilla(operation), value, unlockLevel);
+				attribute.location(), fromVanilla(operation), value, unlockLevel, Optional.empty());
 	}
 
 	public static AttributeEffect modifier(
@@ -126,7 +137,18 @@ public record AttributeEffect(
 			int unlockLevel
 	) {
 		return new AttributeEffect(
-				attribute.unwrapKey().orElseThrow().location(), fromVanilla(operation), value, unlockLevel);
+				attribute.unwrapKey().orElseThrow().location(), fromVanilla(operation), value, unlockLevel, Optional.empty());
+	}
+
+	public static AttributeEffect modifier(
+			Holder<Attribute> attribute,
+			AttributeModifier.Operation operation,
+			LevelBasedValue value,
+			int unlockLevel,
+			LootItemCondition condition
+	) {
+		return new AttributeEffect(
+				attribute.unwrapKey().orElseThrow().location(), fromVanilla(operation), value, unlockLevel, Optional.of(condition));
 	}
 
 

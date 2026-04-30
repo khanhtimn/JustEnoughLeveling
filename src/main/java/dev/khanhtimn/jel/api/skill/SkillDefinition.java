@@ -14,7 +14,10 @@ import net.minecraft.world.item.Item;
 import dev.khanhtimn.jel.api.perk.Perk;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 /**
  * Definition of a skill.
@@ -41,7 +44,8 @@ public record SkillDefinition(
 		XpFormula xp,
 		XpConversion xpConversion,
 		List<AttributeEffect> attributes,
-		List<Perk> perks
+		List<Perk> perks,
+		Map<Integer, Requirement> requirements
 ) {
 
 	/**
@@ -80,7 +84,12 @@ public record SkillDefinition(
 					.forGetter(SkillDefinition::attributes),
 			Perk.CODEC.listOf()
 					.optionalFieldOf("perks", List.of())
-					.forGetter(SkillDefinition::perks)
+					.forGetter(SkillDefinition::perks),
+			Codec.unboundedMap(
+					Codec.STRING.xmap(Integer::parseInt, String::valueOf),
+					Requirement.CODEC
+			).optionalFieldOf("requirements", Map.of())
+					.forGetter(SkillDefinition::requirements)
 	).apply(instance, SkillDefinition::new));
 
 	public static final Codec<SkillDefinition> NETWORK_CODEC = CODEC;
@@ -91,6 +100,7 @@ public record SkillDefinition(
 		}
 		attributes = List.copyOf(attributes);
 		perks = List.copyOf(perks);
+		requirements = Map.copyOf(requirements);
 	}
 
 	public static Builder builder() {
@@ -122,6 +132,10 @@ public record SkillDefinition(
 	public int totalXpCostToReachLevel(int targetLevel) {
 		targetLevel = clampLevel(targetLevel);
 		return xp.totalCostToLevel(targetLevel);
+	}
+
+	public Optional<Requirement> requirementForLevel(int targetLevel) {
+		return Optional.ofNullable(requirements.get(targetLevel));
 	}
 
 	public int vanillaToSkillXp(int vanillaXp, int skillLevel) {
@@ -161,6 +175,7 @@ public record SkillDefinition(
 		private XpConversion xpConversion = XpConversion.identity();
 		private final List<AttributeEffect> attributes = new ArrayList<>();
 		private final List<Perk> perks = new ArrayList<>();
+		private final Map<Integer, Requirement> requirements = new LinkedHashMap<>();
 
 		private Builder() {
 		}
@@ -275,6 +290,11 @@ public record SkillDefinition(
 			return this;
 		}
 
+		public Builder requirement(int level, Requirement req) {
+			this.requirements.put(level, req);
+			return this;
+		}
+
 		public SkillDefinition build() {
 			return new SkillDefinition(
 					name,
@@ -285,7 +305,8 @@ public record SkillDefinition(
 					xpFormula,
 					xpConversion,
 					List.copyOf(attributes),
-					List.copyOf(perks)
+					List.copyOf(perks),
+					Map.copyOf(requirements)
 			);
 		}
 	}

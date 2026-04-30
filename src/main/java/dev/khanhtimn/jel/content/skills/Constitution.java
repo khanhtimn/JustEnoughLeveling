@@ -5,6 +5,8 @@ import dev.khanhtimn.jel.api.skill.AttributeEffect;
 import dev.khanhtimn.jel.api.skill.SkillDefinition;
 import dev.khanhtimn.jel.api.skill.XpFormula;
 import dev.khanhtimn.jel.api.perk.Perk;
+import dev.khanhtimn.jel.api.perk.TraitParam;
+import dev.khanhtimn.jel.api.trait.TraitKey;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffects;
@@ -14,11 +16,10 @@ import net.minecraft.world.item.enchantment.LevelBasedValue;
 
 import java.util.List;
 
-/**
- * Constitution skill: controls max health base value and grants regeneration.
- */
 public final class Constitution {
-	public static final ResourceLocation BONUS_REGEN_TRAIT = ResourceLocation.fromNamespaceAndPath(Constants.MOD_ID, "bonus_natural_regen");
+	public static final ResourceLocation NATURAL_REGEN = ResourceLocation.fromNamespaceAndPath(Constants.MOD_ID, "natural_regen");
+
+	public static final TraitKey REGEN_BONUS = TraitKey.of(NATURAL_REGEN, "bonus");
 
 	public static SkillDefinition create() {
 		return SkillDefinition.builder()
@@ -35,7 +36,7 @@ public final class Constitution {
 						)
 				)
 				.perk(List.of(
-								Perk.trait(BONUS_REGEN_TRAIT, LevelBasedValue.perLevel(0, 0.025f), 10),
+								Perk.trait(NATURAL_REGEN, TraitParam.of(REGEN_BONUS, LevelBasedValue.perLevel(0, 0.025f), 10)),
 								Perk.effect(MobEffects.REGENERATION, LevelBasedValue.constant(0), false, false, false, 34)
 						)
 				)

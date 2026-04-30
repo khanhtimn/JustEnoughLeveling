@@ -1,0 +1,53 @@
+{
+  "attributes": [
+    {
+      "attribute": "minecraft:generic.armor",
+      "operation": "base",
+      "value": {
+        "type": "minecraft:linear",
+        "base": 0.0,
+        "per_level_above_first": 0.15
+      }
+    },
+    {
+      "attribute": "minecraft:generic.knockback_resistance",
+      "operation": "base",
+      "value": {
+        "type": "minecraft:linear",
+        "base": 0.0,
+        "per_level_above_first": 0.05
+      }
+    }
+  ],
+  "color": "#FF4444",
+  "description": {
+    "translate": "jel.skill.defense.description"
+  },
+  "icon": "minecraft:shield",
+  "max_level": 30,
+  "name": {
+    "translate": "jel.skill.defense.name"
+  },
+  "perks": [
+    {
+      "type": "jel:trait",
+      "parameters": {
+        "chance": {
+          "formula": {
+            "type": "minecraft:linear",
+            "base": 0.0,
+            "per_level_above_first": 0.025
+          },
+          "unlock_level": 24
+        }
+      },
+      "trait": "jel:death_grace",
+      "unlock_level": 24
+    }
+  ],
+  "xp": {
+    "type": "minecraft:linear",
+    "base": 100.0,
+    "per_level_above_first": 50.0
+  }
+}

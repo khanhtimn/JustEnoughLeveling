@@ -1,0 +1,48 @@
+{
+  "color": "#FFAA00",
+  "description": {
+    "translate": "jel.skill.farming.description"
+  },
+  "icon": "minecraft:potion",
+  "max_level": 30,
+  "name": {
+    "translate": "jel.skill.farming.name"
+  },
+  "perks": [
+    {
+      "type": "jel:trait",
+      "parameters": {
+        "chance": {
+          "formula": {
+            "type": "minecraft:linear",
+            "base": 0.0,
+            "per_level_above_first": 0.02
+          },
+          "unlock_level": 20
+        }
+      },
+      "trait": "jel:breed_twin",
+      "unlock_level": 20
+    },
+    {
+      "type": "jel:trait",
+      "parameters": {
+        "multiplier": {
+          "formula": {
+            "type": "minecraft:linear",
+            "base": 0.0,
+            "per_level_above_first": 0.05
+          },
+          "unlock_level": 15
+        }
+      },
+      "trait": "jel:breed_xp",
+      "unlock_level": 15
+    }
+  ],
+  "xp": {
+    "type": "minecraft:linear",
+    "base": 100.0,
+    "per_level_above_first": 50.0
+  }
+}

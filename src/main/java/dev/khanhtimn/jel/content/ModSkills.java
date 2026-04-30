@@ -17,16 +17,32 @@ import dev.khanhtimn.jel.content.skills.*;
 public final class ModSkills {
 	public static final ResourceKey<SkillDefinition> CONSTITUTION = key("constitution");
 	public static final ResourceKey<SkillDefinition> COMBAT = key("combat");
+	public static final ResourceKey<SkillDefinition> DEFENSE = key("defense");
+	public static final ResourceKey<SkillDefinition> ARCHERY = key("archery");
+	public static final ResourceKey<SkillDefinition> AGILITY = key("agility");
+	public static final ResourceKey<SkillDefinition> MAGIC = key("magic");
+	public static final ResourceKey<SkillDefinition> SMITHING = key("smithing");
 	public static final ResourceKey<SkillDefinition> MINING = key("mining");
+	public static final ResourceKey<SkillDefinition> FARMING = key("farming");
+	public static final ResourceKey<SkillDefinition> COOKING = key("cooking");
+	public static final ResourceKey<SkillDefinition> BATERING = key("batering");
 
 	/**
 	 * Registers all built-in skill definitions into the given context.
 	 * Used by datagen's {@code RegistrySetBuilder}.
 	 */
 	public static void bootstrap(BootstrapContext<SkillDefinition> ctx) {
-		ctx.register(COMBAT, Melee.create());
-		ctx.register(MINING, Mining.create());
 		ctx.register(CONSTITUTION, Constitution.create());
+		ctx.register(COMBAT, Melee.create());
+		ctx.register(DEFENSE, Defense.create());
+		ctx.register(ARCHERY, Archery.create());
+		ctx.register(AGILITY, Agility.create());
+		ctx.register(MAGIC, Magic.create());
+		ctx.register(SMITHING, Smithing.create());
+		ctx.register(MINING, Mining.create());
+		ctx.register(FARMING, Farming.create());
+		ctx.register(BATERING, Batering.create());
+		ctx.register(COOKING, Cooking.create());
 	}
 
 	private static ResourceKey<SkillDefinition> key(String name) {

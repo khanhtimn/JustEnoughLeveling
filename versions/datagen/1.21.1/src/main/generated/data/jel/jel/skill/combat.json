@@ -21,7 +21,7 @@
     {
       "attribute": "minecraft:generic.attack_knockback",
       "operation": "add_value",
-      "unlock_level": 6,
+      "unlock_level": 18,
       "value": {
         "type": "minecraft:linear",
         "base": 0.05,
@@ -31,7 +31,7 @@
     {
       "attribute": "minecraft:player.sweeping_damage_ratio",
       "operation": "add_value",
-      "unlock_level": 12,
+      "unlock_level": 15,
       "value": {
         "type": "minecraft:linear",
         "base": 0.0,
@@ -44,10 +44,42 @@
     "translate": "jel.skill.melee.description"
   },
   "icon": "minecraft:diamond_sword",
-  "max_level": 20,
+  "max_level": 30,
   "name": {
     "translate": "jel.skill.melee.name"
   },
+  "perks": [
+    {
+      "type": "jel:trait",
+      "parameters": {
+        "bonus": {
+          "formula": {
+            "type": "minecraft:linear",
+            "base": 0.0,
+            "per_level_above_first": 0.005
+          },
+          "unlock_level": 21
+        }
+      },
+      "trait": "jel:critical_damage",
+      "unlock_level": 21
+    },
+    {
+      "type": "jel:trait",
+      "parameters": {
+        "chance": {
+          "formula": {
+            "type": "minecraft:linear",
+            "base": 0.0,
+            "per_level_above_first": 0.025
+          },
+          "unlock_level": 24
+        }
+      },
+      "trait": "jel:double_damage",
+      "unlock_level": 24
+    }
+  ],
   "xp": {
     "type": "minecraft:linear",
     "base": 100.0,

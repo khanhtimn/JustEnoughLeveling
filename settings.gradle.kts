@@ -10,12 +10,13 @@ pluginManagement {
 		maven("https://maven.kikugie.dev/releases") { name = "KikuGie Releases" }
 		maven("https://maven.parchmentmc.org") { name = "ParchmentMC" }
 		maven("https://maven.terraformersmc.com/") { name = "TerraformersMC" }
+		maven("https://maven.muon.rip/releases") { name = "MixinMCP" }
 		exclusiveContent {
 			forRepository { maven("https://api.modrinth.com/maven") { name = "Modrinth" } }
 			filter { includeGroup("maven.modrinth") }
 		}
 		exclusiveContent {
-			forRepository { maven("https://cursemaven.com") { name = "CurseForge"} }
+			forRepository { maven("https://cursemaven.com") { name = "CurseForge" } }
 			filter { includeGroup("curse.maven") }
 		}
 	}

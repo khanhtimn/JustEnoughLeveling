@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(FoodData.class)
-public class FoodDataMixin {
+public abstract class FoodDataMixin {
 
 	@Inject(
 			method = "tick",
@@ -21,8 +21,8 @@ public class FoodDataMixin {
 					shift = At.Shift.AFTER
 			)
 	)
-	private void jel$bonusConstitutionRegen(Player player, CallbackInfo ci) {
-		float bonus = JelTraits.value(player, Constitution.BONUS_REGEN_TRAIT);
+	private void jel$healMixin(Player player, CallbackInfo ci) {
+		float bonus = JelTraits.value(player, Constitution.REGEN_BONUS);
 		if (bonus > 0) {
 			player.heal(bonus);
 		}

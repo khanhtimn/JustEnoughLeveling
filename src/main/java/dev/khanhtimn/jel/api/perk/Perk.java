@@ -3,10 +3,13 @@ package dev.khanhtimn.jel.api.perk;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 
+import dev.khanhtimn.jel.api.skill.Requirement;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.item.enchantment.LevelBasedValue;
+
+import java.util.Optional;
 
 /**
  * A non-attribute effect granted by a skill at a certain level.
@@ -70,24 +73,24 @@ public interface Perk {
         return ApplyMode.STATE;
     }
 
+    default Optional<Requirement> requirement() {
+        return Optional.empty();
+    }
+
     static Perk tag(String tag, int unlockLevel) {
         return new TagPerk(unlockLevel, tag);
     }
 
-    static Perk trait(ResourceLocation trait, int unlockLevel) {
-        return new TraitPerk(unlockLevel, trait, LevelBasedValue.constant(1f));
-    }
-
     static Perk trait(String trait, int unlockLevel) {
-        return new TraitPerk(unlockLevel, ResourceLocation.parse(trait), LevelBasedValue.constant(1f));
+        return new TraitPerk(unlockLevel, ResourceLocation.parse(trait), null, null);
     }
 
-    static Perk trait(ResourceLocation trait, LevelBasedValue value, int unlockLevel) {
-        return new TraitPerk(unlockLevel, trait, value);
+    static Perk trait(ResourceLocation trait, int unlockLevel) {
+        return new TraitPerk(unlockLevel, trait, null, null);
     }
 
-    static Perk trait(String trait, LevelBasedValue value, int unlockLevel) {
-        return new TraitPerk(unlockLevel, ResourceLocation.parse(trait), value);
+    static Perk trait(ResourceLocation trait, TraitParam... params) {
+        return TraitPerk.ofParams(trait, params);
     }
 
     static Perk effect(Holder<MobEffect> effect, int amplifier, int unlockLevel) {
