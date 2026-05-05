@@ -4,56 +4,359 @@
       "attribute": "minecraft:generic.movement_speed",
       "operation": "base",
       "value": {
-        "type": "minecraft:linear",
-        "base": 0.07,
-        "per_level_above_first": 0.001
+        "type": "minecraft:lookup",
+        "fallback": 0.12,
+        "values": [
+          0.07,
+          0.072,
+          0.074,
+          0.076,
+          0.078,
+          0.08,
+          0.082,
+          0.084,
+          0.086,
+          0.088,
+          0.09,
+          0.092,
+          0.094000004,
+          0.096,
+          0.098000005,
+          0.1,
+          0.101,
+          0.102,
+          0.103,
+          0.103999995,
+          0.105,
+          0.106,
+          0.107,
+          0.107999995,
+          0.109,
+          0.11,
+          0.1104,
+          0.1108,
+          0.111200005,
+          0.111600004,
+          0.112,
+          0.112600006,
+          0.1132,
+          0.113800004,
+          0.1144,
+          0.115,
+          0.1154,
+          0.1158,
+          0.1162,
+          0.1166,
+          0.117,
+          0.1174,
+          0.1178,
+          0.118200004,
+          0.1186,
+          0.119,
+          0.11925,
+          0.1195,
+          0.11975,
+          0.12
+        ]
+      }
+    },
+    {
+      "attribute": "minecraft:generic.jump_strength",
+      "operation": "base",
+      "value": {
+        "type": "minecraft:lookup",
+        "fallback": 0.55,
+        "values": [
+          0.42,
+          0.42,
+          0.42,
+          0.42,
+          0.42,
+          0.42,
+          0.42,
+          0.42,
+          0.42,
+          0.42,
+          0.42,
+          0.42,
+          0.42,
+          0.42,
+          0.42,
+          0.42,
+          0.424,
+          0.428,
+          0.43199998,
+          0.436,
+          0.44,
+          0.444,
+          0.448,
+          0.452,
+          0.456,
+          0.46,
+          0.46400002,
+          0.468,
+          0.472,
+          0.47599998,
+          0.48,
+          0.484,
+          0.488,
+          0.49199998,
+          0.496,
+          0.5,
+          0.504,
+          0.508,
+          0.51199996,
+          0.516,
+          0.52,
+          0.52199996,
+          0.524,
+          0.52599996,
+          0.528,
+          0.53,
+          0.53499997,
+          0.53999996,
+          0.545,
+          0.55
+        ]
+      }
+    },
+    {
+      "attribute": "minecraft:generic.safe_fall_distance",
+      "operation": "base",
+      "value": {
+        "type": "minecraft:lookup",
+        "fallback": 6.0,
+        "values": [
+          2.0,
+          2.06,
+          2.12,
+          2.18,
+          2.24,
+          2.3,
+          2.36,
+          2.4199998,
+          2.48,
+          2.54,
+          2.6,
+          2.6799998,
+          2.76,
+          2.84,
+          2.92,
+          3.0,
+          3.06,
+          3.12,
+          3.18,
+          3.24,
+          3.3,
+          3.36,
+          3.4199998,
+          3.48,
+          3.54,
+          3.6,
+          3.6799998,
+          3.76,
+          3.84,
+          3.92,
+          4.0,
+          4.08,
+          4.16,
+          4.2400002,
+          4.32,
+          4.4,
+          4.48,
+          4.56,
+          4.6400003,
+          4.7200003,
+          4.8,
+          4.92,
+          5.04,
+          5.1600003,
+          5.28,
+          5.4,
+          5.55,
+          5.7,
+          5.85,
+          6.0
+        ]
       }
     },
     {
       "attribute": "minecraft:player.sneaking_speed",
       "operation": "base",
       "value": {
-        "type": "minecraft:linear",
-        "base": 0.2,
-        "per_level_above_first": 0.01
+        "type": "minecraft:lookup",
+        "fallback": 0.45,
+        "values": [
+          0.2,
+          0.204,
+          0.208,
+          0.212,
+          0.216,
+          0.22,
+          0.22399999,
+          0.228,
+          0.232,
+          0.236,
+          0.24,
+          0.24599999,
+          0.252,
+          0.25800002,
+          0.264,
+          0.27,
+          0.27600002,
+          0.282,
+          0.28800002,
+          0.294,
+          0.3,
+          0.30600002,
+          0.312,
+          0.31800002,
+          0.324,
+          0.33,
+          0.33600003,
+          0.342,
+          0.34800002,
+          0.354,
+          0.36,
+          0.366,
+          0.372,
+          0.378,
+          0.384,
+          0.39,
+          0.396,
+          0.40199998,
+          0.408,
+          0.41399997,
+          0.42,
+          0.424,
+          0.428,
+          0.43199998,
+          0.436,
+          0.44,
+          0.4425,
+          0.445,
+          0.4475,
+          0.45
+        ]
       }
     },
     {
-      "attribute": "minecraft:player.submerged_mining_speed",
+      "attribute": "minecraft:generic.oxygen_bonus",
       "operation": "base",
       "value": {
+        "type": "minecraft:lookup",
+        "fallback": 10.0,
+        "values": [
+          0.0,
+          0.1,
+          0.2,
+          0.3,
+          0.4,
+          0.5,
+          0.6,
+          0.7,
+          0.8,
+          0.9,
+          1.0,
+          1.2,
+          1.4,
+          1.6,
+          1.8,
+          2.0,
+          2.2,
+          2.4,
+          2.6,
+          2.8,
+          3.0,
+          3.2,
+          3.4,
+          3.6,
+          3.8,
+          4.0,
+          4.2,
+          4.4,
+          4.6,
+          4.8,
+          5.0,
+          5.2,
+          5.4,
+          5.6,
+          5.8,
+          6.0,
+          6.2,
+          6.4,
+          6.6,
+          6.8,
+          7.0,
+          7.2,
+          7.4,
+          7.6,
+          7.8,
+          8.0,
+          8.5,
+          9.0,
+          9.5,
+          10.0
+        ]
+      }
+    },
+    {
+      "attribute": "minecraft:generic.step_height",
+      "operation": "add_value",
+      "unlock_level": 12,
+      "value": {
         "type": "minecraft:linear",
-        "base": 0.1,
-        "per_level_above_first": 0.01
+        "base": 0.0,
+        "per_level_above_first": 0.015
+      }
+    },
+    {
+      "attribute": "minecraft:generic.fall_damage_multiplier",
+      "operation": "add_value",
+      "unlock_level": 15,
+      "value": {
+        "type": "minecraft:linear",
+        "base": 0.0,
+        "per_level_above_first": -0.012
+      }
+    },
+    {
+      "attribute": "minecraft:generic.movement_efficiency",
+      "operation": "add_value",
+      "unlock_level": 18,
+      "value": {
+        "type": "minecraft:linear",
+        "base": 0.0,
+        "per_level_above_first": 0.012
       }
     },
     {
       "attribute": "minecraft:generic.water_movement_efficiency",
       "operation": "add_value",
-      "unlock_level": 15,
+      "unlock_level": 12,
       "value": {
         "type": "minecraft:linear",
-        "base": 0.1,
-        "per_level_above_first": 0.01
+        "base": 0.0,
+        "per_level_above_first": 0.015
       }
     },
     {
-      "attribute": "minecraft:generic.oxygen_bonus",
+      "attribute": "minecraft:player.submerged_mining_speed",
       "operation": "add_value",
-      "unlock_level": 10,
+      "unlock_level": 15,
       "value": {
         "type": "minecraft:linear",
-        "base": 0.2,
-        "per_level_above_first": 0.2
+        "base": 0.0,
+        "per_level_above_first": 0.01
       }
     }
   ],
-  "color": "#FFAA00",
+  "color": "#55CC55",
   "description": {
     "translate": "jel.skill.agility.description"
   },
   "icon": "minecraft:leather_boots",
-  "max_level": 30,
+  "max_level": 50,
   "name": {
     "translate": "jel.skill.agility.name"
   },
@@ -65,7 +368,7 @@
           "formula": {
             "type": "minecraft:linear",
             "base": 0.0,
-            "per_level_above_first": 0.025
+            "per_level_above_first": 0.015
           },
           "unlock_level": 10
         }
@@ -76,17 +379,17 @@
     {
       "type": "jel:trait",
       "parameters": {
-        "reduction": {
+        "bonus": {
           "formula": {
             "type": "minecraft:linear",
             "base": 0.0,
-            "per_level_above_first": 0.025
+            "per_level_above_first": 0.02
           },
-          "unlock_level": 15
+          "unlock_level": 8
         }
       },
-      "trait": "jel:exhaustion",
-      "unlock_level": 15
+      "trait": "jel:agility/wall_kick",
+      "unlock_level": 8
     },
     {
       "type": "jel:trait",
@@ -95,23 +398,201 @@
           "formula": {
             "type": "minecraft:linear",
             "base": 0.0,
-            "per_level_above_first": 0.025
+            "per_level_above_first": 0.02
           },
-          "unlock_level": 20
+          "unlock_level": 15
         }
       },
-      "trait": "jel:fall_damage",
-      "unlock_level": 20
+      "trait": "jel:agility/feather_landing",
+      "unlock_level": 15
     },
     {
-      "type": "jel:effect",
-      "effect": "minecraft:saturation",
-      "unlock_level": 30
+      "type": "jel:trait",
+      "parameters": {
+        "bonus": {
+          "formula": {
+            "type": "minecraft:linear",
+            "base": 0.0,
+            "per_level_above_first": 0.008
+          },
+          "unlock_level": 22
+        }
+      },
+      "trait": "jel:agility/momentum",
+      "unlock_level": 22
+    },
+    {
+      "type": "jel:trait",
+      "parameters": {
+        "threshold": {
+          "formula": 60.0,
+          "unlock_level": 22
+        }
+      },
+      "trait": "jel:agility/momentum",
+      "unlock_level": 22
+    },
+    {
+      "type": "jel:trait",
+      "parameters": {
+        "chance": {
+          "formula": {
+            "type": "minecraft:linear",
+            "base": 0.0,
+            "per_level_above_first": 0.006
+          },
+          "unlock_level": 28
+        }
+      },
+      "trait": "jel:agility/acrobat",
+      "unlock_level": 28
+    },
+    {
+      "type": "jel:trait",
+      "parameters": {
+        "duration": {
+          "formula": 80.0,
+          "unlock_level": 36
+        }
+      },
+      "trait": "jel:agility/sprint_surge",
+      "unlock_level": 36
+    },
+    {
+      "type": "jel:trait",
+      "parameters": {
+        "cooldown": {
+          "formula": 300.0,
+          "unlock_level": 36
+        }
+      },
+      "trait": "jel:agility/sprint_surge",
+      "unlock_level": 36
+    },
+    {
+      "type": "jel:trait",
+      "parameters": {
+        "active": {
+          "formula": 1.0,
+          "unlock_level": 46
+        }
+      },
+      "trait": "jel:agility/windrunner",
+      "unlock_level": 46
+    },
+    {
+      "type": "jel:trait",
+      "parameters": {
+        "bonus": {
+          "formula": {
+            "type": "minecraft:linear",
+            "base": 0.0,
+            "per_level_above_first": 0.02
+          },
+          "unlock_level": 8
+        }
+      },
+      "trait": "jel:agility/aquatic_affinity",
+      "unlock_level": 8
+    },
+    {
+      "type": "jel:trait",
+      "parameters": {
+        "reduction": {
+          "formula": {
+            "type": "minecraft:linear",
+            "base": 0.0,
+            "per_level_above_first": 0.02
+          },
+          "unlock_level": 15
+        }
+      },
+      "trait": "jel:agility/sure_footed",
+      "unlock_level": 15
+    },
+    {
+      "type": "jel:trait",
+      "parameters": {
+        "threshold": {
+          "formula": 4.0,
+          "unlock_level": 22
+        }
+      },
+      "trait": "jel:agility/night_eyes",
+      "unlock_level": 22
+    },
+    {
+      "type": "jel:trait",
+      "parameters": {
+        "reduction": {
+          "formula": {
+            "type": "minecraft:linear",
+            "base": 0.0,
+            "per_level_above_first": 0.012
+          },
+          "unlock_level": 28
+        }
+      },
+      "trait": "jel:agility/thick_skin",
+      "unlock_level": 28
+    },
+    {
+      "type": "jel:trait",
+      "parameters": {
+        "bonus": {
+          "formula": {
+            "type": "minecraft:linear",
+            "base": 0.0,
+            "per_level_above_first": 0.008
+          },
+          "unlock_level": 36
+        }
+      },
+      "trait": "jel:agility/glider",
+      "unlock_level": 36
+    },
+    {
+      "type": "jel:trait",
+      "parameters": {
+        "active": {
+          "formula": 1.0,
+          "unlock_level": 46
+        }
+      },
+      "trait": "jel:agility/nomad",
+      "unlock_level": 46
     }
   ],
+  "requirements": {
+    "30": {
+      "condition": {
+        "condition": "jel:skill_level_check",
+        "level": {
+          "min": 12
+        },
+        "skill": "jel:constitution"
+      },
+      "description": {
+        "translate": "jel.skill.agility.req.constitution_12"
+      }
+    },
+    "40": {
+      "condition": {
+        "condition": "jel:skill_level_check",
+        "level": {
+          "min": 15
+        },
+        "skill": "jel:melee"
+      },
+      "description": {
+        "translate": "jel.skill.agility.req.melee_or_archery_15"
+      }
+    }
+  },
   "xp": {
-    "type": "minecraft:linear",
-    "base": 100.0,
-    "per_level_above_first": 50.0
+    "type": "quadratic",
+    "a": 50.0,
+    "b": 40.0,
+    "c": 5.0
   }
 }

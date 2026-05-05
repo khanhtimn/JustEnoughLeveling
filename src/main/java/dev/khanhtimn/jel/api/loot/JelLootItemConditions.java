@@ -7,6 +7,9 @@ public final class JelLootItemConditions {
 	public static final LootItemConditionType SKILL_LEVEL_CHECK =
 			new LootItemConditionType(SkillLevelCondition.CODEC);
 
+	public static final LootItemConditionType TRAIT_CHANCE =
+			new LootItemConditionType(JelTraitChanceCondition.CODEC);
+
 	private JelLootItemConditions() {
 	}
 }

@@ -34,6 +34,7 @@
     ]
   },
   "mixins": [
-    "${id}.mixins.json"
+    "${id}.mixins.json",
+    "${id}.compat.appleskin.mixins.json"
   ],${dependencies}
 }

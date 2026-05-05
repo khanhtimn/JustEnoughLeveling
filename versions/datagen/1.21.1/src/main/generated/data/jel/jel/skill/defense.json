@@ -5,8 +5,8 @@
       "operation": "base",
       "value": {
         "type": "minecraft:linear",
-        "base": 0.0,
-        "per_level_above_first": 0.15
+        "base": -2.0,
+        "per_level_above_first": 0.1333
       }
     },
     {
@@ -15,16 +15,26 @@
       "value": {
         "type": "minecraft:linear",
         "base": 0.0,
-        "per_level_above_first": 0.05
+        "per_level_above_first": 0.01
+      }
+    },
+    {
+      "attribute": "minecraft:generic.armor_toughness",
+      "operation": "add_value",
+      "unlock_level": 8,
+      "value": {
+        "type": "minecraft:linear",
+        "base": 0.0,
+        "per_level_above_first": 0.08
       }
     }
   ],
-  "color": "#FF4444",
+  "color": "#4488CC",
   "description": {
     "translate": "jel.skill.defense.description"
   },
   "icon": "minecraft:shield",
-  "max_level": 30,
+  "max_level": 50,
   "name": {
     "translate": "jel.skill.defense.name"
   },
@@ -32,22 +42,214 @@
     {
       "type": "jel:trait",
       "parameters": {
+        "percent": {
+          "formula": {
+            "type": "minecraft:linear",
+            "base": 0.0,
+            "per_level_above_first": 0.004
+          },
+          "unlock_level": 10
+        }
+      },
+      "trait": "jel:defense/damage_reduction",
+      "unlock_level": 10
+    },
+    {
+      "type": "jel:trait",
+      "parameters": {
+        "percent": {
+          "formula": {
+            "type": "minecraft:linear",
+            "base": 0.0,
+            "per_level_above_first": 0.005
+          },
+          "unlock_level": 18
+        }
+      },
+      "trait": "jel:defense/elemental_ward",
+      "unlock_level": 18
+    },
+    {
+      "type": "jel:trait",
+      "parameters": {
+        "armor_bonus": {
+          "formula": {
+            "type": "minecraft:linear",
+            "base": 0.0,
+            "per_level_above_first": 0.06
+          },
+          "unlock_level": 25
+        }
+      },
+      "trait": "jel:defense/fortify",
+      "unlock_level": 25
+    },
+    {
+      "type": "jel:trait",
+      "parameters": {
         "chance": {
           "formula": {
             "type": "minecraft:linear",
             "base": 0.0,
-            "per_level_above_first": 0.025
+            "per_level_above_first": 0.0067
           },
-          "unlock_level": 24
+          "unlock_level": 32
         }
       },
-      "trait": "jel:death_grace",
-      "unlock_level": 24
+      "trait": "jel:defense/death_grace",
+      "unlock_level": 32
+    },
+    {
+      "type": "jel:trait",
+      "parameters": {
+        "damage": {
+          "formula": {
+            "type": "minecraft:linear",
+            "base": 0.0,
+            "per_level_above_first": 0.04
+          },
+          "unlock_level": 40
+        }
+      },
+      "trait": "jel:defense/thorns_nova",
+      "unlock_level": 40
+    },
+    {
+      "type": "jel:trait",
+      "parameters": {
+        "reduction": {
+          "formula": {
+            "type": "minecraft:linear",
+            "base": 0.75,
+            "per_level_above_first": 0.0
+          },
+          "unlock_level": 48
+        }
+      },
+      "trait": "jel:defense/iron_curtain",
+      "unlock_level": 48
+    },
+    {
+      "type": "jel:trait",
+      "parameters": {
+        "chance": {
+          "formula": {
+            "type": "minecraft:linear",
+            "base": 0.0,
+            "per_level_above_first": 0.006
+          },
+          "unlock_level": 10
+        }
+      },
+      "trait": "jel:defense/parry",
+      "unlock_level": 10
+    },
+    {
+      "type": "jel:trait",
+      "parameters": {
+        "percent": {
+          "formula": {
+            "type": "minecraft:linear",
+            "base": 0.0,
+            "per_level_above_first": 0.0065
+          },
+          "unlock_level": 18
+        }
+      },
+      "trait": "jel:defense/thorns_reflect",
+      "unlock_level": 18
+    },
+    {
+      "type": "jel:trait",
+      "parameters": {
+        "damage": {
+          "formula": {
+            "type": "minecraft:linear",
+            "base": 0.0,
+            "per_level_above_first": 0.04
+          },
+          "unlock_level": 25
+        }
+      },
+      "trait": "jel:defense/shield_bash",
+      "unlock_level": 25
+    },
+    {
+      "type": "jel:trait",
+      "parameters": {
+        "heal_percent": {
+          "formula": {
+            "type": "minecraft:linear",
+            "base": 0.0,
+            "per_level_above_first": 0.005
+          },
+          "unlock_level": 32
+        }
+      },
+      "trait": "jel:defense/second_wind",
+      "unlock_level": 32
+    },
+    {
+      "type": "jel:trait",
+      "parameters": {
+        "radius": {
+          "formula": {
+            "type": "minecraft:linear",
+            "base": 5.0,
+            "per_level_above_first": 0.1
+          },
+          "unlock_level": 40
+        }
+      },
+      "trait": "jel:defense/rallying_cry",
+      "unlock_level": 40
+    },
+    {
+      "type": "jel:trait",
+      "parameters": {
+        "damage_bonus": {
+          "formula": {
+            "type": "minecraft:linear",
+            "base": 0.0,
+            "per_level_above_first": 0.01
+          },
+          "unlock_level": 48
+        }
+      },
+      "trait": "jel:defense/vengeful_spirit",
+      "unlock_level": 48
     }
   ],
+  "requirements": {
+    "30": {
+      "condition": {
+        "condition": "jel:skill_level_check",
+        "level": {
+          "min": 10
+        },
+        "skill": "jel:constitution"
+      },
+      "description": {
+        "translate": "jel.skill.defense.req.constitution_10"
+      }
+    },
+    "40": {
+      "condition": {
+        "condition": "jel:skill_level_check",
+        "level": {
+          "min": 20
+        },
+        "skill": "jel:constitution"
+      },
+      "description": {
+        "translate": "jel.skill.defense.req.constitution_20"
+      }
+    }
+  },
   "xp": {
-    "type": "minecraft:linear",
-    "base": 100.0,
-    "per_level_above_first": 50.0
+    "type": "quadratic",
+    "a": 50.0,
+    "b": 40.0,
+    "c": 5.0
   }
 }

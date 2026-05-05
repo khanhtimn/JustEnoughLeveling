@@ -3,3 +3,5 @@ accessWidener v2 named
 accessible field net/minecraft/server/MinecraftServer pvp Z # sample_content
 accessible field net/minecraft/client/gui/screens/inventory/AbstractContainerScreen leftPos I
 accessible field net/minecraft/client/gui/screens/inventory/AbstractContainerScreen topPos I
+
+accessible method net/minecraft/world/entity/projectile/AbstractArrow setPierceLevel (B)V

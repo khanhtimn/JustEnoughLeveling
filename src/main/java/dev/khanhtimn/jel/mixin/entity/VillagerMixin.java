@@ -1,15 +1,20 @@
 package dev.khanhtimn.jel.mixin.entity;
 
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import com.llamalad7.mixinextras.sugar.Local;
 import dev.khanhtimn.jel.api.JelTraits;
 import dev.khanhtimn.jel.content.skills.Batering;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ExperienceOrb;
-import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.village.ReputationEventType;
 import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.ReputationEventHandler;
 import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
@@ -18,7 +23,6 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 @Mixin(Villager.class)
 public abstract class VillagerMixin extends AbstractVillager {
@@ -36,10 +40,9 @@ public abstract class VillagerMixin extends AbstractVillager {
 			at = @At(
 					value = "INVOKE",
 					target = "Lnet/minecraft/world/level/Level;addFreshEntity(Lnet/minecraft/world/entity/Entity;)Z"
-			),
-			locals = LocalCapture.CAPTURE_FAILSOFT
+			)
 	)
-	protected void jel$rewardTradeXpMixin(MerchantOffer merchantOffer, CallbackInfo ci, int i) {
+	protected void jel$rewardTradeXpMixin(MerchantOffer merchantOffer, CallbackInfo ci, @Local int i) {
 		if (this.lastTradedPlayer instanceof Player player) {
 			int amount = (int) (i * JelTraits.value(player, Batering.TRADE_XP_MULTIPLIER));
 			if (amount > 0) {
@@ -71,19 +74,19 @@ public abstract class VillagerMixin extends AbstractVillager {
 		}
 	}
 
-	@Inject(
+	@WrapOperation(
 			method = "setLastHurtByMob",
 			at = @At(
 					value = "INVOKE",
 					target = "Lnet/minecraft/server/level/ServerLevel;onReputationEvent(Lnet/minecraft/world/entity/ai/village/ReputationEventType;Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/entity/ReputationEventHandler;)V"
-			),
-			cancellable = true
+			)
 	)
-	private void jel$setLastHurtByMobMixin(LivingEntity attacker, CallbackInfo ci) {
-		if (attacker instanceof Player player && JelTraits.has(player, Batering.TRADE_IMMUNITY)) {
-			super.setLastHurtByMob(attacker);
-			ci.cancel();
-		}
+	private void jel$setLastHurtByMobMixin(
+			ServerLevel level, ReputationEventType type, Entity entity,
+			ReputationEventHandler handler, Operation<Void> original
+	) {
+		if (entity instanceof Player player && JelTraits.has(player, Batering.TRADE_IMMUNITY)) return;
+		original.call(level, type, entity, handler);
 	}
 
 }

@@ -1,5 +1,6 @@
 package dev.khanhtimn.jel.mixin.misc;
 
+import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import dev.khanhtimn.jel.Constants;
 import dev.khanhtimn.jel.api.JelTraits;
 import dev.khanhtimn.jel.content.skills.Luck;
@@ -20,7 +21,6 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(AnvilMenu.class)
 public abstract class AnvilMenuMixin extends ItemCombinerMenu {
@@ -34,17 +34,11 @@ public abstract class AnvilMenuMixin extends ItemCombinerMenu {
 		super(menuType, i, inventory, containerLevelAccess);
 	}
 
-	@Inject(
-			method = "mayPickup",
-			at = @At("HEAD"),
-			cancellable = true
-	)
-	protected void jel$mayPickupMixin(Player player, boolean present, CallbackInfoReturnable<Boolean> cir) {
-		if (JelTraits.has(player, Smithing.XP_CAP)) {
-			cir.setReturnValue(true);
-		}
+	@ModifyReturnValue(method = "mayPickup", at = @At("RETURN"))
+	protected boolean jel$mayPickupMixin(boolean original, Player player) {
+		if (JelTraits.has(player, Smithing.XP_CAP)) return true;
+		return original;
 	}
-
 
 	@Inject(
 			method = "createResult",
@@ -80,24 +74,15 @@ public abstract class AnvilMenuMixin extends ItemCombinerMenu {
 			),
 			require = 0
 	)
-	private void onTakeOutputMixin(Player player, ItemStack itemStack, CallbackInfo ci) {
+	private void jel$onTakeOutputMixin(Player player, ItemStack itemStack, CallbackInfo ci) {
 		if (JelTraits.testChance(player, Luck.FREE_ANVIL_COST_CHANCE)) {
 			this.cost.set(0);
 		}
 	}
 
-	@Inject(
-			method = "getCost",
-			at = @At(
-					value = "HEAD"
-			),
-			cancellable = true
-	)
-	public void jel$getAnvilCostMixin(CallbackInfoReturnable<Integer> info) {
-		int levelCost = this.cost.get() + (int) JelTraits.value(this.player, Smithing.XP_DISCOUNT);
-		if (levelCost != this.cost.get()) {
-			info.setReturnValue(levelCost);
-		}
+	@ModifyReturnValue(method = "getCost", at = @At("RETURN"))
+	public int jel$getAnvilCostMixin(int original) {
+		return original + (int) JelTraits.value(this.player, Smithing.XP_DISCOUNT);
 	}
 
 }

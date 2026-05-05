@@ -1,0 +1,19 @@
+{
+  "package": "dev.khanhtimn.jel.mixin.compat.appleskin",
+  "required": false,
+  "minVersion": "0.8",
+  "compatibilityLevel": "${java}",
+  "plugin": "com.moulberry.mixinconstraints.ConstraintsMixinPlugin",
+  "injectors": {
+    "defaultRequire": 0
+  },
+  "mixinextras": {
+    "minVersion": "0.5.3"
+  },
+  "client": [
+    "AppleSkinFoodHelperMixin",
+    "AppleSkinHUDMixin",
+    "AppleSkinHungerHelperMixin",
+    "AppleSkinOffsetsCacheMixin"
+  ]
+}

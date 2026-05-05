@@ -4,14 +4,14 @@ import com.mrcrayfish.framework.api.FrameworkAPI;
 import com.mrcrayfish.framework.api.network.FrameworkNetwork;
 import dev.khanhtimn.jel.Constants;
 import dev.khanhtimn.jel.network.message.MessageLevelUpSkill;
+import dev.khanhtimn.jel.network.message.MessageOreHighlight;
 import net.minecraft.network.protocol.PacketFlow;
-import net.minecraft.resources.ResourceLocation;
 
 public final class ModNetwork {
 
 	private static final FrameworkNetwork PLAY = FrameworkAPI
 			.createNetworkBuilder(
-					ResourceLocation.fromNamespaceAndPath(Constants.MOD_ID, "play"),
+					Constants.rl("play"),
 					1
 			)
 			.registerPlayMessage(
@@ -20,6 +20,13 @@ public final class ModNetwork {
 					MessageLevelUpSkill.STREAM_CODEC,
 					MessageLevelUpSkill::handle,
 					PacketFlow.SERVERBOUND
+			)
+			.registerPlayMessage(
+					"ore_highlight",
+					MessageOreHighlight.class,
+					MessageOreHighlight.STREAM_CODEC,
+					MessageOreHighlight::handle,
+					PacketFlow.CLIENTBOUND
 			)
 			.build();
 

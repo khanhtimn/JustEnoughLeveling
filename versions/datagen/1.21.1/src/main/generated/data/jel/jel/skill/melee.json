@@ -1,0 +1,274 @@
+{
+  "attributes": [
+    {
+      "attribute": "minecraft:generic.attack_damage",
+      "operation": "base",
+      "value": {
+        "type": "minecraft:linear",
+        "base": 0.6,
+        "per_level_above_first": 0.0267
+      }
+    },
+    {
+      "attribute": "minecraft:generic.attack_speed",
+      "operation": "base",
+      "value": {
+        "type": "minecraft:linear",
+        "base": 2.5,
+        "per_level_above_first": 0.063
+      }
+    },
+    {
+      "attribute": "minecraft:player.entity_interaction_range",
+      "operation": "base",
+      "value": {
+        "type": "minecraft:linear",
+        "base": 2.5,
+        "per_level_above_first": 0.0267
+      }
+    },
+    {
+      "attribute": "minecraft:player.sweeping_damage_ratio",
+      "operation": "add_value",
+      "unlock_level": 12,
+      "value": {
+        "type": "minecraft:linear",
+        "base": 0.0,
+        "per_level_above_first": 0.015
+      }
+    },
+    {
+      "attribute": "minecraft:generic.attack_knockback",
+      "operation": "add_value",
+      "unlock_level": 20,
+      "value": {
+        "type": "minecraft:linear",
+        "base": 0.0,
+        "per_level_above_first": 0.03
+      }
+    }
+  ],
+  "color": "#CC3333",
+  "description": {
+    "translate": "jel.skill.melee.description"
+  },
+  "icon": "minecraft:diamond_sword",
+  "max_level": 50,
+  "name": {
+    "translate": "jel.skill.melee.name"
+  },
+  "perks": [
+    {
+      "type": "jel:trait",
+      "parameters": {
+        "chance": {
+          "formula": {
+            "type": "minecraft:linear",
+            "base": 0.0,
+            "per_level_above_first": 0.0075
+          },
+          "unlock_level": 10
+        }
+      },
+      "trait": "jel:melee/bleeding_edge",
+      "unlock_level": 10
+    },
+    {
+      "type": "jel:trait",
+      "parameters": {
+        "damage_bonus": {
+          "formula": {
+            "type": "minecraft:linear",
+            "base": 0.0,
+            "per_level_above_first": 0.015
+          },
+          "unlock_level": 18
+        }
+      },
+      "trait": "jel:melee/adrenaline",
+      "unlock_level": 18
+    },
+    {
+      "type": "jel:trait",
+      "parameters": {
+        "bonus": {
+          "formula": {
+            "type": "minecraft:linear",
+            "base": 0.0,
+            "per_level_above_first": 0.008
+          },
+          "unlock_level": 25
+        }
+      },
+      "trait": "jel:melee/critical_fury",
+      "unlock_level": 25
+    },
+    {
+      "type": "jel:trait",
+      "parameters": {
+        "speed_bonus": {
+          "formula": {
+            "type": "minecraft:linear",
+            "base": 0.0,
+            "per_level_above_first": 0.01
+          },
+          "unlock_level": 32
+        }
+      },
+      "trait": "jel:melee/bloodlust",
+      "unlock_level": 32
+    },
+    {
+      "type": "jel:trait",
+      "parameters": {
+        "chance": {
+          "formula": {
+            "type": "minecraft:linear",
+            "base": 0.0,
+            "per_level_above_first": 0.006
+          },
+          "unlock_level": 40
+        }
+      },
+      "trait": "jel:melee/ground_slam",
+      "unlock_level": 40
+    },
+    {
+      "type": "jel:trait",
+      "parameters": {
+        "threshold": {
+          "formula": {
+            "type": "minecraft:linear",
+            "base": 0.15,
+            "per_level_above_first": 0.0
+          },
+          "unlock_level": 48
+        }
+      },
+      "trait": "jel:melee/wrath",
+      "unlock_level": 48
+    },
+    {
+      "type": "jel:trait",
+      "parameters": {
+        "percentage": {
+          "formula": {
+            "type": "minecraft:linear",
+            "base": 0.0,
+            "per_level_above_first": 0.004
+          },
+          "unlock_level": 10
+        }
+      },
+      "trait": "jel:melee/life_steal",
+      "unlock_level": 10
+    },
+    {
+      "type": "jel:trait",
+      "parameters": {
+        "chance": {
+          "formula": {
+            "type": "minecraft:linear",
+            "base": 0.0,
+            "per_level_above_first": 0.005
+          },
+          "unlock_level": 18
+        }
+      },
+      "trait": "jel:melee/riposte",
+      "unlock_level": 18
+    },
+    {
+      "type": "jel:trait",
+      "parameters": {
+        "chance": {
+          "formula": {
+            "type": "minecraft:linear",
+            "base": 0.0,
+            "per_level_above_first": 0.005
+          },
+          "unlock_level": 25
+        }
+      },
+      "trait": "jel:melee/disarm",
+      "unlock_level": 25
+    },
+    {
+      "type": "jel:trait",
+      "parameters": {
+        "damage_bonus": {
+          "formula": {
+            "type": "minecraft:linear",
+            "base": 0.0,
+            "per_level_above_first": 0.01
+          },
+          "unlock_level": 32
+        }
+      },
+      "trait": "jel:melee/combo_finisher",
+      "unlock_level": 32
+    },
+    {
+      "type": "jel:trait",
+      "parameters": {
+        "dot_damage": {
+          "formula": {
+            "type": "minecraft:linear",
+            "base": 0.0,
+            "per_level_above_first": 0.02
+          },
+          "unlock_level": 40
+        }
+      },
+      "trait": "jel:melee/thousand_cuts",
+      "unlock_level": 40
+    },
+    {
+      "type": "jel:trait",
+      "parameters": {
+        "bonus": {
+          "formula": {
+            "type": "minecraft:linear",
+            "base": 0.0,
+            "per_level_above_first": 0.02
+          },
+          "unlock_level": 48
+        }
+      },
+      "trait": "jel:melee/mark_of_death",
+      "unlock_level": 48
+    }
+  ],
+  "requirements": {
+    "30": {
+      "condition": {
+        "condition": "jel:skill_level_check",
+        "level": {
+          "min": 15
+        },
+        "skill": "jel:defense"
+      },
+      "description": {
+        "translate": "jel.skill.melee.req.defense_15"
+      }
+    },
+    "40": {
+      "condition": {
+        "condition": "jel:skill_level_check",
+        "level": {
+          "min": 20
+        },
+        "skill": "jel:defense"
+      },
+      "description": {
+        "translate": "jel.skill.melee.req.defense_20"
+      }
+    }
+  },
+  "xp": {
+    "type": "quadratic",
+    "a": 50.0,
+    "b": 40.0,
+    "c": 5.0
+  }
+}

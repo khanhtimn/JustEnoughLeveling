@@ -2,8 +2,11 @@ package dev.khanhtimn.jel.api.skill;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import dev.khanhtimn.jel.api.loot.SkillLevelCondition;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.ComponentSerialization;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 
@@ -58,5 +61,21 @@ public record Requirement(
 
 	public static Requirement of(Component description, LootItemCondition condition) {
 		return new Requirement(Optional.of(description), condition);
+	}
+
+	public static Requirement skillLevel(ResourceLocation skill, int minLevel) {
+		return of(SkillLevelCondition.atLeast(skill, minLevel));
+	}
+
+	public static Requirement skillLevel(Component description, ResourceLocation skill, int minLevel) {
+		return of(description, SkillLevelCondition.atLeast(skill, minLevel));
+	}
+
+	public static Requirement skillLevel(ResourceKey<SkillDefinition> skill, int minLevel) {
+		return of(SkillLevelCondition.atLeast(skill, minLevel));
+	}
+
+	public static Requirement skillLevel(Component description, ResourceKey<SkillDefinition> skill, int minLevel) {
+		return of(description, SkillLevelCondition.atLeast(skill, minLevel));
 	}
 }

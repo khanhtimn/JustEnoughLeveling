@@ -42,6 +42,12 @@ loom {
 		environment = "server"
 		configName = "Fabric Server"
 	}
+	runs.configureEach {
+		vmArgs(
+			"-Dmixin.debug.export=true",
+			"-XX:+AllowEnhancedClassRedefinition"
+		)
+	}
 }
 
 fabricApi {
@@ -63,6 +69,8 @@ repositories {
 		filter { includeGroup("curse.maven") }
 	}
 	strictMaven("https://maven.terraformersmc.com/releases/") { name = "TerraformersMC" }
+	strictMaven("https://maven.ryanliptak.com/") { name = "AppleSkin" }
+	strictMaven("https://maven.shedaniel.me/") { name = "Cloth Config" }
 	strictMaven("https://maven.bawnorton.com/releases/", "com.github.bawnorton.mixinsquared") { name = "MixinSquared" }
 	strictMaven("https://maven.pkg.github.com/MrCrayfish/Maven/") {
 		name = "MrCrayfish (GitHub)"
@@ -88,9 +96,13 @@ dependencies {
 	include(libs.mixinsquared.fabric)
 
 	modImplementation("net.fabricmc.fabric-api:fabric-api:${prop("deps.fabric-api")}")
+
 	modLocalRuntime("com.terraformersmc:modmenu:${prop("deps.modmenu")}")
 
 	modImplementation("com.mrcrayfish:framework-fabric:${prop("deps.minecraft")}-${prop("deps.framework")}")
+
+	modImplementation("squeek.appleskin:appleskin-fabric:mc1.21-${prop("deps.appleskin")}")
+	modApi("me.shedaniel.cloth:cloth-config-fabric:${prop("deps.clothconfig")}")
 	modLocalRuntime("maven.modrinth:sodium:mc${prop("deps.minecraft")}-${prop("deps.sodium")}-fabric")
 	modLocalRuntime("maven.modrinth:sodium-extra:mc${prop("deps.minecraft")}-${prop("deps.sodium-extra")}+fabric")
 	modLocalRuntime("dev.emi:emi-fabric:${prop("deps.emi")}+${prop("deps.minecraft")}")

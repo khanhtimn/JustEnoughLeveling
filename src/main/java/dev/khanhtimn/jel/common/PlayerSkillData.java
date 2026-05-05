@@ -55,6 +55,8 @@ public final class PlayerSkillData extends SyncedObject {
 
 	private final HashMap<ResourceLocation, IntSet> requirementsMet = new HashMap<>();
 
+	private final Object2ObjectOpenHashMap<ResourceLocation, ResourceLocation> branchChoices = new Object2ObjectOpenHashMap<>();
+
 
 	public int getLevel(ResourceKey<SkillDefinition> skillKey) {
 		return getLevel(skillKey.location());
@@ -194,6 +196,41 @@ public final class PlayerSkillData extends SyncedObject {
 	}
 
 
+	public java.util.Optional<ResourceLocation> getBranch(ResourceLocation skillId) {
+		return java.util.Optional.ofNullable(branchChoices.get(skillId));
+	}
+
+	public java.util.Optional<ResourceLocation> getBranch(ResourceKey<SkillDefinition> skillKey) {
+		return getBranch(skillKey.location());
+	}
+
+	public void setBranch(ResourceLocation skillId, ResourceLocation branchId) {
+		branchChoices.put(skillId, branchId);
+		markDirty();
+	}
+
+	public void clearBranch(ResourceLocation skillId) {
+		if (branchChoices.remove(skillId) != null) {
+			markDirty();
+		}
+	}
+
+	public boolean isBranch(ResourceKey<SkillDefinition> skillKey, ResourceLocation branchId) {
+		return branchId.equals(branchChoices.get(skillKey.location()));
+	}
+
+	public boolean isBranch(ResourceLocation skillId, ResourceLocation branchId) {
+		return branchId.equals(branchChoices.get(skillId));
+	}
+
+	public void clearAllBranches() {
+		if (!branchChoices.isEmpty()) {
+			branchChoices.clear();
+			markDirty();
+		}
+	}
+
+
 	private CompoundTag writeTag(HolderLookup.Provider provider) {
 		CompoundTag tag = new CompoundTag();
 
@@ -212,6 +249,13 @@ public final class PlayerSkillData extends SyncedObject {
 				perksTag.putBoolean(perkId.toString(), true);
 			}
 			tag.put("unlocked_perks", perksTag);
+		}
+
+		if (!branchChoices.isEmpty()) {
+			CompoundTag branchTag = new CompoundTag();
+			branchChoices.forEach((skillId, branchId) ->
+					branchTag.putString(skillId.toString(), branchId.toString()));
+			tag.put("branch_choices", branchTag);
 		}
 
 		return tag;
@@ -240,6 +284,17 @@ public final class PlayerSkillData extends SyncedObject {
 				ResourceLocation id = ResourceLocation.tryParse(key);
 				if (id != null) {
 					skillData.unlockedPerks.add(id);
+				}
+			}
+		}
+
+		if (data.contains("branch_choices", Tag.TAG_COMPOUND)) {
+			CompoundTag branchTag = data.getCompound("branch_choices");
+			for (String key : branchTag.getAllKeys()) {
+				ResourceLocation skillId = ResourceLocation.tryParse(key);
+				ResourceLocation branchId = ResourceLocation.tryParse(branchTag.getString(key));
+				if (skillId != null && branchId != null) {
+					skillData.branchChoices.put(skillId, branchId);
 				}
 			}
 		}
@@ -275,6 +330,12 @@ public final class PlayerSkillData extends SyncedObject {
 				buf.writeVarInt(level);
 			}
 		}
+
+		buf.writeVarInt(skillData.branchChoices.size());
+		skillData.branchChoices.forEach((skillId, branchId) -> {
+			buf.writeResourceLocation(skillId);
+			buf.writeResourceLocation(branchId);
+		});
 	}
 
 	private static PlayerSkillData readNetwork(RegistryFriendlyByteBuf buf) {
@@ -305,6 +366,13 @@ public final class PlayerSkillData extends SyncedObject {
 			ResourceLocation skillId = buf.readResourceLocation();
 			int level = buf.readVarInt();
 			skillData.requirementsMet.computeIfAbsent(skillId, k -> new IntOpenHashSet()).add(level);
+		}
+
+		int branchCount = buf.readVarInt();
+		for (int i = 0; i < branchCount; i++) {
+			ResourceLocation skillId = buf.readResourceLocation();
+			ResourceLocation branchId = buf.readResourceLocation();
+			skillData.branchChoices.put(skillId, branchId);
 		}
 
 		return skillData;

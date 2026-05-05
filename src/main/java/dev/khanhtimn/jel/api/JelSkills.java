@@ -54,6 +54,12 @@ public final class JelSkills {
 		return getSkillData(player).hasSkill(skillKey);
 	}
 
+	public static boolean isBranch(Player player, ResourceKey<SkillDefinition> skillKey,
+	                               ResourceLocation branchId) {
+		PlayerSkillData data = getSkillData(player);
+		return data != null && data.isBranch(skillKey, branchId);
+	}
+
 	// --- Mutation API ---
 
 	public static boolean tryLevelUpOnce(ServerPlayer player, ResourceKey<SkillDefinition> skillKey) {

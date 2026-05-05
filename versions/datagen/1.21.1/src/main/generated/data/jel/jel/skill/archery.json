@@ -1,30 +1,22 @@
 {
   "attributes": [
     {
-      "attribute": "minecraft:player.block_interaction_range",
-      "operation": "base",
+      "attribute": "minecraft:player.entity_interaction_range",
+      "operation": "add_value",
+      "unlock_level": 5,
       "value": {
         "type": "minecraft:linear",
-        "base": 2.5,
-        "per_level_above_first": 0.1
-      }
-    },
-    {
-      "attribute": "minecraft:generic.follow_range",
-      "operation": "base",
-      "value": {
-        "type": "minecraft:linear",
-        "base": 32.0,
-        "per_level_above_first": 1.0
+        "base": 0.0,
+        "per_level_above_first": 0.02
       }
     }
   ],
-  "color": "#FF4444",
+  "color": "#55AA55",
   "description": {
     "translate": "jel.skill.archery.description"
   },
   "icon": "minecraft:bow",
-  "max_level": 30,
+  "max_level": 50,
   "name": {
     "translate": "jel.skill.archery.name"
   },
@@ -36,13 +28,88 @@
           "formula": {
             "type": "minecraft:linear",
             "base": 0.0,
-            "per_level_above_first": 0.025
+            "per_level_above_first": 0.05
           },
-          "unlock_level": 12
+          "unlock_level": 5
         }
       },
-      "trait": "jel:bow_damage",
-      "unlock_level": 12
+      "trait": "jel:archery/bow_damage",
+      "unlock_level": 5
+    },
+    {
+      "type": "jel:trait",
+      "parameters": {
+        "bonus": {
+          "formula": {
+            "type": "minecraft:linear",
+            "base": 0.35,
+            "per_level_above_first": 0.0
+          },
+          "unlock_level": 15
+        }
+      },
+      "trait": "jel:archery/headshot",
+      "unlock_level": 15
+    },
+    {
+      "type": "jel:trait",
+      "parameters": {
+        "chance": {
+          "formula": {
+            "type": "minecraft:linear",
+            "base": 0.0,
+            "per_level_above_first": 0.005
+          },
+          "unlock_level": 22
+        }
+      },
+      "trait": "jel:archery/piercing_shot",
+      "unlock_level": 22
+    },
+    {
+      "type": "jel:trait",
+      "parameters": {
+        "chance": {
+          "formula": {
+            "type": "minecraft:linear",
+            "base": 0.0,
+            "per_level_above_first": 0.004
+          },
+          "unlock_level": 30
+        }
+      },
+      "trait": "jel:archery/bow_crit",
+      "unlock_level": 30
+    },
+    {
+      "type": "jel:trait",
+      "parameters": {
+        "chance": {
+          "formula": {
+            "type": "minecraft:linear",
+            "base": 0.0,
+            "per_level_above_first": 0.002
+          },
+          "unlock_level": 38
+        }
+      },
+      "trait": "jel:archery/frozen_arrow",
+      "unlock_level": 38
+    },
+    {
+      "type": "jel:trait",
+      "parameters": {
+        "radius": {
+          "formula": {
+            "type": "minecraft:linear",
+            "base": 3.0,
+            "per_level_above_first": 0.0
+          },
+          "unlock_level": 45
+        }
+      },
+      "trait": "jel:archery/arrow_rain",
+      "unlock_level": 45
     },
     {
       "type": "jel:trait",
@@ -51,13 +118,28 @@
           "formula": {
             "type": "minecraft:linear",
             "base": 0.0,
-            "per_level_above_first": 0.025
+            "per_level_above_first": 0.05
           },
-          "unlock_level": 16
+          "unlock_level": 8
         }
       },
-      "trait": "jel:crossbow_damage",
-      "unlock_level": 16
+      "trait": "jel:archery/crossbow_damage",
+      "unlock_level": 8
+    },
+    {
+      "type": "jel:trait",
+      "parameters": {
+        "reduction": {
+          "formula": {
+            "type": "minecraft:linear",
+            "base": 0.0,
+            "per_level_above_first": 0.007
+          },
+          "unlock_level": 15
+        }
+      },
+      "trait": "jel:archery/rapid_reload",
+      "unlock_level": 15
     },
     {
       "type": "jel:trait",
@@ -66,13 +148,28 @@
           "formula": {
             "type": "minecraft:linear",
             "base": 0.0,
-            "per_level_above_first": 0.025
+            "per_level_above_first": 0.005
           },
-          "unlock_level": 20
+          "unlock_level": 22
         }
       },
-      "trait": "jel:bow_double_damage",
-      "unlock_level": 20
+      "trait": "jel:archery/crossbow_crit",
+      "unlock_level": 22
+    },
+    {
+      "type": "jel:trait",
+      "parameters": {
+        "targets": {
+          "formula": {
+            "type": "minecraft:linear",
+            "base": 2.0,
+            "per_level_above_first": 0.0
+          },
+          "unlock_level": 30
+        }
+      },
+      "trait": "jel:archery/chain_bolt",
+      "unlock_level": 30
     },
     {
       "type": "jel:trait",
@@ -81,18 +178,72 @@
           "formula": {
             "type": "minecraft:linear",
             "base": 0.0,
-            "per_level_above_first": 0.025
+            "per_level_above_first": 0.0013
           },
-          "unlock_level": 24
+          "unlock_level": 38
         }
       },
-      "trait": "jel:crossbow_double_damage",
-      "unlock_level": 24
+      "trait": "jel:archery/explosive_bolt",
+      "unlock_level": 38
+    },
+    {
+      "type": "jel:trait",
+      "parameters": {
+        "chance": {
+          "formula": {
+            "type": "minecraft:linear",
+            "base": 0.0,
+            "per_level_above_first": 0.0015
+          },
+          "unlock_level": 45
+        }
+      },
+      "trait": "jel:archery/auto_loader",
+      "unlock_level": 45
     }
   ],
+  "requirements": {
+    "25": {
+      "condition": {
+        "condition": "jel:skill_level_check",
+        "level": {
+          "min": 10
+        },
+        "skill": "jel:melee"
+      },
+      "description": {
+        "translate": "jel.skill.archery.req.melee_10"
+      }
+    },
+    "35": {
+      "condition": {
+        "condition": "jel:skill_level_check",
+        "level": {
+          "min": 10
+        },
+        "skill": "jel:agility"
+      },
+      "description": {
+        "translate": "jel.skill.archery.req.agility_10"
+      }
+    },
+    "45": {
+      "condition": {
+        "condition": "jel:skill_level_check",
+        "level": {
+          "min": 20
+        },
+        "skill": "jel:melee"
+      },
+      "description": {
+        "translate": "jel.skill.archery.req.melee_20"
+      }
+    }
+  },
   "xp": {
-    "type": "minecraft:linear",
-    "base": 100.0,
-    "per_level_above_first": 50.0
+    "type": "quadratic",
+    "a": 50.0,
+    "b": 40.0,
+    "c": 5.0
   }
 }

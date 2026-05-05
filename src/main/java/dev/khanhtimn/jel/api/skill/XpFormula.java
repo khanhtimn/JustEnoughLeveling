@@ -12,10 +12,11 @@ import net.minecraft.world.item.enchantment.LevelBasedValue;
 /**
  * Data-driven XP cost formula for leveling up skills.
  * <p>
- * Three variants:
+ * Four variants:
  * <ul>
  *   <li>{@link Vanilla} — Minecraft's piecewise XP curve</li>
  *   <li>{@link Exponential} — {@code base × multiplier^(level-1)}</li>
+ *   <li>{@link Quadratic} — {@code floor(a + b×level + c×level²)}</li>
  *   <li>{@link LevelBased} — delegates to any {@link LevelBasedValue}
  *       (constant, linear, lookup, clamped, fraction, levels_squared)</li>
  * </ul>
@@ -24,6 +25,7 @@ import net.minecraft.world.item.enchantment.LevelBasedValue;
  * <pre>{@code
  * XpFormula.vanilla()                                    // MC curve
  * XpFormula.exponential(100, 1.5)                        // base × 1.5^(level-1)
+ * XpFormula.quadratic(50, 30, 2)                         // 50 + 30*level + 2*level²
  * XpFormula.of(LevelBasedValue.constant(200))            // 200 per level
  * XpFormula.of(LevelBasedValue.perLevel(100, 50))        // 100, 150, 200, ...
  * XpFormula.of(LevelBasedValue.lookup(values, fallback)) // explicit per-level
@@ -33,14 +35,15 @@ import net.minecraft.world.item.enchantment.LevelBasedValue;
  * <pre>{@code
  * // Omitted → defaults to vanilla
  * // "xp": "vanilla"
- * // "xp": 200                          → constant
- * // "xp": {"type": "linear", ...}      → LBV linear
- * // "xp": {"type": "exponential", ...} → Exponential
- * // "xp": {"type": "lookup", ...}      → LBV lookup
+ * // "xp": 200                                → constant
+ * // "xp": {"type": "linear", ...}            → LBV linear
+ * // "xp": {"type": "exponential", ...}       → Exponential
+ * // "xp": {"type": "quadratic", "a": 50, "b": 30, "c": 2} → Quadratic
+ * // "xp": {"type": "lookup", ...}            → LBV lookup
  * }</pre>
  */
 public sealed interface XpFormula
-		permits XpFormula.Vanilla, XpFormula.Exponential, XpFormula.LevelBased {
+		permits XpFormula.Vanilla, XpFormula.Exponential, XpFormula.Quadratic, XpFormula.LevelBased {
 
 
 	static XpFormula vanilla() {
@@ -49,6 +52,10 @@ public sealed interface XpFormula
 
 	static XpFormula exponential(int base, double multiplier) {
 		return new Exponential(base, multiplier);
+	}
+
+	static XpFormula quadratic(float a, float b, float c) {
+		return new Quadratic(a, b, c);
 	}
 
 	static XpFormula of(LevelBasedValue cost) {
@@ -62,6 +69,7 @@ public sealed interface XpFormula
 	 *   <li>{@code "vanilla"} (string) → {@link Vanilla}</li>
 	 *   <li>{@code 200} (bare number) → {@link LevelBased}({@link LevelBasedValue.Constant})</li>
 	 *   <li>{@code {"type": "exponential", ...}} → {@link Exponential}</li>
+	 *   <li>{@code {"type": "quadratic", ...}} → {@link Quadratic}</li>
 	 *   <li>{@code {"type": "linear"|"lookup"|...}} → {@link LevelBased} via LBV dispatch</li>
 	 *   <li>{@code {}} (empty object, no type) → {@link Vanilla}</li>
 	 * </ul>
@@ -91,16 +99,25 @@ public sealed interface XpFormula
 			return ops.getMap(input).flatMap(map -> {
 				T typeElem = map.get("type");
 				if (typeElem == null) {
-					// No type field → vanilla
+					// No type field — try known shapes by their required keys
+					if (map.get("a") != null) {
+						return Quadratic.MAP_CODEC.decode(ops, map)
+								.map(q -> Pair.of((XpFormula) q, input));
+					}
+					if (map.get("base") != null && map.get("multiplier") != null) {
+						return Exponential.MAP_CODEC.decode(ops, map)
+								.map(e -> Pair.of((XpFormula) e, input));
+					}
 					return DataResult.success(Pair.of(Vanilla.INSTANCE, input));
 				}
 				return Codec.STRING.parse(ops, typeElem).flatMap(type -> switch (type) {
 					case "vanilla" -> DataResult.success(Pair.of(Vanilla.INSTANCE, input));
 					case "exponential" -> Exponential.MAP_CODEC.decode(ops, map)
 							.map(e -> Pair.of(e, input));
+					case "quadratic" -> Quadratic.MAP_CODEC.decode(ops, map)
+							.map(q -> Pair.of(q, input));
 					default ->
 						// Fall through to vanilla LBV dispatch (linear, lookup, clamped, etc.)
-						// Use the raw input (not MapLike) since DISPATCH_CODEC is a Codec, not MapDecoder
 							LevelBasedValue.CODEC.decode(ops, input)
 									.map(pair -> pair.mapFirst(LevelBased::new));
 				});
@@ -111,9 +128,21 @@ public sealed interface XpFormula
 		public <T> DataResult<T> encode(XpFormula input, DynamicOps<T> ops, T prefix) {
 			return switch (input) {
 				case Vanilla v -> Codec.STRING.encode("vanilla", ops, prefix);
-				case Exponential e -> Exponential.CODEC.encode(e, ops, prefix);
+				case Exponential e -> Exponential.MAP_CODEC.codec()
+						.encode(e, ops, prefix).flatMap(t -> addTypeField(ops, t, "exponential"));
+				case Quadratic q -> Quadratic.MAP_CODEC.codec()
+						.encode(q, ops, prefix).flatMap(t -> addTypeField(ops, t, "quadratic"));
 				case LevelBased lb -> LevelBasedValue.CODEC.encode(lb.cost(), ops, prefix);
 			};
+		}
+
+		private <T> DataResult<T> addTypeField(DynamicOps<T> ops, T encoded, String type) {
+			return ops.getMap(encoded).flatMap(map -> {
+				var builder = ops.mapBuilder();
+				builder.add(ops.createString("type"), ops.createString(type));
+				map.entries().forEach(e -> builder.add(e.getFirst(), e.getSecond()));
+				return builder.build(ops.empty());
+			});
 		}
 	};
 
@@ -175,6 +204,30 @@ public sealed interface XpFormula
 			double raw = base * Math.pow(multiplier, level - 1);
 			int value = (int) Math.round(raw);
 			return Math.max(0, value);
+		}
+	}
+
+	record Quadratic(float a, float b, float c) implements XpFormula {
+
+		public static final MapCodec<Quadratic> MAP_CODEC
+				= RecordCodecBuilder.mapCodec(instance -> instance.group(
+				Codec.FLOAT.fieldOf("a")
+						.forGetter(Quadratic::a),
+				Codec.FLOAT.fieldOf("b")
+						.forGetter(Quadratic::b),
+				Codec.FLOAT.fieldOf("c")
+						.forGetter(Quadratic::c)
+		).apply(instance, Quadratic::new));
+
+		public static final Codec<Quadratic> CODEC = MAP_CODEC.codec();
+
+		@Override
+		public int costForLevel(int level) {
+			if (level <= 0) {
+				return 0;
+			}
+			double raw = a + b * level + c * level * level;
+			return Math.max(1, (int) Math.floor(raw));
 		}
 	}
 

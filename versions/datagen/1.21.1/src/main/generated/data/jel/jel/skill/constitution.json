@@ -4,9 +4,180 @@
       "attribute": "minecraft:generic.max_health",
       "operation": "base",
       "value": {
-        "type": "minecraft:linear",
-        "base": 6.0,
-        "per_level_above_first": 1.0
+        "type": "minecraft:lookup",
+        "fallback": 40.0,
+        "values": [
+          6.0,
+          6.8,
+          7.6,
+          8.4,
+          9.2,
+          10.0,
+          10.8,
+          11.6,
+          12.4,
+          13.2,
+          14.0,
+          14.6,
+          15.2,
+          15.8,
+          16.4,
+          17.0,
+          17.6,
+          18.2,
+          18.8,
+          19.4,
+          20.0,
+          20.8,
+          21.6,
+          22.4,
+          23.2,
+          24.0,
+          24.8,
+          25.6,
+          26.4,
+          27.2,
+          28.0,
+          28.8,
+          29.6,
+          30.4,
+          31.2,
+          32.0,
+          32.8,
+          33.6,
+          34.4,
+          35.2,
+          36.0,
+          36.4,
+          36.8,
+          37.2,
+          37.6,
+          38.0,
+          38.5,
+          39.0,
+          39.5,
+          40.0
+        ]
+      }
+    },
+    {
+      "attribute": "jel:max_food_level",
+      "operation": "base",
+      "value": {
+        "type": "minecraft:lookup",
+        "fallback": 40.0,
+        "values": [
+          10.0,
+          10.6,
+          11.2,
+          11.8,
+          12.4,
+          13.0,
+          13.6,
+          14.2,
+          14.8,
+          15.4,
+          16.0,
+          16.4,
+          16.8,
+          17.2,
+          17.6,
+          18.0,
+          18.4,
+          18.8,
+          19.2,
+          19.6,
+          20.0,
+          20.8,
+          21.6,
+          22.4,
+          23.2,
+          24.0,
+          24.8,
+          25.6,
+          26.4,
+          27.2,
+          28.0,
+          28.8,
+          29.6,
+          30.4,
+          31.2,
+          32.0,
+          32.8,
+          33.6,
+          34.4,
+          35.2,
+          36.0,
+          36.4,
+          36.8,
+          37.2,
+          37.6,
+          38.0,
+          38.5,
+          39.0,
+          39.5,
+          40.0
+        ]
+      }
+    },
+    {
+      "attribute": "minecraft:generic.max_absorption",
+      "operation": "base",
+      "value": {
+        "type": "minecraft:lookup",
+        "fallback": 10.0,
+        "values": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          2.0,
+          2.2,
+          2.4,
+          2.6,
+          2.8,
+          3.0,
+          3.2,
+          3.4,
+          3.6,
+          3.8,
+          4.0,
+          4.4,
+          4.8,
+          5.2,
+          5.6,
+          6.0,
+          6.2,
+          6.4,
+          6.6,
+          6.8,
+          7.0,
+          7.4,
+          7.8,
+          8.2,
+          8.6,
+          9.0,
+          9.25,
+          9.5,
+          9.75,
+          10.0
+        ]
       }
     }
   ],
@@ -15,7 +186,7 @@
     "translate": "jel.skill.constitution.description"
   },
   "icon": "minecraft:golden_apple",
-  "max_level": 34,
+  "max_level": 50,
   "name": {
     "translate": "jel.skill.constitution.name"
   },
@@ -27,23 +198,318 @@
           "formula": {
             "type": "minecraft:linear",
             "base": 0.0,
-            "per_level_above_first": 0.025
+            "per_level_above_first": 0.02
           },
-          "unlock_level": 10
+          "unlock_level": 8
         }
       },
-      "trait": "jel:natural_regen",
-      "unlock_level": 10
+      "trait": "jel:constitution/natural_regen",
+      "unlock_level": 8
     },
     {
-      "type": "jel:effect",
-      "effect": "minecraft:regeneration",
-      "unlock_level": 34
+      "type": "jel:trait",
+      "parameters": {
+        "threshold": {
+          "formula": 0.15,
+          "unlock_level": 15
+        }
+      },
+      "trait": "jel:constitution/second_wind",
+      "unlock_level": 15
+    },
+    {
+      "type": "jel:trait",
+      "parameters": {
+        "cooldown": {
+          "formula": 2400.0,
+          "unlock_level": 15
+        }
+      },
+      "trait": "jel:constitution/second_wind",
+      "unlock_level": 15
+    },
+    {
+      "type": "jel:trait",
+      "parameters": {
+        "bonus": {
+          "formula": {
+            "type": "minecraft:lookup",
+            "fallback": 0.18,
+            "values": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.02,
+              0.023333333,
+              0.026666667,
+              0.03,
+              0.03333333,
+              0.036666665,
+              0.04,
+              0.046,
+              0.052,
+              0.058,
+              0.064,
+              0.07,
+              0.076,
+              0.082,
+              0.088,
+              0.094000004,
+              0.1,
+              0.108,
+              0.116000004,
+              0.124,
+              0.132,
+              0.14,
+              0.148,
+              0.156,
+              0.164,
+              0.172,
+              0.18,
+              0.18
+            ]
+          },
+          "unlock_level": 22
+        }
+      },
+      "trait": "jel:constitution/hearty",
+      "unlock_level": 22
+    },
+    {
+      "type": "jel:trait",
+      "parameters": {
+        "dr_bonus": {
+          "formula": {
+            "type": "minecraft:linear",
+            "base": 0.0,
+            "per_level_above_first": 0.005
+          },
+          "unlock_level": 28
+        }
+      },
+      "trait": "jel:constitution/fortitude",
+      "unlock_level": 28
+    },
+    {
+      "type": "jel:trait",
+      "parameters": {
+        "threshold": {
+          "formula": 0.1,
+          "unlock_level": 36
+        }
+      },
+      "trait": "jel:constitution/undying_will",
+      "unlock_level": 36
+    },
+    {
+      "type": "jel:trait",
+      "parameters": {
+        "cooldown": {
+          "formula": 6000.0,
+          "unlock_level": 36
+        }
+      },
+      "trait": "jel:constitution/undying_will",
+      "unlock_level": 36
+    },
+    {
+      "type": "jel:trait",
+      "parameters": {
+        "active": {
+          "formula": 1.0,
+          "unlock_level": 46
+        }
+      },
+      "trait": "jel:constitution/avatar_of_life",
+      "unlock_level": 46
+    },
+    {
+      "type": "jel:trait",
+      "parameters": {
+        "reduction": {
+          "formula": {
+            "type": "minecraft:linear",
+            "base": 0.0,
+            "per_level_above_first": 0.025
+          },
+          "unlock_level": 8
+        }
+      },
+      "trait": "jel:constitution/efficient_digestion",
+      "unlock_level": 8
+    },
+    {
+      "type": "jel:trait",
+      "parameters": {
+        "bonus": {
+          "formula": {
+            "type": "minecraft:linear",
+            "base": 0.0,
+            "per_level_above_first": 0.04
+          },
+          "unlock_level": 15
+        }
+      },
+      "trait": "jel:constitution/nourishing",
+      "unlock_level": 15
+    },
+    {
+      "type": "jel:trait",
+      "parameters": {
+        "chance": {
+          "formula": {
+            "type": "minecraft:linear",
+            "base": 0.0,
+            "per_level_above_first": 0.012
+          },
+          "unlock_level": 22
+        }
+      },
+      "trait": "jel:constitution/iron_stomach",
+      "unlock_level": 22
+    },
+    {
+      "type": "jel:trait",
+      "parameters": {
+        "bonus": {
+          "formula": {
+            "type": "minecraft:linear",
+            "base": 0.0,
+            "per_level_above_first": 0.01
+          },
+          "unlock_level": 28
+        }
+      },
+      "trait": "jel:constitution/respite",
+      "unlock_level": 28
+    },
+    {
+      "type": "jel:trait",
+      "parameters": {
+        "duration": {
+          "formula": {
+            "type": "minecraft:lookup",
+            "fallback": 160.0,
+            "values": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              60.0,
+              66.666664,
+              73.333336,
+              80.0,
+              86.666664,
+              93.333336,
+              100.0,
+              106.666664,
+              113.333336,
+              120.0,
+              126.666664,
+              133.33333,
+              140.0,
+              160.0
+            ]
+          },
+          "unlock_level": 36
+        }
+      },
+      "trait": "jel:constitution/feast",
+      "unlock_level": 36
+    },
+    {
+      "type": "jel:trait",
+      "parameters": {
+        "active": {
+          "formula": 1.0,
+          "unlock_level": 46
+        }
+      },
+      "trait": "jel:constitution/bottomless_appetite",
+      "unlock_level": 46
     }
   ],
+  "requirements": {
+    "30": {
+      "condition": {
+        "condition": "jel:skill_level_check",
+        "level": {
+          "min": 12
+        },
+        "skill": "jel:agility"
+      },
+      "description": {
+        "translate": "jel.skill.constitution.req.agility_12"
+      }
+    },
+    "40": {
+      "condition": {
+        "condition": "jel:skill_level_check",
+        "level": {
+          "min": 15
+        },
+        "skill": "jel:defense"
+      },
+      "description": {
+        "translate": "jel.skill.constitution.req.defense_15"
+      }
+    }
+  },
   "xp": {
-    "type": "minecraft:linear",
-    "base": 100.0,
-    "per_level_above_first": 50.0
+    "type": "quadratic",
+    "a": 50.0,
+    "b": 40.0,
+    "c": 5.0
   }
 }

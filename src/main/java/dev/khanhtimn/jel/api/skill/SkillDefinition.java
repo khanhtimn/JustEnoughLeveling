@@ -3,15 +3,24 @@ package dev.khanhtimn.jel.api.skill;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.ComponentSerialization;
 import net.minecraft.network.chat.TextColor;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.enchantment.LevelBasedValue;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 
+import dev.khanhtimn.jel.api.perk.EffectPerk;
 import dev.khanhtimn.jel.api.perk.Perk;
+import dev.khanhtimn.jel.api.perk.TraitParam;
+import dev.khanhtimn.jel.api.trait.TraitKey;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -149,17 +158,16 @@ public record SkillDefinition(
 
 	/**
 	 * Fluent builder for constructing {@link SkillDefinition} instances.
-	 * <p>
-	 * Usage:
 	 * <pre>{@code
 	 * SkillDefinition.builder()
 	 *     .name("Combat")
-	 *     .description("Increases attack damage")
-	 *     .icon("minecraft:diamond_sword")
+	 *     .icon(Items.DIAMOND_SWORD)
 	 *     .color(0xFF4444)
 	 *     .maxLevel(10)
-	 *     .attribute(AttributeEffect.modifier("minecraft:generic.attack_damage",
-	 *         AttributeModifier.Operation.ADD_VALUE, LevelBasedValue.perLevel(0.5f, 0.5f), 1))
+	 *     .base(Attributes.ATTACK_DAMAGE, LevelBasedValue.perLevel(0.4f, 0.2f))
+	 *     .modifier(Attributes.ATTACK_KNOCKBACK, ADD_VALUE, perLevel(0.05f), 18)
+	 *     .trait(CRIT_DAMAGE, CRIT_DAMAGE_BONUS, perLevel(0, 0.005f), 21)
+	 *     .effect(MobEffects.REGENERATION, 0, 30)
 	 *     .tag("jel.combat_mastery", 5)
 	 *     .build();
 	 * }</pre>
@@ -179,6 +187,8 @@ public record SkillDefinition(
 
 		private Builder() {
 		}
+
+		// --- Identity ---
 
 		public Builder name(String text) {
 			this.name = Component.literal(text);
@@ -240,9 +250,6 @@ public record SkillDefinition(
 		}
 
 		/**
-		 * Set the skill's theme color from a vanilla {@link ChatFormatting}
-		 * (e.g. {@code ChatFormatting.RED}, {@code ChatFormatting.GOLD}).
-		 *
 		 * @throws IllegalArgumentException if the formatting has no color
 		 */
 		public Builder color(ChatFormatting formatting) {
@@ -270,29 +277,111 @@ public record SkillDefinition(
 			return this;
 		}
 
+		// --- Attributes ---
+
 		public Builder attribute(AttributeEffect effect) {
 			this.attributes.add(effect);
 			return this;
 		}
 
-		public Builder attribute(List<AttributeEffect> effects) {
-			this.attributes.addAll(effects);
-			return this;
+		public Builder base(Holder<Attribute> attribute, LevelBasedValue value) {
+			return attribute(AttributeEffect.base(attribute, value));
 		}
+
+		public Builder modifier(Holder<Attribute> attribute,
+		                        AttributeModifier.Operation operation,
+		                        LevelBasedValue value, int unlockLevel) {
+			return attribute(AttributeEffect.modifier(attribute, operation, value, unlockLevel));
+		}
+
+		// --- Perks ---
 
 		public Builder perk(Perk perk) {
 			this.perks.add(perk);
 			return this;
 		}
 
-		public Builder perk(List<Perk> perkEntries) {
-			this.perks.addAll(perkEntries);
-			return this;
+		public Builder tag(String tag, int unlockLevel) {
+			return perk(Perk.tag(tag, unlockLevel));
 		}
+
+		public Builder trait(String trait, int unlockLevel) {
+			return perk(Perk.trait(trait, unlockLevel));
+		}
+
+		public Builder trait(ResourceLocation trait, int unlockLevel) {
+			return perk(Perk.trait(trait, unlockLevel));
+		}
+
+		public Builder trait(ResourceLocation trait, TraitParam... params) {
+			return perk(Perk.trait(trait, params));
+		}
+
+		public Builder trait(ResourceLocation trait, TraitKey param,
+		                     LevelBasedValue formula, int unlockLevel) {
+			return perk(Perk.trait(trait, TraitParam.of(param, formula, unlockLevel)));
+		}
+
+		public Builder effect(Holder<MobEffect> effect, int amplifier, int unlockLevel) {
+			return perk(Perk.effect(effect, amplifier, unlockLevel));
+		}
+
+		public Builder effect(Holder<MobEffect> effect, LevelBasedValue amplifier, int unlockLevel) {
+			return perk(Perk.effect(effect, amplifier, unlockLevel));
+		}
+
+		public Builder effect(Holder<MobEffect> effect, LevelBasedValue amplifier,
+		                      boolean ambient, boolean showParticles, boolean showIcon,
+		                      int unlockLevel) {
+			return perk(EffectPerk.of(effect, amplifier, ambient, showParticles, showIcon, unlockLevel));
+		}
+
+		public Builder function(String grant, int unlockLevel) {
+			return perk(Perk.function(grant, unlockLevel));
+		}
+
+		public Builder function(String grant, String revoke, int unlockLevel) {
+			return perk(Perk.function(grant, revoke, unlockLevel));
+		}
+
+		public Builder command(String grantCommand, int unlockLevel) {
+			return perk(Perk.command(grantCommand, unlockLevel));
+		}
+
+		public Builder command(String grantCommand, String revokeCommand, int unlockLevel) {
+			return perk(Perk.command(grantCommand, revokeCommand, unlockLevel));
+		}
+
+		public Builder lootTable(String lootTable, int unlockLevel) {
+			return perk(Perk.lootTable(lootTable, unlockLevel));
+		}
+
+		public Builder lootTable(ResourceLocation lootTable, int unlockLevel) {
+			return perk(Perk.lootTable(lootTable, unlockLevel));
+		}
+
+		// --- Requirements ---
 
 		public Builder requirement(int level, Requirement req) {
 			this.requirements.put(level, req);
 			return this;
+		}
+
+		public Builder requirement(int level, LootItemCondition condition) {
+			return requirement(level, Requirement.of(condition));
+		}
+
+		public Builder requirement(int level, Component description, LootItemCondition condition) {
+			return requirement(level, Requirement.of(description, condition));
+		}
+
+		public Builder requiresSkill(int level, ResourceLocation otherSkill, int minSkillLevel) {
+			return requirement(level, Requirement.skillLevel(otherSkill, minSkillLevel));
+		}
+
+		public Builder requiresSkill(int level, Component description,
+		                             ResourceLocation otherSkill, int minSkillLevel) {
+			return requirement(level, Requirement.skillLevel(description, otherSkill, minSkillLevel));
 		}
 
 		public SkillDefinition build() {

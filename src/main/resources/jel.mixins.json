@@ -10,17 +10,28 @@
     "minVersion": "0.5.3"
   },
   "mixins": [
+    "entity.AbstractArrowMixin",
     "entity.AnimalMixin",
+    "entity.FishingHookMixin",
     "entity.LivingEntityMixin",
+    "entity.TamableAnimalMixin",
     "entity.TntEntityMixin",
     "entity.VillagerMixin",
+    "item.BoneMealMixin",
     "item.BowItemMixin",
     "item.CrossbowItemMixin",
+    "item.ItemMiningMixin",
     "item.ItemStackServerMixin",
     "item.PotionItemMixin",
     "misc.AnvilMenuMixin",
+    "misc.BlockMixin",
+    "misc.CropBlockMixin",
     "player.FoodDataMixin",
+    "player.PlayerAttributeMixin",
     "player.PlayerMixin"
   ],
-  "client": []
+  "client": [
+    "client.GuiMixin",
+    "player.LocalPlayerMixin"
+  ]
 }

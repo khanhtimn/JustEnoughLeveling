@@ -36,12 +36,14 @@ neoForge {
 			client()
 			gameDirectory = file("run/")
 			ideName = "NeoForge Client (${stonecutter.active?.version})"
+			jvmArgument("-Dmixin.debug.export=true")
 			programArgument("--username=Dev")
 		}
 		register("server") {
 			server()
 			gameDirectory = file("run/")
 			ideName = "NeoForge Server (${stonecutter.active?.version})"
+			jvmArgument("-Dmixin.debug.export=true")
 		}
 	}
 
@@ -64,6 +66,8 @@ repositories {
 		filter { includeGroup("curse.maven") }
 	}
 	strictMaven("https://maven.terraformersmc.com/releases/") { name = "TerraformersMC" }
+	strictMaven("https://maven.ryanliptak.com/") { name = "AppleSkin" }
+	strictMaven("https://maven.shedaniel.me/") { name = "Cloth Config" }
 	strictMaven("https://maven.bawnorton.com/releases/", "com.github.bawnorton.mixinsquared") { name = "MixinSquared" }
 	strictMaven("https://maven.pkg.github.com/MrCrayfish/Maven/") {
 		name = "MrCrayfish (GitHub)"
@@ -81,6 +85,9 @@ dependencies {
 	jarJar(libs.mixinsquared.neoforge)?.let { implementation(it) }
 
 	implementation("com.mrcrayfish:framework-neoforge:${prop("deps.minecraft")}-${prop("deps.framework")}")
+
+	implementation("squeek.appleskin:appleskin-neoforge:mc1.21-${prop("deps.appleskin")}")
+	api("me.shedaniel.cloth:cloth-config-neoforge:${prop("deps.clothconfig")}")
 
 	runtimeOnly("maven.modrinth:sodium:mc${prop("deps.minecraft")}-${prop("deps.sodium")}-neoforge")
 	runtimeOnly("maven.modrinth:sodium-extra:mc${prop("deps.minecraft")}-${prop("deps.sodium-extra")}+neoforge")

@@ -1,7 +1,6 @@
 package dev.khanhtimn.jel.content.skills;
 
 import dev.khanhtimn.jel.Constants;
-import dev.khanhtimn.jel.api.perk.Perk;
 import dev.khanhtimn.jel.api.perk.TraitParam;
 import dev.khanhtimn.jel.api.skill.SkillDefinition;
 import dev.khanhtimn.jel.api.skill.XpFormula;
@@ -10,8 +9,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.LevelBasedValue;
-
-import java.util.List;
 
 public class Magic {
 	public static final ResourceLocation DAMAGE_REFLECTION = ResourceLocation.fromNamespaceAndPath(Constants.MOD_ID, "damage_reflection");
@@ -29,14 +26,10 @@ public class Magic {
 				.color(0xFFAA00)
 				.maxLevel(30)
 				.xpFormula(XpFormula.of(LevelBasedValue.perLevel(100, 50)))
-				.perk(List.of(
-								Perk.trait(DAMAGE_REFLECTION,
-										TraitParam.of(REFLECT_CHANCE, LevelBasedValue.perLevel(0, 0.008f), 15),
-										TraitParam.of(REFLECT_MULTIPLIER, LevelBasedValue.perLevel(0, 0.025f), 15)
-								),
-								Perk.trait(UPGRADED_EFFECT, TraitParam.of(UPGRADED_EFFECT_CHANCE, LevelBasedValue.perLevel(0, 0.012f), 20))
-						)
-				)
+				.trait(DAMAGE_REFLECTION,
+						TraitParam.of(REFLECT_CHANCE, LevelBasedValue.perLevel(0, 0.008f), 15),
+						TraitParam.of(REFLECT_MULTIPLIER, LevelBasedValue.perLevel(0, 0.025f), 15))
+				.trait(UPGRADED_EFFECT, UPGRADED_EFFECT_CHANCE, LevelBasedValue.perLevel(0, 0.012f), 20)
 				.build();
 	}
 

@@ -8,11 +8,11 @@ import dev.khanhtimn.jel.api.skill.SkillDefinition;
 import net.minecraft.advancements.critereon.MinMaxBounds;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
-import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
 import org.jetbrains.annotations.NotNull;
 
@@ -40,6 +40,26 @@ public record SkillLevelCondition(
 							.forGetter(SkillLevelCondition::level)
 			).apply(instance, SkillLevelCondition::new)
 	);
+
+	public static SkillLevelCondition atLeast(ResourceLocation skill, int min) {
+		return new SkillLevelCondition(skill, MinMaxBounds.Ints.atLeast(min));
+	}
+
+	public static SkillLevelCondition atLeast(ResourceKey<SkillDefinition> skill, int min) {
+		return atLeast(skill.location(), min);
+	}
+
+	public static SkillLevelCondition atMost(ResourceLocation skill, int max) {
+		return new SkillLevelCondition(skill, MinMaxBounds.Ints.atMost(max));
+	}
+
+	public static SkillLevelCondition between(ResourceLocation skill, int min, int max) {
+		return new SkillLevelCondition(skill, MinMaxBounds.Ints.between(min, max));
+	}
+
+	public static SkillLevelCondition exactly(ResourceLocation skill, int level) {
+		return new SkillLevelCondition(skill, MinMaxBounds.Ints.exactly(level));
+	}
 
 	@Override
 	public boolean test(LootContext ctx) {

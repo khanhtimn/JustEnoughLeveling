@@ -1,8 +1,6 @@
 package dev.khanhtimn.jel.content.skills;
 
 import dev.khanhtimn.jel.Constants;
-import dev.khanhtimn.jel.api.perk.Perk;
-import dev.khanhtimn.jel.api.perk.TraitParam;
 import dev.khanhtimn.jel.api.skill.SkillDefinition;
 import dev.khanhtimn.jel.api.skill.XpFormula;
 import dev.khanhtimn.jel.api.trait.TraitKey;
@@ -10,8 +8,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.LevelBasedValue;
-
-import java.util.List;
 
 public class Batering {
 
@@ -29,12 +25,9 @@ public class Batering {
 				.color(0xFFAA00)
 				.maxLevel(30)
 				.xpFormula(XpFormula.of(LevelBasedValue.perLevel(100, 50)))
-				.perk(List.of(
-								Perk.trait(TRADE_XP, TraitParam.of(TRADE_XP_MULTIPLIER, LevelBasedValue.perLevel(0.005f), 10)),
-								Perk.trait(TRADE_PRICE, TraitParam.of(TRADE_PRICE_DISCOUNT, LevelBasedValue.perLevel(0.01f), 15)),
-								Perk.trait(TRADE_IMMUNITY, 30)
-						)
-				)
+				.trait(TRADE_XP, TRADE_XP_MULTIPLIER, LevelBasedValue.perLevel(0.005f), 10)
+				.trait(TRADE_PRICE, TRADE_PRICE_DISCOUNT, LevelBasedValue.perLevel(0.01f), 15)
+				.trait(TRADE_IMMUNITY, 30)
 				.build();
 	}
 

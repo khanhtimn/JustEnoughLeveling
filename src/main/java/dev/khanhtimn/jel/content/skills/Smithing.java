@@ -1,9 +1,7 @@
 package dev.khanhtimn.jel.content.skills;
 
 import dev.khanhtimn.jel.Constants;
-import dev.khanhtimn.jel.api.perk.Perk;
 import dev.khanhtimn.jel.api.perk.TraitParam;
-import dev.khanhtimn.jel.api.skill.AttributeEffect;
 import dev.khanhtimn.jel.api.skill.SkillDefinition;
 import dev.khanhtimn.jel.api.skill.XpFormula;
 import dev.khanhtimn.jel.api.trait.TraitKey;
@@ -13,8 +11,6 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.LevelBasedValue;
-
-import java.util.List;
 
 public class Smithing {
 	public static final ResourceLocation UPGRADED_TNT = ResourceLocation.fromNamespaceAndPath(Constants.MOD_ID, "upgraded_tnt");
@@ -35,28 +31,14 @@ public class Smithing {
 				.color(0xFFAA00)
 				.maxLevel(30)
 				.xpFormula(XpFormula.of(LevelBasedValue.perLevel(100, 50)))
-				.attribute(List.of(
-								AttributeEffect.base(
-										Attributes.BURNING_TIME,
-										LevelBasedValue.perLevel(1.8f, -0.05f)
-								),
-								AttributeEffect.modifier(
-										Attributes.EXPLOSION_KNOCKBACK_RESISTANCE,
-										AttributeModifier.Operation.ADD_VALUE,
-										LevelBasedValue.perLevel(0.05f),
-										15
-								)
-						)
-				)
-				.perk(List.of(
-								Perk.trait(AVOID_ITEM_BREAK, TraitParam.of(ITEM_BREAK_CHANCE, LevelBasedValue.perLevel(0.005f), 10)),
-								Perk.trait(ANVIL_XP_COST,
-										TraitParam.of(XP_DISCOUNT, LevelBasedValue.perLevel(0, -1f), 12),
-										TraitParam.of(XP_CAP, LevelBasedValue.constant(30f), 30)
-								),
-								Perk.trait(UPGRADED_TNT, TraitParam.of(TNT_STRENGTH, LevelBasedValue.perLevel(0.2f), 15))
-						)
-				)
+				.base(Attributes.BURNING_TIME, LevelBasedValue.perLevel(1.8f, -0.05f))
+				.modifier(Attributes.EXPLOSION_KNOCKBACK_RESISTANCE, AttributeModifier.Operation.ADD_VALUE,
+						LevelBasedValue.perLevel(0.05f), 15)
+				.trait(AVOID_ITEM_BREAK, ITEM_BREAK_CHANCE, LevelBasedValue.perLevel(0.005f), 10)
+				.trait(ANVIL_XP_COST,
+						TraitParam.of(XP_DISCOUNT, LevelBasedValue.perLevel(0, -1f), 12),
+						TraitParam.of(XP_CAP, LevelBasedValue.constant(30f), 30))
+				.trait(UPGRADED_TNT, TNT_STRENGTH, LevelBasedValue.perLevel(0.2f), 15)
 				.build();
 	}
 

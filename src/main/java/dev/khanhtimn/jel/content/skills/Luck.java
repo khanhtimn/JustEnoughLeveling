@@ -1,9 +1,6 @@
 package dev.khanhtimn.jel.content.skills;
 
 import dev.khanhtimn.jel.Constants;
-import dev.khanhtimn.jel.api.perk.Perk;
-import dev.khanhtimn.jel.api.perk.TraitParam;
-import dev.khanhtimn.jel.api.skill.AttributeEffect;
 import dev.khanhtimn.jel.api.skill.SkillDefinition;
 import dev.khanhtimn.jel.api.skill.XpFormula;
 import dev.khanhtimn.jel.api.trait.TraitKey;
@@ -12,8 +9,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.LevelBasedValue;
-
-import java.util.List;
 
 public class Luck {
 
@@ -28,16 +23,8 @@ public class Luck {
 				.color(0xFFAA00)
 				.maxLevel(30)
 				.xpFormula(XpFormula.of(LevelBasedValue.perLevel(100, 50)))
-				.attribute(
-						AttributeEffect.base(
-								Attributes.LUCK,
-								LevelBasedValue.perLevel(-5f, 0.25f)
-						)
-				)
-				.perk(List.of(
-								Perk.trait(FREE_ANVIL_COST, TraitParam.of(FREE_ANVIL_COST_CHANCE, LevelBasedValue.perLevel(0.02f), 25))
-						)
-				)
+				.base(Attributes.LUCK, LevelBasedValue.perLevel(-5f, 0.25f))
+				.trait(FREE_ANVIL_COST, FREE_ANVIL_COST_CHANCE, LevelBasedValue.perLevel(0.02f), 25)
 				.build();
 	}
 
