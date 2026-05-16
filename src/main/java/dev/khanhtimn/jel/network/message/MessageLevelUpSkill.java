@@ -17,7 +17,6 @@ public final class MessageLevelUpSkill {
 
 	@RPCPacket("jel:level_up")
 	public static void handle(RPCSender sender, ResourceLocation skillId) {
-		if (!sender.isServer()) return;
 		ServerPlayer player = sender.asPlayer();
 		if (player == null) return;
 

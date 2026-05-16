@@ -47,7 +47,7 @@ import java.util.Optional;
 public record SkillDefinition(
 		Component name,
 		Component description,
-		ResourceLocation icon,
+		SkillIcon icon,
 		int color,
 		int maxLevel,
 		XpFormula xp,
@@ -75,7 +75,7 @@ public record SkillDefinition(
 					.forGetter(SkillDefinition::name),
 			ComponentSerialization.CODEC.optionalFieldOf("description", Component.empty())
 					.forGetter(SkillDefinition::description),
-			ResourceLocation.CODEC.fieldOf("icon")
+			SkillIcon.CODEC.fieldOf("icon")
 					.forGetter(SkillDefinition::icon),
 			COLOR_CODEC.optionalFieldOf("color", 0xFFFFFF)
 					.forGetter(SkillDefinition::color),
@@ -176,7 +176,7 @@ public record SkillDefinition(
 
 		private Component name = Component.literal("Unnamed");
 		private Component description = Component.empty();
-		private ResourceLocation iconItem = ResourceLocation.withDefaultNamespace("barrier");
+		private SkillIcon skillIcon = new SkillIcon.ItemIcon(ResourceLocation.withDefaultNamespace("barrier"));
 		private int color = 0xFFFFFF;
 		private int maxLevel = 10;
 		private XpFormula xpFormula = XpFormula.vanilla();
@@ -211,17 +211,22 @@ public record SkillDefinition(
 		}
 
 		public Builder icon(String itemId) {
-			this.iconItem = ResourceLocation.parse(itemId);
+			this.skillIcon = new SkillIcon.ItemIcon(ResourceLocation.parse(itemId));
 			return this;
 		}
 
 		public Builder icon(Item item) {
-			this.iconItem = BuiltInRegistries.ITEM.getKey(item);
+			this.skillIcon = new SkillIcon.ItemIcon(BuiltInRegistries.ITEM.getKey(item));
 			return this;
 		}
 
 		public Builder icon(ResourceLocation itemId) {
-			this.iconItem = itemId;
+			this.skillIcon = new SkillIcon.ItemIcon(itemId);
+			return this;
+		}
+
+		public Builder iconTexture(ResourceLocation texturePath) {
+			this.skillIcon = new SkillIcon.TextureIcon(texturePath);
 			return this;
 		}
 
@@ -388,7 +393,7 @@ public record SkillDefinition(
 			return new SkillDefinition(
 					name,
 					description,
-					iconItem,
+					skillIcon,
 					color,
 					maxLevel,
 					xpFormula,

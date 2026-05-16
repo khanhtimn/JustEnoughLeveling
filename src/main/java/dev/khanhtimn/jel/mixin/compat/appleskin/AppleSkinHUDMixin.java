@@ -14,10 +14,10 @@ import org.spongepowered.asm.mixin.injection.At;
 import squeek.appleskin.helpers.TextureHelper;
 import com.mojang.blaze3d.systems.RenderSystem;
 //? neoforge {
-/*import squeek.appleskin.helpers.HungerHelper;
-*///?} else {
-import squeek.appleskin.helpers.FoodHelper;
- //?}
+import squeek.appleskin.helpers.HungerHelper;
+//?} else {
+/*import squeek.appleskin.helpers.FoodHelper;
+ *///?}
 
 @IfModLoaded("appleskin")
 @Mixin(targets = "squeek.appleskin.client.HUDOverlayHandler")
@@ -77,7 +77,7 @@ public abstract class AppleSkinHUDMixin {
 	}
 
 	//? neoforge {
-	/*@ModifyExpressionValue(
+	@ModifyExpressionValue(
 			method = "drawSaturationOverlay(FFLnet/minecraft/world/entity/player/Player;Lnet/minecraft/client/gui/GuiGraphics;IIFI)V",
 			at = @At(value = "CONSTANT", args = "floatValue=20.0"),
 			require = 0
@@ -123,8 +123,8 @@ public abstract class AppleSkinHUDMixin {
 		float maxExhaustion = HungerHelper.getMaxExhaustion(player);
 		jel$drawMultiRowExhaustion(exhaustion, maxExhaustion, guiGraphics, right, top);
 	}
-	*///?} else {
-	@ModifyExpressionValue(
+	//?} else {
+	/*@ModifyExpressionValue(
 			method = "drawSaturationOverlay(Lnet/minecraft/client/gui/GuiGraphics;FFLnet/minecraft/client/Minecraft;IIFI)V",
 			at = @At(value = "CONSTANT", args = "floatValue=20.0"),
 			require = 0
@@ -171,5 +171,5 @@ public abstract class AppleSkinHUDMixin {
 		float maxExhaustion = FoodHelper.MAX_EXHAUSTION * maxFood / (float) VANILLA_MAX_FOOD;
 		jel$drawMultiRowExhaustion(exhaustion, maxExhaustion, guiGraphics, right, top);
 	}
-	//?}
+	*///?}
 }

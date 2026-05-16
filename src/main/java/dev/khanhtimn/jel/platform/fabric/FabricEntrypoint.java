@@ -2,7 +2,7 @@ package dev.khanhtimn.jel.platform.fabric;
 
 //? fabric {
 
-import dev.khanhtimn.jel.Constants;
+/*import dev.khanhtimn.jel.Constants;
 import dev.khanhtimn.jel.JustEnoughLeveling;
 import dev.khanhtimn.jel.api.loot.JelLootItemConditions;
 import dev.khanhtimn.jel.api.loot.JelLootItemFunctions;
@@ -35,4 +35,4 @@ public class FabricEntrypoint implements ModInitializer {
 		FabricEventSubscriber.registerEvents();
 	}
 }
-//?}
+*///?}

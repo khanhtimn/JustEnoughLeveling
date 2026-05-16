@@ -2,7 +2,7 @@ package dev.khanhtimn.jel.platform.neoforge;
 
 //? neoforge {
 
-/*import dev.khanhtimn.jel.Constants;
+import dev.khanhtimn.jel.Constants;
 import dev.khanhtimn.jel.JustEnoughLeveling;
 import dev.khanhtimn.jel.client.render.OreHighlightRenderer;
 import net.minecraft.client.Minecraft;
@@ -40,4 +40,4 @@ public class NeoforgeClientEventSubscriber {
 		}
 	}
 }
-*///?}
+//?}

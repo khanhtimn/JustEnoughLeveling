@@ -3,6 +3,10 @@
   "gui.jel.skills_tab": "Skills",
   "gui.jel.inventory_tab": "Inventory",
   "gui.jel.back_to_inventory": "← Back to Inventory",
+  "gui.jel.back": "← Back",
+  "gui.jel.level_up": "Level Up",
+  "gui.jel.attributes": "Attributes",
+  "gui.jel.perks": "Perks",
   "gui.jel.vanilla_xp": "Level %s  (%s XP)",
 
   "jel.skill.constitution.name": "Constitution",

@@ -1,6 +1,6 @@
 package dev.khanhtimn.jel.client.gui.widget;
 
-import dev.khanhtimn.jel.client.gui.SkillScreen;
+import dev.khanhtimn.jel.network.message.MessageOpenSkillUI;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
@@ -13,9 +13,7 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Tab button injected into the survival inventory screen.
- * When clicked, opens the {@link SkillScreen}.
- * <p>
- * Also rendered on the SkillScreen itself as a "return to inventory" tab.
+ * When clicked, sends a C2S packet to open the container-backed skill UI.
  */
 public class SkillTabButton extends AbstractWidget {
 
@@ -29,7 +27,7 @@ public class SkillTabButton extends AbstractWidget {
 	 *
 	 * @param guiLeft       the left x of the inventory screen panel
 	 * @param guiTop        the top y of the inventory screen panel
-	 * @param isOnInventory true if this tab is on the InventoryScreen, false if on SkillScreen
+	 * @param isOnInventory true if this tab is on the InventoryScreen
 	 */
 	public SkillTabButton(int guiLeft, int guiTop, boolean isOnInventory) {
 		super(guiLeft + 176, guiTop + 4, TAB_WIDTH, TAB_HEIGHT,
@@ -64,7 +62,7 @@ public class SkillTabButton extends AbstractWidget {
 	public void onClick(double mouseX, double mouseY) {
 		Minecraft mc = Minecraft.getInstance();
 		if (isOnInventory) {
-			mc.setScreen(new SkillScreen());
+			MessageOpenSkillUI.sendToServer();
 		} else {
 			if (mc.player != null) {
 				mc.setScreen(new InventoryScreen(mc.player));

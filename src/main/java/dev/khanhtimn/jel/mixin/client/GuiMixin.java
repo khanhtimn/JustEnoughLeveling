@@ -18,10 +18,10 @@ import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.ModifyConstant;
 
 //? fabric {
-import com.llamalad7.mixinextras.sugar.ref.LocalIntRef;
+/*import com.llamalad7.mixinextras.sugar.ref.LocalIntRef;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-//?}
+*///?}
 
 @Mixin(Gui.class)
 public abstract class GuiMixin {
@@ -74,7 +74,7 @@ public abstract class GuiMixin {
 	}
 
 	//? neoforge {
-	/*@ModifyConstant(method = "renderFoodLevel", constant = @Constant(intValue = 10))
+	@ModifyConstant(method = "renderFoodLevel", constant = @Constant(intValue = 10))
 	private int jel$adjustRightHeight(int original, @Local(ordinal = 0) Player player) {
 		int maxFood = jel$maxFood(player);
 		if (maxFood <= VANILLA_MAX_FOOD) return original;
@@ -82,8 +82,8 @@ public abstract class GuiMixin {
 		int rows = Mth.ceil((float) totalSlots / 10);
 		return rows * 10;
 	}
-	*///?} else {
-	@Inject(
+	//?} else {
+	/*@Inject(
 			method = "renderPlayerHealth",
 			at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/Gui;renderFood(Lnet/minecraft/client/gui/GuiGraphics;Lnet/minecraft/world/entity/player/Player;II)V",
 					shift = At.Shift.AFTER)
@@ -95,5 +95,5 @@ public abstract class GuiMixin {
 		int extraRows = (totalSlots - 1) / 10;
 		r.set(r.get() - extraRows * 10);
 	}
-	//?}
+	*///?}
 }

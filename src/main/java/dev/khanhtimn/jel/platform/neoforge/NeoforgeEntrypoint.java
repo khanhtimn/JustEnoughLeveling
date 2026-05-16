@@ -2,7 +2,7 @@ package dev.khanhtimn.jel.platform.neoforge;
 
 //? neoforge {
 
-/*import dev.khanhtimn.jel.Constants;
+import dev.khanhtimn.jel.Constants;
 import dev.khanhtimn.jel.JustEnoughLeveling;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
@@ -19,4 +19,4 @@ public class NeoforgeEntrypoint {
 		JustEnoughLeveling.onInitialize();
 	}
 }
-*///?}
+//?}

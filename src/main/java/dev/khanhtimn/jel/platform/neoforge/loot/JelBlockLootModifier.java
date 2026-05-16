@@ -2,7 +2,7 @@ package dev.khanhtimn.jel.platform.neoforge.loot;
 
 //? neoforge {
 
-/*import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.khanhtimn.jel.common.LootDropModifiers;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
@@ -17,10 +17,10 @@ import net.neoforged.neoforge.common.loot.IGlobalLootModifier;
 import net.neoforged.neoforge.common.loot.LootModifier;
 import org.jetbrains.annotations.NotNull;
 
-/^*
+/**
  * NeoForge Global Loot Modifier that applies all JEL multiplicative drop mechanics.
  * Replaces BlockMixin's runtime @WrapOperation on NeoForge — the mixin is only active on Fabric.
- ^/
+ */
 public class JelBlockLootModifier extends LootModifier {
 
 	public static final MapCodec<JelBlockLootModifier> CODEC =
@@ -52,4 +52,4 @@ public class JelBlockLootModifier extends LootModifier {
 		return CODEC;
 	}
 }
-*///?}
+//?}

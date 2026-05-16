@@ -2,7 +2,7 @@ package dev.khanhtimn.jel.platform.fabric;
 
 //? fabric {
 
-import dev.khanhtimn.jel.Constants;
+/*import dev.khanhtimn.jel.Constants;
 import dev.khanhtimn.jel.api.skill.SkillDefinition;
 import dev.khanhtimn.jel.api.JelRegistries;
 import dev.khanhtimn.jel.common.JelLootPoolInjector;
@@ -99,4 +99,4 @@ public class FabricEventSubscriber {
 				ModCommands.register(dispatcher));
 	}
 }
-//?}
+*///?}

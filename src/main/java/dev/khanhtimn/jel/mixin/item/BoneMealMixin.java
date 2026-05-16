@@ -23,7 +23,7 @@ import org.spongepowered.asm.mixin.injection.At;
 public abstract class BoneMealMixin {
 
 	//? if neoforge {
-	/*@WrapOperation(
+	@WrapOperation(
 			method = "applyBonemeal",
 			at = @At(
 					value = "INVOKE",
@@ -44,8 +44,8 @@ public abstract class BoneMealMixin {
 		}
 		original.call(instance, level, random, pos, state);
 	}
-	*///?} elif fabric {
-	@WrapOperation(
+	//?} elif fabric {
+	/*@WrapOperation(
 			method = "growCrop",
 			at = @At(
 					value = "INVOKE",
@@ -75,7 +75,7 @@ public abstract class BoneMealMixin {
 				pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 6.0, false);
 		return nearest instanceof ServerPlayer sp ? sp : null;
 	}
-	//?}
+	*///?}
 
 	@Unique
 	private static void jel$spawnFailParticles(ServerLevel level, BlockPos pos) {

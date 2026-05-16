@@ -2,7 +2,7 @@ package dev.khanhtimn.jel.platform.neoforge;
 
 //? neoforge {
 
-/*import dev.khanhtimn.jel.Constants;
+import dev.khanhtimn.jel.Constants;
 import dev.khanhtimn.jel.api.skill.SkillDefinition;
 import dev.khanhtimn.jel.api.JelRegistries;
 import dev.khanhtimn.jel.api.loot.JelLootItemConditions;
@@ -134,4 +134,4 @@ public class NeoforgeEventSubscriber {
 		}
 	}
 }
-*///?}
+//?}
