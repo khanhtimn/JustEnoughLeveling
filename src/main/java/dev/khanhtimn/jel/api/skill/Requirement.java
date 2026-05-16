@@ -2,7 +2,6 @@ package dev.khanhtimn.jel.api.skill;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import dev.khanhtimn.jel.api.loot.SkillLevelCondition;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.ComponentSerialization;
 import net.minecraft.resources.ResourceKey;
@@ -64,18 +63,18 @@ public record Requirement(
 	}
 
 	public static Requirement skillLevel(ResourceLocation skill, int minLevel) {
-		return of(SkillLevelCondition.atLeast(skill, minLevel));
+		return of(LevelCondition.atLeast(skill, minLevel));
 	}
 
 	public static Requirement skillLevel(Component description, ResourceLocation skill, int minLevel) {
-		return of(description, SkillLevelCondition.atLeast(skill, minLevel));
+		return of(description, LevelCondition.atLeast(skill, minLevel));
 	}
 
 	public static Requirement skillLevel(ResourceKey<SkillDefinition> skill, int minLevel) {
-		return of(SkillLevelCondition.atLeast(skill, minLevel));
+		return of(LevelCondition.atLeast(skill, minLevel));
 	}
 
 	public static Requirement skillLevel(Component description, ResourceKey<SkillDefinition> skill, int minLevel) {
-		return of(description, SkillLevelCondition.atLeast(skill, minLevel));
+		return of(description, LevelCondition.atLeast(skill, minLevel));
 	}
 }

@@ -12,10 +12,6 @@ platform {
 		required("forge") {
 			forgeVersionRange = "[1,)"
 		}
-		required("framework") {
-			slug("framework")
-			forgeVersionRange = "[${prop("deps.framework")},)"
-		}
 	}
 }
 
@@ -60,13 +56,7 @@ repositories {
 	maven("https://maven.minecraftforge.net/") { name = "Forge" }
 	strictMaven("https://api.modrinth.com/maven", "maven.modrinth") { name = "Modrinth" }
 	strictMaven("https://maven.bawnorton.com/releases", "com.github.bawnorton.mixinsquared") { name = "MixinSquared" }
-	maven("https://maven.pkg.github.com/MrCrayfish/Maven") {
-			name = "MrCrayfish (GitHub)"
-			credentials {
-					username = project.findProperty("gpr.user") as String?
-					password = project.findProperty("gpr.key") as String?
-			}
-	}
+
 }
 
 dependencies {
@@ -77,7 +67,6 @@ dependencies {
 	compileOnly(annotationProcessor("com.github.bawnorton.mixinsquared:mixinsquared-common:0.3.7-beta.1")!!)
 	implementation(jarJar("com.github.bawnorton.mixinsquared:mixinsquared-forge:0.3.7-beta.1")!!)
 
-	implementation("com.mrcrayfish:framework-forge:${prop("deps.minecraft")}-${prop("deps.framework")}")
 }
 
 sourceSets {

@@ -1,6 +1,6 @@
 package dev.khanhtimn.jel.client.gui.widget;
 
-import dev.khanhtimn.jel.core.ModNetwork;
+
 import dev.khanhtimn.jel.network.message.MessageLevelUpSkill;
 import dev.khanhtimn.jel.api.skill.SkillDefinition;
 import dev.khanhtimn.jel.api.skill.Requirement;
@@ -195,9 +195,7 @@ public class SkillCard extends AbstractWidget {
 		if (mouseX >= btnX && mouseX < btnX + LEVEL_UP_BTN_SIZE
 				&& mouseY >= btnY && mouseY < btnY + LEVEL_UP_BTN_SIZE) {
 			if (canAffordLevelUp(tracker, tracker.getProgress(skillKey).level())) {
-				ModNetwork.getPlay().sendToServer(
-						new MessageLevelUpSkill(skillKey.location())
-				);
+				MessageLevelUpSkill.sendToServer(skillKey.location());
 			}
 		}
 	}

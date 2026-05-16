@@ -22,6 +22,16 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+//? fabric {
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import dev.khanhtimn.jel.common.LootDropModifiers;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.Entity;
+import java.util.ArrayList;
+import java.util.List;
+//?}
+
 @Mixin(Block.class)
 public abstract class BlockMixin {
 
@@ -30,7 +40,7 @@ public abstract class BlockMixin {
 
 	//? fabric {
 
-	/*@WrapOperation(
+	@WrapOperation(
 			method = "dropResources(Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/entity/BlockEntity;Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/item/ItemStack;)V",
 			at = @At(
 					value = "INVOKE",
@@ -51,7 +61,7 @@ public abstract class BlockMixin {
 		}
 		return modified;
 	}
-	*///?}
+	//?}
 
 	@Inject(
 			method = "playerDestroy",

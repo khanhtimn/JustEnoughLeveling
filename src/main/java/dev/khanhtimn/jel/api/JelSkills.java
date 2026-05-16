@@ -2,7 +2,7 @@ package dev.khanhtimn.jel.api;
 
 import dev.khanhtimn.jel.api.skill.SkillDefinition;
 import dev.khanhtimn.jel.api.skill.SkillProgress;
-import dev.khanhtimn.jel.common.ModSyncedDataKeys;
+import dev.khanhtimn.jel.common.PlayerDataHelper;
 import dev.khanhtimn.jel.common.PlayerSkillData;
 import dev.khanhtimn.jel.common.SkillEffectApplier;
 import dev.khanhtimn.jel.common.SkillOperations;
@@ -57,7 +57,7 @@ public final class JelSkills {
 	public static boolean isBranch(Player player, ResourceKey<SkillDefinition> skillKey,
 	                               ResourceLocation branchId) {
 		PlayerSkillData data = getSkillData(player);
-		return data != null && data.isBranch(skillKey, branchId);
+		return data.isBranch(skillKey, branchId);
 	}
 
 	// --- Mutation API ---
@@ -240,6 +240,6 @@ public final class JelSkills {
 	// --- Internal accessor ---
 
 	public static PlayerSkillData getSkillData(Player player) {
-		return ModSyncedDataKeys.PLAYER_SKILLS.getValue(player);
+		return PlayerDataHelper.get(player);
 	}
 }

@@ -3,7 +3,7 @@ stonecutter = "0.9.1"
 stonecutter-postprocess = "2.1-beta.8"
 mod-publish = "1.1.0"
 dotenv-gradle = "4.0.0"
-fabric-loom = "1.14-SNAPSHOT"
+fabric-loom = "1.16.2"
 neoforge-moddev = "2.0.141"
 foojay = "1.0.0"
 fabric-loader = "0.19.2"
@@ -14,6 +14,11 @@ moulberry-mixinconstraints = "1.1.0"
 mixinsquared = "0.3.7-beta.1"
 vanniktech-maven-publish = "0.35.0"
 mixin = "0.8.5"
+
+# Yoga layout engine
+yoga = "1.0.0"
+# Taffy
+taffy = "1.1.4"
 
 [libraries]
 kikugie-postprocess = { module = "dev.kikugie:postprocess", version.ref = "stonecutter-postprocess" }
@@ -26,6 +31,10 @@ moulberry-mixinconstraints = { module = "com.moulberry:mixinconstraints", versio
 mixinsquared-fabric = { module = "com.github.bawnorton.mixinsquared:mixinsquared-fabric", version.ref = "mixinsquared" }
 mixinsquared-neoforge = { module = "com.github.bawnorton.mixinsquared:mixinsquared-neoforge", version.ref = "mixinsquared" }
 mixinsquared-common = { module = "com.github.bawnorton.mixinsquared:mixinsquared-common", version.ref = "mixinsquared" }
+
+yoga = { module = "org.appliedenergistics.yoga:yoga", version.ref = "yoga" }
+taffy = { module = "dev.vfyjxf:taffy", version.ref = "taffy" }
+
 
 [plugins]
 stonecutter = { id = "dev.kikugie.stonecutter", version.ref = "stonecutter" }

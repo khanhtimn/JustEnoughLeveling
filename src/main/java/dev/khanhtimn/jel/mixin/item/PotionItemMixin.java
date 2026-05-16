@@ -15,10 +15,10 @@ public abstract class PotionItemMixin {
 
 	@ModifyVariable(
 			//? if fabric {
-			/*method = "method_57389",
-			*///?} else {
-			method = "lambda$finishUsingItem$0",
-			//?}
+			method = "method_57389",
+			//?} else {
+			/*method = "lambda$finishUsingItem$0",
+			*///?}
 			at = @At("HEAD"),
 			argsOnly = true
 	)

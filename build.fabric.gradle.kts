@@ -17,9 +17,9 @@ platform {
 		required("fabricloader") {
 			versionRange = ">=${libs.fabric.loader.get().version}"
 		}
-		required("framework") {
-			slug("framework")
-			versionRange = ">=${prop("deps.framework")}"
+		required("ldlib2") {
+			slug("ldlib2")
+			versionRange = ">=${prop("deps.ldlib2")}"
 		}
 		optional("modmenu") {}
 	}
@@ -68,17 +68,14 @@ repositories {
 		forRepository { maven("https://cursemaven.com/") { name = "CurseForge" } }
 		filter { includeGroup("curse.maven") }
 	}
+	strictMaven("https://maven.parchmentmc.org/") {
+		name = "ParchmentMC"
+	}
 	strictMaven("https://maven.terraformersmc.com/releases/") { name = "TerraformersMC" }
 	strictMaven("https://maven.ryanliptak.com/") { name = "AppleSkin" }
 	strictMaven("https://maven.shedaniel.me/") { name = "Cloth Config" }
 	strictMaven("https://maven.bawnorton.com/releases/", "com.github.bawnorton.mixinsquared") { name = "MixinSquared" }
-	strictMaven("https://maven.pkg.github.com/MrCrayfish/Maven/") {
-		name = "MrCrayfish (GitHub)"
-		credentials {
-			username = project.findProperty("gpr.user") as String?
-			password = project.findProperty("gpr.key") as String?
-		}
-	}
+
 }
 
 dependencies {
@@ -86,7 +83,13 @@ dependencies {
 	mappings(
 		loom.layered {
 			officialMojangMappings()
-			if (hasProperty("deps.parchment")) parchment("org.parchmentmc.data:parchment-${prop("deps.parchment")}@zip")
+			if (hasProperty("deps.parchment")) parchment(
+				"org.parchmentmc.data:parchment-${prop("deps.minecraft")}:${
+					prop(
+						"deps.parchment"
+					)
+				}@zip"
+			)
 		})
 	modImplementation(libs.fabric.loader)
 	implementation(libs.moulberry.mixinconstraints)
@@ -96,10 +99,19 @@ dependencies {
 	include(libs.mixinsquared.fabric)
 
 	modImplementation("net.fabricmc.fabric-api:fabric-api:${prop("deps.fabric-api")}")
-
+	modImplementation("net.fabricmc:fabric-language-kotlin:${prop("deps.fabric-language-kotlin")}")
+	modLocalRuntime("maven.modrinth:architectury-api:${prop("deps.architectury-api")}+fabric")
 	modLocalRuntime("com.terraformersmc:modmenu:${prop("deps.modmenu")}")
 
-	modImplementation("com.mrcrayfish:framework-fabric:${prop("deps.minecraft")}-${prop("deps.framework")}")
+	modImplementation("maven.modrinth:ldlib-fabric:${prop("deps.ldlib2")}")
+
+	// Yoga layout engine
+	implementation(libs.yoga)
+	include(libs.yoga)
+
+	// Taffy
+	implementation(libs.taffy)
+	include(libs.taffy)
 
 	modImplementation("squeek.appleskin:appleskin-fabric:mc1.21-${prop("deps.appleskin")}")
 	modApi("me.shedaniel.cloth:cloth-config-fabric:${prop("deps.clothconfig")}")

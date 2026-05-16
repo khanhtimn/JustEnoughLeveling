@@ -36,13 +36,13 @@ abstract class DependenciesConfig @Inject constructor(val objects: ObjectFactory
 	val incompatible: NamedDomainObjectContainer<Dependency> = container()
 	val embeds: NamedDomainObjectContainer<Dependency> = container()
 
-	fun required(modid: String, action: Action<Dependency>): Dependency? = required.create(modid, action)
-	fun optional(modid: String, action: Action<Dependency>): Dependency? = optional.create(modid, action)
-	fun incompatible(modid: String, action: Action<Dependency>): Dependency? = incompatible.create(modid, action)
-	fun embeds(modid: String, action: Action<Dependency>): Dependency? = embeds.create(modid, action)
+	fun required(modid: String, action: Action<Dependency>): Dependency = required.create(modid, action)
+	fun optional(modid: String, action: Action<Dependency>): Dependency = optional.create(modid, action)
+	fun incompatible(modid: String, action: Action<Dependency>): Dependency = incompatible.create(modid, action)
+	fun embeds(modid: String, action: Action<Dependency>): Dependency = embeds.create(modid, action)
 }
 
-abstract class Dependency @Inject constructor(val name: String) {
+abstract class Dependency @Inject constructor(name: String) {
 
 	abstract val modid: Property<String>
 	abstract val modrinth: Property<String>
@@ -64,7 +64,11 @@ abstract class Dependency @Inject constructor(val name: String) {
 	}
 
 	fun slug(modrinthSlug: String? = null, curseforgeSlug: String? = null) {
-		if (modrinthSlug != null) { modrinth.set(modrinthSlug) }
-		if (curseforgeSlug != null) { curseforge.set(curseforgeSlug) }
+		if (modrinthSlug != null) {
+			modrinth.set(modrinthSlug)
+		}
+		if (curseforgeSlug != null) {
+			curseforge.set(curseforgeSlug)
+		}
 	}
 }

@@ -18,7 +18,7 @@ import java.util.function.Consumer;
 public abstract class ItemStackServerMixin {
 
 	//? if fabric {
-	/*@Inject(
+	@Inject(
 			method = "hurtAndBreak(ILnet/minecraft/server/level/ServerLevel;Lnet/minecraft/server/level/ServerPlayer;Ljava/util/function/Consumer;)V",
 			at = @At(
 					value = "INVOKE",
@@ -32,8 +32,8 @@ public abstract class ItemStackServerMixin {
 		}
 	}
 
-	*///?} else {
-	@Inject(
+	//?} else {
+	/*@Inject(
 			method = "hurtAndBreak(ILnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/entity/LivingEntity;Ljava/util/function/Consumer;)V",
 			at = @At(
 					value = "INVOKE",
@@ -46,5 +46,5 @@ public abstract class ItemStackServerMixin {
 			ci.cancel();
 		}
 	}
-	//?}
+	*///?}
 }

@@ -1,6 +1,5 @@
 package dev.khanhtimn.jel.event;
 
-import com.mrcrayfish.framework.api.event.TickEvents;
 import dev.khanhtimn.jel.api.JelSkills;
 import dev.khanhtimn.jel.api.JelTraits;
 import dev.khanhtimn.jel.content.ModSkills;
@@ -9,7 +8,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.animal.Animal;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
@@ -23,21 +21,15 @@ public final class FarmingEvents {
 	private static final int HERDER_CALL_INTERVAL = 20;
 	private static final int PHOTOSYNTHESIS_RADIUS = 4;
 
-	public static void register() {
-		TickEvents.END_PLAYER.register(FarmingEvents::onPlayerTick);
-	}
-
-	private static void onPlayerTick(Player player) {
-		if (player.level().isClientSide()) return;
-		if (!(player instanceof ServerPlayer serverPlayer)) return;
-		if (JelSkills.getLevel(serverPlayer, ModSkills.FARMING) <= 0) return;
+	public static void onPlayerTick(ServerPlayer player) {
+		if (JelSkills.getLevel(player, ModSkills.FARMING) <= 0) return;
 
 		if (player.tickCount % PHOTOSYNTHESIS_INTERVAL == 0) {
-			tickPhotosynthesis(serverPlayer);
+			tickPhotosynthesis(player);
 		}
 
 		if (player.tickCount % HERDER_CALL_INTERVAL == 0) {
-			tickHerderCall(serverPlayer);
+			tickHerderCall(player);
 		}
 	}
 

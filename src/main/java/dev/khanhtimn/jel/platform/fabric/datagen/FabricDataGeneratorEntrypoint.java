@@ -2,7 +2,7 @@ package dev.khanhtimn.jel.platform.fabric.datagen;
 
 //? fabric {
 
-/*import dev.khanhtimn.jel.api.JelRegistries;
+import dev.khanhtimn.jel.api.JelRegistries;
 import dev.khanhtimn.jel.content.ModSkills;
 import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
@@ -26,4 +26,4 @@ public class FabricDataGeneratorEntrypoint implements DataGeneratorEntrypoint {
 	}
 
 }
-*///?}
+//?}

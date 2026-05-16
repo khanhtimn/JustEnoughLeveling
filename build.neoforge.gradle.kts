@@ -13,9 +13,9 @@ platform {
 		required("neoforge") {
 			forgeVersionRange = "[1,)"
 		}
-		required("framework") {
-			slug("framework")
-			forgeVersionRange = "[${prop("deps.framework")},)"
+		required("ldlib2") {
+			slug("ldlib2")
+			forgeVersionRange = "[${prop("deps.ldlib2")},)"
 		}
 	}
 }
@@ -26,9 +26,8 @@ neoForge {
 	validateAccessTransformers = true
 
 	if (hasProperty("deps.parchment")) parchment {
-		val (mc, ver) = (property("deps.parchment") as String).split(':')
-		mappingsVersion = ver
-		minecraftVersion = mc
+		minecraftVersion = prop("deps.minecraft")
+		mappingsVersion = prop("deps.parchment")
 	}
 
 	runs {
@@ -65,17 +64,16 @@ repositories {
 		forRepository { maven("https://cursemaven.com/") { name = "CurseForge" } }
 		filter { includeGroup("curse.maven") }
 	}
+
+	strictMaven("https://maven.parchmentmc.org/") {
+		name = "ParchmentMC"
+	}
 	strictMaven("https://maven.terraformersmc.com/releases/") { name = "TerraformersMC" }
 	strictMaven("https://maven.ryanliptak.com/") { name = "AppleSkin" }
 	strictMaven("https://maven.shedaniel.me/") { name = "Cloth Config" }
 	strictMaven("https://maven.bawnorton.com/releases/", "com.github.bawnorton.mixinsquared") { name = "MixinSquared" }
-	strictMaven("https://maven.pkg.github.com/MrCrayfish/Maven/") {
-		name = "MrCrayfish (GitHub)"
-		credentials {
-			username = project.findProperty("gpr.user") as? String
-			password = project.findProperty("gpr.key") as? String
-		}
-	}
+	strictMaven("https://maven.firstdark.dev/snapshots") { name = "LDLib2" }
+
 }
 
 dependencies {
@@ -84,7 +82,7 @@ dependencies {
 	annotationProcessor(libs.mixinsquared.common)?.let { compileOnly(it) }
 	jarJar(libs.mixinsquared.neoforge)?.let { implementation(it) }
 
-	implementation("com.mrcrayfish:framework-neoforge:${prop("deps.minecraft")}-${prop("deps.framework")}")
+	implementation("com.lowdragmc.ldlib2:ldlib2-neoforge-${prop("deps.minecraft")}:${prop("deps.ldlib2")}:all")
 
 	implementation("squeek.appleskin:appleskin-neoforge:mc1.21-${prop("deps.appleskin")}")
 	api("me.shedaniel.cloth:cloth-config-neoforge:${prop("deps.clothconfig")}")

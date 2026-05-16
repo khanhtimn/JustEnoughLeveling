@@ -45,6 +45,7 @@ public final class SkillEffectApplier {
 		revokeAll(player, tracker, access);
 		applyAll(player, tracker, access);
 
+		// TODO: Why is this here? Effect applier should not concern any specific effects
 		float maxHealth = player.getMaxHealth();
 		if (player.getHealth() > maxHealth) {
 			player.setHealth(maxHealth);

@@ -1,39 +1,39 @@
 package dev.khanhtimn.jel.network.message;
 
-import com.mrcrayfish.framework.api.network.MessageContext;
+import com.lowdragmc.lowdraglib2.networking.rpc.RPCPacket;
+import com.lowdragmc.lowdraglib2.networking.rpc.RPCPacketDistributor;
+import com.lowdragmc.lowdraglib2.syncdata.rpc.RPCSender;
 import dev.khanhtimn.jel.Constants;
-import dev.khanhtimn.jel.api.skill.SkillDefinition;
-import dev.khanhtimn.jel.api.JelSkills;
 import dev.khanhtimn.jel.api.JelRegistries;
-import net.minecraft.network.RegistryFriendlyByteBuf;
-import net.minecraft.network.codec.StreamCodec;
+import dev.khanhtimn.jel.api.JelSkills;
+import dev.khanhtimn.jel.api.skill.SkillDefinition;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 
-public record MessageLevelUpSkill(ResourceLocation skillId) {
+public final class MessageLevelUpSkill {
 
-	public static final StreamCodec<RegistryFriendlyByteBuf, MessageLevelUpSkill> STREAM_CODEC =
-			StreamCodec.composite(
-					ResourceLocation.STREAM_CODEC.cast(),
-					MessageLevelUpSkill::skillId,
-					MessageLevelUpSkill::new
-			);
+	private static final String PACKET_ID = "jel:level_up";
 
-	public static void handle(MessageLevelUpSkill message, MessageContext context) {
-		context.execute(() -> context.getPlayer().ifPresent(player -> {
-			if (player instanceof ServerPlayer serverPlayer) {
-				ResourceKey<SkillDefinition> key = ResourceKey.create(
-						JelRegistries.SKILL_REGISTRY_KEY,
-						message.skillId()
-				);
-				boolean success = JelSkills.tryLevelUpOnce(serverPlayer, key);
-				if (!success) {
-					Constants.LOG.debug("Level-up denied for {} on skill {} (insufficient XP or max level)",
-							serverPlayer.getName().getString(), message.skillId());
-				}
-			}
-		}));
-		context.setHandled(true);
+	@RPCPacket("jel:level_up")
+	public static void handle(RPCSender sender, ResourceLocation skillId) {
+		if (!sender.isServer()) return;
+		ServerPlayer player = sender.asPlayer();
+		if (player == null) return;
+
+		ResourceKey<SkillDefinition> key = ResourceKey.create(
+				JelRegistries.SKILL_REGISTRY_KEY, skillId);
+		boolean success = JelSkills.tryLevelUpOnce(player, key);
+		if (!success) {
+			Constants.LOG.debug("Level-up denied for {} on skill {} (insufficient XP or max level)",
+					player.getName().getString(), skillId);
+		}
+	}
+
+	public static void sendToServer(ResourceLocation skillId) {
+		RPCPacketDistributor.rpcToServer(PACKET_ID, skillId);
+	}
+
+	private MessageLevelUpSkill() {
 	}
 }

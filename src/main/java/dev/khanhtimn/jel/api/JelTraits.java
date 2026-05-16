@@ -2,7 +2,7 @@ package dev.khanhtimn.jel.api;
 
 import dev.khanhtimn.jel.api.skill.SkillDefinition;
 import dev.khanhtimn.jel.api.trait.TraitKey;
-import dev.khanhtimn.jel.common.ModSyncedDataKeys;
+import dev.khanhtimn.jel.common.PlayerDataHelper;
 import dev.khanhtimn.jel.common.PlayerSkillData;
 import dev.khanhtimn.jel.common.TraitCooldownTracker;
 import net.minecraft.resources.ResourceKey;
@@ -23,7 +23,7 @@ public final class JelTraits {
 
 	public static boolean has(Player player, ResourceLocation traitId) {
 		PlayerSkillData data = JelSkills.getSkillData(player);
-		return data != null && data.hasTrait(traitId);
+		return data.hasTrait(traitId);
 	}
 
 	public static float value(Player player, TraitKey key) {
@@ -32,7 +32,7 @@ public final class JelTraits {
 
 	public static float value(Player player, ResourceLocation traitId) {
 		PlayerSkillData data = JelSkills.getSkillData(player);
-		return data != null ? data.getTraitValue(traitId) : 0f;
+		return data.getTraitValue(traitId);
 	}
 
 	public static boolean testChance(Player player, TraitKey key) {
@@ -50,14 +50,14 @@ public final class JelTraits {
 	public static float branchValue(Player player, ResourceKey<SkillDefinition> skillKey,
 	                                ResourceLocation branchId, TraitKey key) {
 		PlayerSkillData data = JelSkills.getSkillData(player);
-		if (data == null || !data.isBranch(skillKey, branchId)) return 0f;
+		if (!data.isBranch(skillKey, branchId)) return 0f;
 		return data.getTraitValue(key.id());
 	}
 
 	public static boolean branchHas(Player player, ResourceKey<SkillDefinition> skillKey,
 	                                ResourceLocation branchId, ResourceLocation traitId) {
 		PlayerSkillData data = JelSkills.getSkillData(player);
-		return data != null && data.isBranch(skillKey, branchId) && data.hasTrait(traitId);
+		return data.isBranch(skillKey, branchId) && data.hasTrait(traitId);
 	}
 
 	public static boolean branchTestChance(Player player, ResourceKey<SkillDefinition> skillKey,
@@ -69,12 +69,12 @@ public final class JelTraits {
 	// --- Cooldown API ---
 
 	public static boolean isOnCooldown(Player player, ResourceLocation traitId) {
-		TraitCooldownTracker cooldowns = ModSyncedDataKeys.TRAIT_COOLDOWNS.getValue(player);
+		TraitCooldownTracker cooldowns = PlayerDataHelper.getCooldowns(player);
 		return cooldowns.isOnCooldown(traitId, player.level().getGameTime());
 	}
 
 	public static void setCooldown(Player player, ResourceLocation traitId, int durationTicks) {
-		TraitCooldownTracker cooldowns = ModSyncedDataKeys.TRAIT_COOLDOWNS.getValue(player);
+		TraitCooldownTracker cooldowns = PlayerDataHelper.getCooldowns(player);
 		cooldowns.setCooldown(traitId, player.level().getGameTime(), durationTicks);
 	}
 }

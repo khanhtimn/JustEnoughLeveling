@@ -1,10 +1,10 @@
-package dev.khanhtimn.jel.api.loot;
+package dev.khanhtimn.jel.api.skill;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.khanhtimn.jel.api.JelRegistries;
 import dev.khanhtimn.jel.api.JelSkills;
-import dev.khanhtimn.jel.api.skill.SkillDefinition;
+import dev.khanhtimn.jel.api.loot.JelLootItemConditions;
 import net.minecraft.advancements.critereon.MinMaxBounds;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -27,38 +27,38 @@ import org.jetbrains.annotations.NotNull;
  *   "level": { "min": 3 } }
  * }</pre>
  */
-public record SkillLevelCondition(
+public record LevelCondition(
 		ResourceLocation skill,
 		MinMaxBounds.Ints level
 ) implements LootItemCondition {
 
-	public static final MapCodec<SkillLevelCondition> CODEC = RecordCodecBuilder.mapCodec(
+	public static final MapCodec<LevelCondition> CODEC = RecordCodecBuilder.mapCodec(
 			instance -> instance.group(
 					ResourceLocation.CODEC.fieldOf("skill")
-							.forGetter(SkillLevelCondition::skill),
+							.forGetter(LevelCondition::skill),
 					MinMaxBounds.Ints.CODEC.fieldOf("level")
-							.forGetter(SkillLevelCondition::level)
-			).apply(instance, SkillLevelCondition::new)
+							.forGetter(LevelCondition::level)
+			).apply(instance, LevelCondition::new)
 	);
 
-	public static SkillLevelCondition atLeast(ResourceLocation skill, int min) {
-		return new SkillLevelCondition(skill, MinMaxBounds.Ints.atLeast(min));
+	public static LevelCondition atLeast(ResourceLocation skill, int min) {
+		return new LevelCondition(skill, MinMaxBounds.Ints.atLeast(min));
 	}
 
-	public static SkillLevelCondition atLeast(ResourceKey<SkillDefinition> skill, int min) {
+	public static LevelCondition atLeast(ResourceKey<SkillDefinition> skill, int min) {
 		return atLeast(skill.location(), min);
 	}
 
-	public static SkillLevelCondition atMost(ResourceLocation skill, int max) {
-		return new SkillLevelCondition(skill, MinMaxBounds.Ints.atMost(max));
+	public static LevelCondition atMost(ResourceLocation skill, int max) {
+		return new LevelCondition(skill, MinMaxBounds.Ints.atMost(max));
 	}
 
-	public static SkillLevelCondition between(ResourceLocation skill, int min, int max) {
-		return new SkillLevelCondition(skill, MinMaxBounds.Ints.between(min, max));
+	public static LevelCondition between(ResourceLocation skill, int min, int max) {
+		return new LevelCondition(skill, MinMaxBounds.Ints.between(min, max));
 	}
 
-	public static SkillLevelCondition exactly(ResourceLocation skill, int level) {
-		return new SkillLevelCondition(skill, MinMaxBounds.Ints.exactly(level));
+	public static LevelCondition exactly(ResourceLocation skill, int level) {
+		return new LevelCondition(skill, MinMaxBounds.Ints.exactly(level));
 	}
 
 	@Override

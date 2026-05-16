@@ -2,14 +2,13 @@ package dev.khanhtimn.jel.event;
 
 import java.util.WeakHashMap;
 
-import com.mrcrayfish.framework.api.event.PlayerEvents;
-import com.mrcrayfish.framework.api.event.TickEvents;
 import dev.khanhtimn.jel.Constants;
 import dev.khanhtimn.jel.api.JelTraits;
 import dev.khanhtimn.jel.content.ModSkills;
 import dev.khanhtimn.jel.content.skills.Defense;
 import dev.khanhtimn.jel.misc.CombatTraitAccessor;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -27,14 +26,7 @@ public final class CombatEvents {
 
 	private static final WeakHashMap<Player, FortifyState> FORTIFY_STATES = new WeakHashMap<>();
 
-	public static void register() {
-		TickEvents.END_PLAYER.register(CombatEvents::onPlayerTick);
-		PlayerEvents.DEATH.register(CombatEvents::onPlayerDeath);
-	}
-
-	private static void onPlayerTick(Player player) {
-		if (player.level().isClientSide()) return;
-
+	public static void onPlayerTick(ServerPlayer player) {
 		FortifyState state = FORTIFY_STATES.computeIfAbsent(player, p -> new FortifyState());
 
 		double dx = player.getX() - state.prevX;
@@ -72,12 +64,11 @@ public final class CombatEvents {
 		}
 	}
 
-	private static boolean onPlayerDeath(Player player, DamageSource source) {
+	public static void onPlayerDeath(ServerPlayer player, DamageSource source) {
 		if (player instanceof CombatTraitAccessor accessor) {
 			accessor.jel$getComboTracker().onPlayerDeath();
 		}
 		FORTIFY_STATES.remove(player);
-		return false;
 	}
 
 	private static class FortifyState {
