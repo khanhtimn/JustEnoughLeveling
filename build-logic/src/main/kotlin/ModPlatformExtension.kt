@@ -42,7 +42,7 @@ abstract class DependenciesConfig @Inject constructor(val objects: ObjectFactory
 	fun embeds(modid: String, action: Action<Dependency>): Dependency = embeds.create(modid, action)
 }
 
-abstract class Dependency @Inject constructor(name: String) {
+abstract class Dependency @Inject constructor(val name: String) {
 
 	abstract val modid: Property<String>
 	abstract val modrinth: Property<String>
